@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Website
 
-## Getting Started
+개인 포트폴리오 웹사이트 프로젝트입니다.  
+이 프로젝트는 **Next.js (15.x)**, **React**, **TypeScript**, **Tailwind CSS**를 사용하여 제작되었습니다.
 
-First, run the development server:
+### 빌드 및 배포
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+npm run build
+npm start
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# 또는 yarn 사용 시:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+yarn build
+yarn start
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 주요 기능
 
-## Learn More
+- **반응형 디자인**: 다양한 디바이스에 맞게 반응형으로 구현되었습니다.
+- **다이나믹 헤더**: 스크롤 및 마우스 호버에 따라 헤더의 스타일(불투명도, 블러, 배경 색 등)이 변화합니다.
+- **클라이언트 컴포넌트**: Next.js의 클라이언트 컴포넌트와 최신 React Hooks를 활용하여 동적인 UI를 구현했습니다.
+- **커스텀 컴포넌트**: Header, HeroSection 등 사용자 정의 컴포넌트를 사용하여 구성했습니다.
 
-To learn more about Next.js, take a look at the following resources:
+## 기술 스택
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js](https://nextjs.org/) (버전 15.x)
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 설치 및 실행
 
-## Deploy on Vercel
+### 전제 조건
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Node.js (v14 이상 권장)
+- npm 또는 yarn
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 설치 방법
+
+1. **저장소 클론**
+
+   ```bash
+   git clone https://github.com/yourusername/your-portfolio.git
+   cd your-portfolio
+   ```
