@@ -5,6 +5,7 @@
 
 ### 빌드 및 배포
 
+```bash
 npm run build
 npm start
 
@@ -12,6 +13,7 @@ npm start
 
 yarn build
 yarn start
+```
 
 ## 주요 기능
 
