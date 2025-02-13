@@ -4,7 +4,7 @@ import React from "react";
 
 const Introduce: React.FC = () => {
   return (
-    <section id="introduce" className="flex bg-gray-100 py-20 pb-20 px-32">
+    <section id="introduce" className="flex py-20 pb-20 px-32">
       <div className="flex flex-row items-start space-x-8">
         {/* 제목 영역 */}
         <div>

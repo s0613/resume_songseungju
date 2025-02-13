@@ -3,55 +3,41 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 
-const Education: React.FC = () => {
+const Etc: React.FC = () => {
   return (
-    <section id="education" className="py-5 px-32 pt-20">
+    <section id="etc" className="py-5 px-32 pt-20">
       <div className="flex flex-col space-y-8">
-        {/* EDUCATION 제목 */}
+        {/* ETC 제목 */}
         <div>
-          <h1 className="text-4xl mb-4 text-left text-blue-600">EDUCATION</h1>
+          <h1 className="text-4xl mb-4 text-left text-blue-600">ETC</h1>
         </div>
 
-        {/* 첫 번째 교육: 인하대학교 */}
+        {/* 해병대 */}
         <div className="px-10">
           <div className="grid grid-cols-4 gap-4 items-center">
             <div className="col-span-1">
-              <span className="text-2xl text-gray-500">2020.03 ~ 2026.02</span>
+              <span className="text-2xl text-gray-500">2020.11 ~ 2022.05</span>
             </div>
             <div className="col-span-3">
               <span className="text-2xl text-black font-bold">
-                인하대학교{" "}
+                해병대 복무{" "}
                 <Badge variant="outline" className="bg-lime-300">
-                  컴퓨터공학과 졸업예정
+                  통신병
                 </Badge>
               </span>
             </div>
           </div>
-          {/* 활동 내용 */}
           <div className="mt-4 ml-[25%]">
-            <h3 className="text-xl font-semibold text-gray-700">
-              학부과정
-            </h3>
             <ul className="list-disc list-inside text-sm text-gray-800 mt-2 space-y-2">
-              <li>알고리즘, 자료구조, 운영체제, 네트워크, 데이터베이스 등 기본 이론 습득</li>
-              <li>웹프로그래밍, 소프트웨어 공학 등 실습 중심 과목 남김없이 수료</li>
-              <li>학부 프로젝트를 통해 팀 협업 및 발표 경험</li>
+              <li>Republic of Korea Marine Corps (해병대)</li>
+              <li>강인한 정신력과 팀워크 경험을 바탕으로 협업 능력 강화</li>
             </ul>
             <div className="mt-4 flex flex-wrap gap-2">
               <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                학사과정
+                해병대
               </Badge>
               <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                C++
-              </Badge>
-              <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                Java
-              </Badge>
-              <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                Web
-              </Badge>
-              <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                클라우드
+                병장 전역
               </Badge>
             </div>
           </div>
@@ -59,47 +45,43 @@ const Education: React.FC = () => {
 
         <hr className="my-6 border-gray-300" />
 
-        {/* 두 번째 교육: 외부 세미나 / 교육 프로그램 예시 */}
+        {/* 창업 동아리: 인하벤처 */}
         <div className="px-10">
           <div className="grid grid-cols-4 gap-4 items-center">
             <div className="col-span-1">
-              <span className="text-2xl text-gray-500">2017.03 ~ 2020.02</span>
+              <span className="text-2xl text-gray-500">창업 동아리</span>
             </div>
             <div className="col-span-3">
               <span className="text-2xl text-black font-bold">
-                온양고등학교{" "}
+                인하벤처{" "}
                 <Badge variant="outline" className="bg-lime-300">
-                  일반고/이과
+                  활동
                 </Badge>
               </span>
             </div>
           </div>
-          {/* 활동 내용 */}
           <div className="mt-4 ml-[25%]">
-            <h3 className="text-xl font-semibold text-gray-700">
-              과학중점반
-            </h3>
             <ul className="list-disc list-inside text-sm text-gray-800 mt-2 space-y-2">
-              <li>고등학교 1학년 방황</li>
-              <li>고등학교 2학년 과학중점반 입성 성적 상승</li>
-              <li>고증학교 3학년 성적 더 상승 덕분에 인하대 합격. 담임 선생님 감사합니다.</li>
+              <li>아이디어 발굴 및 비즈니스 모델 설계</li>
+              <li>팀 프로젝트를 통한 실전 창업 경험</li>
             </ul>
             <div className="mt-4 flex flex-wrap gap-2">
               <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                벡터 1등급
+                스타트업
               </Badge>
               <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                영어 1등급
+                비즈니스 모델
               </Badge>
               <Badge variant="outline" className="bg-blue-100 text-blue-700">
-                지구과학 1등급
+                팀 프로젝트
               </Badge>
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
 };
 
-export default Education;
+export default Etc;

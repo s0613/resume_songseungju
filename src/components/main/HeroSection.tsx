@@ -1,3 +1,4 @@
+// components/main/HeroSection.tsx
 "use client";
 
 import Image from "next/image";
@@ -12,7 +13,7 @@ import { Terminal } from "lucide-react";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="flex flex-col bg-gray-100 pt-28 px-32">
+    <section id="heroSection" className="flex flex-col pt-28 px-32">
       {/* 이미지와 개인정보가 하나의 묶음 */}
       <div className="flex flex-row items-center space-x-8">
         {/* 프로필 사진 */}
@@ -61,7 +62,13 @@ const HeroSection: React.FC = () => {
             </a>
           </p>
           <div className="text-lg text-gray-700 mb-1 flex items-center">
-            <span>Phone: </span>
+          <Image
+              src="/smartphone-call.svg"
+              alt="GitHub Icon"
+              width={24}
+              height={24}
+              className="inline-block mr-2"
+            />
             <HoverCard>
               <HoverCardTrigger>-</HoverCardTrigger>
               <HoverCardContent>
@@ -69,10 +76,27 @@ const HeroSection: React.FC = () => {
               </HoverCardContent>
             </HoverCard>
           </div>
+          <p className="text-lg text-gray-700 mb-1 flex items-center">
+            <Image
+              src="/icons8-linkedin-50.svg"
+              alt="GitHub Icon"
+              width={24}
+              height={24}
+              className="inline-block mr-2"
+            />
+            <a
+              href="https://www.linkedin.com/in/%EC%8A%B9%EC%A3%BC-%EC%86%A1-73b41a2a8/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline ml-1"
+            >
+              https://www.linkedin.com/송승주/
+            </a>
+          </p>
         </div>
       </div>
       {/* Alert가 개인정보 바로 아래에 위치 */}
-      <div className="mt-4">
+      <div className="rounded-lg">
         <Alert>
           <Terminal className="h-4 w-4" />
           <AlertTitle>UPDATE</AlertTitle>
