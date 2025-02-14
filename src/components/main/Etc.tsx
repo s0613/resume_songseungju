@@ -53,7 +53,7 @@ const Etc: React.FC = () => {
             </div>
             <div className="col-span-3">
               <span className="text-2xl text-black font-bold">
-                인하벤처{" "}
+                인하벤처클럽{" "}
                 <Badge variant="outline" className="bg-lime-300">
                   활동
                 </Badge>

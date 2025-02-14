@@ -1,0 +1,1 @@
+echo "> after-install.sh 실행"
