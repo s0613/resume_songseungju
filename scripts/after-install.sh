@@ -25,6 +25,9 @@ if [ ! -d ".next" ]; then
     exit 1
 fi
 
+# **현재 디렉토리의 node_modules/.bin을 PATH에 추가**
+export PATH=$PATH:$(pwd)/node_modules/.bin
+
 # 무중단 재시작 (Zero Downtime)
 if pm2 list | grep -q "resume_songseungju"; then
     echo "> PM2 Zero Downtime Reload" | tee -a $LOG_FILE
