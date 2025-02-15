@@ -1,16 +1,3 @@
-name: Deploy to S3
-
-on:
-  push:
-    branches:
-      - main
-
-env:
-  S3_BUCKET_NAME: songseungjubucket
-  CODE_DEPLOY_APPLICATION_NAME: resume-songseungju
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: sample-group
-  AWS_REGION: ap-northeast-2
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -38,7 +25,11 @@ jobs:
         run: |
           mkdir deploy
           cp -r .next public package.json scripts deploy/
+          ls -al deploy  # 디버깅 추가
           cd deploy && zip -r ../resume_songseungju.zip . && cd ..
+
+      - name: Debug S3 Upload
+        run: ls -al && unzip -l resume_songseungju.zip # 디버깅 추가
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
