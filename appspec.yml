@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
+  - source: deploy/
     destination: /home/ec2-user/resume_songseungju
     overwrite: yes
 
@@ -16,9 +16,9 @@ hooks:
   BeforeInstall:
     - location: scripts/before-install.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
 
   AfterInstall:
     - location: scripts/after-install.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
