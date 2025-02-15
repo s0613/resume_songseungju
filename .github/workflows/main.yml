@@ -9,48 +9,48 @@ env:
   S3_BUCKET_NAME: songseungjubucket
   CODE_DEPLOY_APPLICATION_NAME: resume-songseungju
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: sample-group
+  AWS_REGION: ap-northeast-2
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x]
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v3
-      
-      - uses: actions/setup-node@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm ci
 
-      # 프로젝트 빌드
-      - name: Build next app
+      - name: Build Next.js App
         run: npm run build
 
-      # 프로젝트 압축
-      - name: Make zip file
-        run: zip -qq -r ./resume_songseungju.zip . -x "node_modules/*"
+      - name: Prepare Deployment Package
+        run: |
+          mkdir deploy
+          cp -r .next public package.json deploy/
+          cd deploy && zip -r ../resume_songseungju.zip . && cd ..
 
-      # AWS 권한 설정
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
+          aws-region: ${{ env.AWS_REGION }}
 
-      # 압축된 파일을 S3에 업로드
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./resume_songseungju.zip s3://${{ env.S3_BUCKET_NAME }}/resume_songseungju.zip
+        run: aws s3 cp resume_songseungju.zip s3://${{ env.S3_BUCKET_NAME }}/resume_songseungju.zip
 
-      # CodeDeploy 트리거 실행
-      - name: Code Deploy
+      - name: Trigger CodeDeploy
         run: |
           aws deploy create-deployment \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
