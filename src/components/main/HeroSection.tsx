@@ -13,23 +13,26 @@ import { Terminal } from "lucide-react";
 
 const HeroSection: React.FC = () => {
   return (
-    <section id="heroSection" className="flex flex-col pt-28 px-32">
+    <section
+      id="heroSection"
+      className="flex flex-col pt-16 md:pt-28 px-4 sm:px-8 md:px-16 lg:px-32"
+    >
       {/* 이미지와 개인정보가 하나의 묶음 */}
-      <div className="flex flex-row items-center space-x-8">
+      <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-8">
         {/* 프로필 사진 */}
-        <div className="w-64 h-64 overflow-hidden">
+        <div className="w-48 h-48 sm:w-64 sm:h-64 overflow-hidden rounded-full">
           <Image
             src="/IM.png"
             alt="Profile Picture"
-            width={364}
-            height={364}
+            width={256}
+            height={256}
             className="object-cover"
           />
         </div>
         {/* 개인정보 영역 */}
-        <div>
-          <h1 className="text-4xl font-bold mb-2 text-left">송승주</h1>
-          <p className="text-lg text-gray-700 mb-1 flex items-center">
+        <div className="text-center md:text-left">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">송승주</h1>
+          <p className="text-base sm:text-lg text-gray-700 mb-1 flex items-center justify-center md:justify-start">
             <Image
               src="/mail.svg"
               alt="Mail Icon"
@@ -39,12 +42,12 @@ const HeroSection: React.FC = () => {
             />
             <a
               href="mailto:farchicken00@naver.com"
-              className="text-blue-500 hover:underline ml-1"
+              className="text-blue-500 hover:underline"
             >
               farchicken00@naver.com
             </a>
           </p>
-          <p className="text-lg text-gray-700 mb-1 flex items-center">
+          <p className="text-base sm:text-lg text-gray-700 mb-1 flex items-center justify-center md:justify-start">
             <Image
               src="/github-mark.svg"
               alt="GitHub Icon"
@@ -56,30 +59,28 @@ const HeroSection: React.FC = () => {
               href="https://github.com/s0613"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:underline ml-1"
+              className="text-blue-500 hover:underline"
             >
               github.com/s0613
             </a>
           </p>
-          <div className="text-lg text-gray-700 mb-1 flex items-center">
-          <Image
+          <div className="text-base sm:text-lg text-gray-700 mb-1 flex items-center justify-center md:justify-start">
+            <Image
               src="/smartphone-call.svg"
-              alt="GitHub Icon"
+              alt="Phone Icon"
               width={24}
               height={24}
               className="inline-block mr-2"
             />
             <HoverCard>
-              <HoverCardTrigger>-</HoverCardTrigger>
-              <HoverCardContent>
-                이메일로 연락주세요.
-              </HoverCardContent>
+              <HoverCardTrigger className="cursor-pointer">-</HoverCardTrigger>
+              <HoverCardContent>이메일로 연락주세요.</HoverCardContent>
             </HoverCard>
           </div>
-          <p className="text-lg text-gray-700 mb-1 flex items-center">
+          <p className="text-base sm:text-lg text-gray-700 mb-1 flex items-center justify-center md:justify-start">
             <Image
               src="/icons8-linkedin-50.svg"
-              alt="GitHub Icon"
+              alt="LinkedIn Icon"
               width={24}
               height={24}
               className="inline-block mr-2"
@@ -88,7 +89,7 @@ const HeroSection: React.FC = () => {
               href="https://www.linkedin.com/in/%EC%8A%B9%EC%A3%BC-%EC%86%A1-73b41a2a8/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:underline ml-1"
+              className="text-blue-500 hover:underline"
             >
               https://www.linkedin.com/송승주/
             </a>
@@ -96,13 +97,13 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
       {/* Alert가 개인정보 바로 아래에 위치 */}
-      <div className="rounded-lg">
+      <div className="mt-8 rounded-lg">
         <Alert>
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>UPDATE</AlertTitle>
-          <AlertDescription>
-            last updated at 2025-02-12
-          </AlertDescription>
+          <Terminal className="h-4 w-4 mr-2" />
+          <div>
+            <AlertTitle>UPDATE</AlertTitle>
+            <AlertDescription>last updated at 2025-02-12</AlertDescription>
+          </div>
         </Alert>
       </div>
     </section>
