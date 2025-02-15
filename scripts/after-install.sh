@@ -13,6 +13,11 @@ fi
 
 cd $DEPLOY_DIR
 
+# 의존성 설치
+echo "> npm install 실행" | tee -a $LOG_FILE
+npm install
+echo "> npm install 완료" | tee -a $LOG_FILE
+
 # pm2 설치 (root 환경)
 if ! command -v pm2 &> /dev/null; then
     echo "> PM2 설치" | tee -a $LOG_FILE
@@ -25,7 +30,7 @@ if [ ! -d ".next" ]; then
     exit 1
 fi
 
-# **현재 디렉토리의 node_modules/.bin을 PATH에 추가**
+# 현재 디렉토리의 node_modules/.bin을 PATH에 추가
 export PATH=$PATH:$(pwd)/node_modules/.bin
 
 # 무중단 재시작 (Zero Downtime)
