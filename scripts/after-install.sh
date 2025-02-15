@@ -30,9 +30,6 @@ if [ ! -d ".next" ]; then
     exit 1
 fi
 
-# 현재 디렉토리의 node_modules/.bin을 PATH에 추가
-export PATH=$PATH:$(pwd)/node_modules/.bin
-
 # PM2 프로세스가 존재하는지 확인하여 무중단 재시작 (Zero Downtime) 진행
 if pm2 info resume_songseungju > /dev/null 2>&1; then
     echo "> PM2 Zero Downtime Reload" | tee -a $LOG_FILE
