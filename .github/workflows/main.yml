@@ -37,7 +37,7 @@ jobs:
       - name: Prepare Deployment Package
         run: |
           mkdir deploy
-          cp -r .next public package.json deploy/
+          cp -r .next public package.json scripts deploy/
           cd deploy && zip -r ../resume_songseungju.zip . && cd ..
 
       - name: Configure AWS Credentials
