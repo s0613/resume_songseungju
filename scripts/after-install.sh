@@ -13,10 +13,14 @@ fi
 
 cd $DEPLOY_DIR
 
-# 의존성 설치
-echo "> npm install 실행" | tee -a $LOG_FILE
-npm install
-echo "> npm install 완료" | tee -a $LOG_FILE
+# node_modules 폴더 존재 여부에 따라 의존성 설치 결정
+if [ -d "node_modules" ]; then
+    echo "> node_modules 폴더가 존재합니다. npm install 생략." | tee -a $LOG_FILE
+else
+    echo "> npm install 실행" | tee -a $LOG_FILE
+    npm install
+    echo "> npm install 완료" | tee -a $LOG_FILE
+fi
 
 # pm2 설치 (root 환경)
 if ! command -v pm2 &> /dev/null; then
