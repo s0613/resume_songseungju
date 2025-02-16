@@ -34,8 +34,7 @@ jobs:
       - name: Prepare Deployment Package
         run: |
           mkdir deploy
-          # 소스 코드 전체를 deploy 폴더로 복사 (node_modules는 보통 .gitignore에 포함되어 있으므로 포함되지 않습니다)
-          cp -r * deploy/
+          rsync -av --exclude='deploy' ./ deploy/
           cd deploy && zip -r ../resume_songseungju.zip . && cd ..
 
       - name: Configure AWS Credentials
