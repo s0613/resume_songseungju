@@ -37,7 +37,7 @@ jobs:
       - name: Prepare Deployment Package
         run: |
           mkdir deploy
-          cp -r .next public package.json scripts appspec.yml node_modules deploy/
+          cp -r .next public package.json scripts appspec.yml deploy/
           cd deploy && zip -r ../resume_songseungju.zip . && cd ..
 
       - name: Configure AWS Credentials
@@ -53,7 +53,7 @@ jobs:
       - name: Trigger CodeDeploy
         run: |
           aws deploy create-deployment \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --s3-location bucket=${{ env.S3_BUCKET_NAME }},bundleType=zip,key=resume_songseungju.zip
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+            --s3-location bucket=${{ env.S3_BUCKET_NAME }},bundleType=zip,key=resume_songseungju.zip
