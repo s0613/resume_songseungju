@@ -5,7 +5,6 @@ LOG_FILE="/home/ec2-user/deploy.log"
 DEPLOY_DIR="/home/ec2-user/resume_songseungju"
 BACKUP_DIR="/home/ec2-user/backup_resume_songseungju"
 
-# 로그 파일이 없으면 생성
 if [ ! -f "$LOG_FILE" ]; then
   sudo touch "$LOG_FILE"
   sudo chown ec2-user:ec2-user "$LOG_FILE"
