@@ -102,7 +102,7 @@ const HeroSection: React.FC = () => {
           <Terminal className="h-4 w-4 mr-2" />
           <div>
             <AlertTitle>UPDATE</AlertTitle>
-            <AlertDescription>last updated at 2025-02-12</AlertDescription>
+            <AlertDescription>last updated at 2025-03-02</AlertDescription>
           </div>
         </Alert>
       </div>

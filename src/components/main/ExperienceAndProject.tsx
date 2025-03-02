@@ -148,9 +148,10 @@ const Experience: React.FC = () => {
               </li>
               <li>
                 회원가입 &amp; 로그인, 이미지 업로드, 검색 기능을 중점적으로 구현하여 사용자
-                경험 최적화
+                경험 개선
               </li>
             </ul>
+            
             <div className="mt-4 flex flex-wrap gap-2">
               <Badge variant="outline" className="bg-blue-100 text-blue-700">
                 Next.js
@@ -170,6 +171,23 @@ const Experience: React.FC = () => {
               <Badge variant="outline" className="bg-blue-100 text-blue-700">
                 AI Integration
               </Badge>
+            </div>
+            <div className="mt-4 flex items-center">
+              <a 
+                href="https://github.com/s0613/ai-website-front"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center text-black hover:underline transition-all"
+              >
+                <img
+                  src="/github-mark.svg"
+                  alt="GitHub"
+                  width={20}
+                  height={20}
+                  className="mr-2"
+                />
+                <span>View on GitHub</span>
+              </a>
             </div>
           </div>
         </div>
