@@ -61,7 +61,7 @@ const Etc: React.FC = () => {
               <span className="text-xl md:text-2xl text-black font-bold">
                 인하벤처클럽{" "}
                 <Badge variant="outline" className="bg-lime-300">
-                  활동
+                  28.5기
                 </Badge>
               </span>
             </div>

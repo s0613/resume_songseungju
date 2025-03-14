@@ -73,7 +73,9 @@ const Skill: React.FC = () => {
 
         {/* Misc */}
         <div className="flex flex-col md:flex-row gap-4 items-start">
-          <h2 className="text-2xl text-gray-500 md:w-1/4 px-4 md:px-10">Misc</h2>
+          <h2 className="text-2xl text-gray-500 md:w-1/4 px-4 md:px-10">
+            Misc
+          </h2>
           <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 list-disc list-inside text-sm text-gray-800 md:w-3/4">
             <li>Agile, Scrum</li>
             <li>CI/CD</li>
