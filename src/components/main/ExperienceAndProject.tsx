@@ -17,7 +17,69 @@ const Experience: React.FC = () => {
           </h1>
         </div>
 
-        {/* 세 번째 경험: Crazy Space 프로젝트 */}
+        {/* MediVu 프로젝트 */}
+        <div className="px-4 sm:px-8 md:px-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+            <div className="md:col-span-1">
+              <span className="text-xl md:text-2xl text-gray-500">
+                2025.03 ~
+              </span>
+            </div>
+            <div className="md:col-span-3">
+              <span className="text-xl md:text-2xl text-black font-bold">
+                MediVu{" "}
+                <Badge variant="outline" className="bg-lime-300">
+                  진행중
+                </Badge>
+              </span>
+            </div>
+          </div>
+          {/* 역할 및 활동 내용 */}
+          <div className="mt-4 ml-0 md:ml-[25%]">
+            <h3 className="text-lg md:text-xl font-semibold text-gray-700">
+              프론트엔드 개발자 (기획 및 사업화 업무 병행)
+            </h3>
+            <ul className="list-disc list-inside text-sm md:text-base text-gray-800 mt-2 space-y-2">
+              <li>
+                AI 기반 의료영상 판독문 자동 생성 솔루션 서비스{" "}
+                <strong>‘MediVu’</strong>의 초기 기획 및 런칭 참여
+              </li>
+              <li>
+                병원을 타겟으로 한 <strong>랜딩페이지</strong>를 직접 제작하고
+                사용자 흐름을 설계
+              </li>
+              <li>
+                <strong>실험실특화형 창업 아이템</strong>으로 선정되기 위한{" "}
+                사업계획서 작성 및 발표 자료(PPT) 제작 주도
+              </li>
+              <li>
+                기획 단계에서 서비스 구조를 정리하고 기술 로드맵 수립에 기여
+              </li>
+            </ul>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                프론트엔드 개발
+              </Badge>
+              <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                랜딩페이지 제작
+              </Badge>
+              <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                창업중심대학
+              </Badge>
+              <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                사업계획서 작성
+              </Badge>
+              <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                발표 자료 제작
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        <hr className="my-6 border-gray-300" />
+
+        {/* Crazy Space 프로젝트 */}
         <div className="px-4 sm:px-8 md:px-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
             <div className="md:col-span-1">
@@ -34,7 +96,6 @@ const Experience: React.FC = () => {
               </span>
             </div>
           </div>
-          {/* 역할 및 활동 내용 */}
           <div className="mt-4 ml-0 md:ml-[25%]">
             <h3 className="text-lg md:text-xl font-semibold text-gray-700">
               풀스택 개발자
@@ -94,9 +155,10 @@ const Experience: React.FC = () => {
             </div>
           </div>
         </div>
+
         <hr className="my-6 border-gray-300" />
 
-        {/* 두 번째 경험: 첫 외주 프로젝트 */}
+        {/* 외주 프로젝트 */}
         <div className="px-4 sm:px-8 md:px-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
             <div className="md:col-span-1">
@@ -113,7 +175,6 @@ const Experience: React.FC = () => {
               </span>
             </div>
           </div>
-          {/* 역할 및 활동 내용 */}
           <div className="mt-4 ml-0 md:ml-[25%]">
             <h3 className="text-lg md:text-xl font-semibold text-gray-700">
               풀스택 개발자
@@ -141,7 +202,8 @@ const Experience: React.FC = () => {
         </div>
 
         <hr className="my-6 border-gray-300" />
-        {/* 첫 번째 경험: 나랑 팀해듀오 */}
+
+        {/* 나랑 팀해듀오 프로젝트 */}
         <div className="px-4 sm:px-8 md:px-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
             <div className="md:col-span-1">
@@ -158,7 +220,6 @@ const Experience: React.FC = () => {
               </span>
             </div>
           </div>
-          {/* 역할 및 활동 내용 */}
           <div className="mt-4 ml-0 md:ml-[25%]">
             <h3 className="text-lg md:text-xl font-semibold text-gray-700">
               팀장 및 백엔드 개발자
