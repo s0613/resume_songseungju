@@ -1,53 +1,85 @@
 "use client";
 
-import React from "react";
+import type React from "react";
+import { motion } from "framer-motion";
 import useIsTop from "@/hooks/use-is-top"; // 경로는 실제 프로젝트 구조에 맞게 수정하세요.
 
 const Header: React.FC = () => {
   const isTop = useIsTop();
 
-  return (
-    <header className="fixed top-0 left-1/2 w-3/5 z-50 bg-transparent transform -translate-x-1/2">
-      {/* 중앙 컨테이너 영역에 효과 적용 */}
-      <nav
-        className={`
-          container mx-auto px-4 py-3 
-          flex flex-col items-center justify-center text-center
-          transition-all duration-300
-          rounded-3xl
-          ${
-            isTop
-              ? "opacity-100 blur-0"
-              : "opacity-50 blur-sm hover:opacity-100 hover:blur-0"
-          }
-          hover:bg-gray-200/60
-        `}
-      >
-        {/* 로고 영역 */}
-        <div className="text-lg font-bold text-blue-600">Portfolio</div>
+  const menuItems = [
+    { name: "SSJ", href: "#heroSection" },
+    { name: "Introduce", href: "#introduce" },
+    { name: "Skill", href: "#skill" },
+    { name: "Expe&proj", href: "#experienceAndProject" },
+    { name: "Education", href: "#education" },
+    { name: "ETC", href: "#etc" },
+  ];
 
-        {/* 메뉴 영역 */}
-        <ul className="flex space-x-6 text-[0.7rem] uppercase tracking-wider mt-2 text-gray-700">
-          {[
-            { name: "SSJ", href: "#heroSection" },
-            { name: "Introduce", href: "#introduce" },
-            { name: "Skill", href: "#skill" },
-            { name: "Expe&proj", href: "#experience" },
-            { name: "Education", href: "#education" },
-            { name: "ETC", href: "#etc" },
-          ].map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                className="px-2 py-1 rounded transition-all hover:text-blue-500"
-              >
-                {item.name}
+  return (
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed top-0 left-0 w-full z-50"
+    >
+      <div className="max-w-6xl mx-auto px-4">
+        <nav
+          className={`
+            mx-auto
+            transition-all duration-300
+            ${isTop
+              ? "mt-6 px-6 py-3 rounded-2xl bg-white/70 backdrop-blur-sm"
+              : "px-6 py-2 bg-white/90 backdrop-blur-md shadow-sm"
+            }
+          `}
+        >
+          <div className="flex items-center justify-between">
+            {/* 로고 영역 */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className={`
+                text-base font-semibold
+                transition-all duration-300
+                ${isTop ? "text-gray-800" : "text-gray-600"}
+              `}
+            >
+              <a href="/" className="hover:text-gray-900">
+                Portfolio
               </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </header>
+            </motion.div>
+
+            {/* 메뉴 영역 */}
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex items-center space-x-2 sm:space-x-4"
+            >
+              {menuItems.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className={`
+                      px-2 py-1 rounded-lg text-sm
+                      transition-all duration-300
+                      ${isTop
+                        ? "text-gray-600 hover:text-gray-900 hover:bg-gray-100/70"
+                        : "text-gray-500 hover:text-gray-800 hover:bg-gray-100/50"
+                      }
+                    `}
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </motion.ul>
+          </div>
+        </nav>
+      </div>
+    </motion.header>
   );
 };
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import HeroSection from '@/components/main/HeroSection';
-import Introduce from '@/components/main/Introduce';
-import Skill from '@/components/main/Skill';
-import Experience from '@/components/main/ExperienceAndProject';
-import Education from '@/components/main/Education';
-import Etc from '@/components/main/Etc';
+import HeroSection from '@/main/HeroSection';
+import Introduce from '@/main/Introduce';
+import Skill from '@/main/Skill';
+import Experience from '@/main/ExperienceAndProject';
+import Education from '@/main/Education';
+import Etc from '@/main/Etc';
 const Page: React.FC = () => {
   return (
     <div>
