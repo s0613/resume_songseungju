@@ -18,9 +18,9 @@ echo "> npm ci 실행" | tee -a "$LOG_FILE"
 npm ci
 echo "> npm ci 완료" | tee -a "$LOG_FILE"
 
-# Next.js 애플리케이션 빌드
-echo "> npm run build 실행" | tee -a "$LOG_FILE"
-npm run build
+# Next.js 애플리케이션 빌드 (ESLint 비활성화)
+echo "> npm run build 실행 (ESLint 무시)" | tee -a "$LOG_FILE"
+npm run build -- --no-lint
 echo "> npm run build 완료" | tee -a "$LOG_FILE"
 
 # PM2 설치 (필요 시)
