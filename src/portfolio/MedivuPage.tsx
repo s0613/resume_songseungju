@@ -10,12 +10,11 @@ const MediVuPage: React.FC = () => {
             <div className="text-center space-y-4">
                 <h1 className="text-4xl font-bold text-gray-800">MediVu</h1>
                 <p className="text-lg text-gray-600">
-                    PACS 연동 문제를 해결하는 AI 기반 의료영상 판독 솔루션
+                    PACS 연동 문제를 해결하는 AI 기반 의료영상 판독 솔루션 (기획 및 프로토타입 단계)
                 </p>
                 <div className="flex justify-center gap-2">
-                    <Badge variant="secondary">Spring Boot</Badge>
                     <Badge variant="secondary">Next.js</Badge>
-                    <Badge variant="secondary">MariaDB</Badge>
+                    <Badge variant="secondary">TypeScript</Badge>
                     <Badge variant="secondary">MCP</Badge>
                     <Badge variant="secondary">PDF De-identification</Badge>
                 </div>
@@ -25,9 +24,9 @@ const MediVuPage: React.FC = () => {
             <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-gray-700">Overview</h2>
                 <p className="text-gray-700 text-justify">
-                    MediVu는 병원 현장에서 실질적인 활용이 어려운 기존 AI 판독 솔루션의 문제점을 해결하기 위해
-                    기획된 프로젝트입니다. PACS와의 미연동 문제, 표준화되지 않은 판독문 양식, 그리고 개인정보 보호
-                    이슈까지 해결할 수 있도록 설계되었습니다.
+                    MediVu는 병원 현장에서 실질적인 활용이 어려운 기존 AI 판독 솔루션의 한계를 극복하기 위해
+                    기획된 서비스입니다. PACS 연동 문제, 표준화되지 않은 판독문 양식, 그리고 개인정보 보호
+                    이슈를 해결하고자 하는 목표로 시작되었으며, 현재 초기 프로토타입을 제작 중입니다.
                 </p>
                 {/* <AI 기반 의료영상 판독 흐름도 이미지> */}
             </div>
@@ -36,9 +35,8 @@ const MediVuPage: React.FC = () => {
             <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-gray-700">Problem</h2>
                 <p className="text-gray-700 text-justify">
-                    현재 많은 병원에서는 AI 판독 솔루션이 도입되었지만, PACS와의 연동이 이루어지지 않아
-                    실질적인 사용이 불가능한 경우가 많습니다. 또한 판독문 형식이 표준화되어 있지 않아 병원 간,
-                    전문의 간 문서 품질 차이가 존재하며, 환자의 개인정보 처리 문제로 AI 판독 결과의 활용이 제한되고 있습니다.
+                    병원에 AI 판독 솔루션이 도입되었음에도 불구하고, PACS와의 기술적 연동 부재로 인해 실질적인 사용이 제한되고 있습니다.
+                    또한 의료 판독문은 병원과 전문의마다 형식과 용어가 달라 표준화가 어려우며, 환자 개인정보 보호 역시 AI 도입의 큰 장벽이 됩니다.
                 </p>
                 {/* <PACS 미연동 문제 시각화 이미지> */}
             </div>
@@ -47,9 +45,9 @@ const MediVuPage: React.FC = () => {
             <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-gray-700">Solution</h2>
                 <p className="text-gray-700 text-justify">
-                    MediVu는 MCP(Multimodal Context Protocol) 기반 구조를 도입하여 PACS로부터 CT/MRI 영상과
-                    관련 데이터를 자동으로 연동하고, AI가 이를 바탕으로 판독문을 생성하는 솔루션입니다. 또한 PDF 판독문에서
-                    환자 정보를 자동 가명화하여 의료법 및 개인정보보호법을 준수합니다.
+                    MediVu는 Model Context Protocol(MCP)을 활용한 구조를 기획하고 있습니다. 이를 통해 PACS에서 의료영상을 자동으로 받아오고,
+                    AI가 분석하여 표준화된 판독문을 생성하는 자동화 흐름을 설계 중입니다. 또한 PDF 판독문 내 환자 정보를 자동 가명화하는 기능을 포함해
+                    개인정보 보호 이슈도 함께 해결하고자 합니다.
                 </p>
                 {/* <MCP 기반 연동 구조 다이어그램 이미지> */}
             </div>
@@ -58,23 +56,20 @@ const MediVuPage: React.FC = () => {
             <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-gray-700">Tech Stack & Architecture</h2>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li>프론트엔드: Next.js + TypeScript 기반 대시보드</li>
-                    <li>백엔드: Spring Boot 기반 REST API</li>
-                    <li>데이터베이스: MariaDB</li>
-                    <li>PDF 가명화 모듈: Python 기반 PDF 추출 + 식별정보 마스킹</li>
-                    <li>AI 인터페이스: MCP 프로토콜 적용 설계</li>
+                    <li>프론트엔드: Next.js + TypeScript 기반 랜딩페이지 프로토타입</li>
+                    <li>PDF 가명화 모듈: Python 기반 PDF 텍스트 추출 + 식별정보 마스킹</li>
+                    <li>AI 연동 구조: Model Context Protocol(MCP)을 활용한 구조 설계 중</li>
                 </ul>
                 {/* <전체 시스템 구성도 이미지> */}
             </div>
 
-            {/* 주요 성과 및 진행 상황 */}
+            {/* 현재 진행 상황 */}
             <div className="space-y-4">
-                <h2 className="text-2xl font-semibold text-gray-700">Progress & Outcome</h2>
+                <h2 className="text-2xl font-semibold text-gray-700">Current Progress</h2>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li>실험실 특화형 선도대학 창업지원 사업계획서 제출</li>
-                    <li>서비스 구조 설계 및 MCP 기반 흐름도 완성</li>
-                    <li>랜딩페이지 UI/UX 디자인 및 개발 진행 중</li>
-                    <li>PDF 판독문 가명화 프로토타입 개발 중</li>
+                    <li>실험실 특화형 선도대학 창업지원 사업계획서 단독 작성 및 제출</li>
+                    <li>Next.js 기반 랜딩페이지 프로토타입 개발 진행 중</li>
+                    <li>Python 기반 PDF 판독문 가명화 프로토타입 개발 중</li>
                 </ul>
                 {/* <랜딩페이지 캡처 이미지 or 사업계획서 제출 이미지> */}
             </div>
@@ -83,9 +78,10 @@ const MediVuPage: React.FC = () => {
             <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-gray-700">What’s Next</h2>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li>AI 분석 정확도 개선 및 전자동화 기능 추가</li>
-                    <li>의료 기관 베타테스트 준비</li>
-                    <li>PDF 외 DICOM 기반 자동 가명화 모듈 추가 개발 예정</li>
+                    <li>MCP 연동 구조를 실제 영상 시스템과 연결 테스트 예정</li>
+                    <li>AI 모델 기반 판독문 생성 퀄리티 향상</li>
+                    <li>병원 기관 대상 베타테스트 준비 및 검토</li>
+                    <li>DICOM 기반 연동 및 가명화 범위 확장 계획</li>
                 </ul>
                 {/* <베타 테스트 계획 다이어그램 이미지> */}
             </div>
