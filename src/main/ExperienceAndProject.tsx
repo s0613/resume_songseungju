@@ -208,7 +208,7 @@ const ExperienceAndProject: React.FC = () => {
                     </div>
                     <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
                       <Calendar className="h-4 w-4 mr-2" />
-                      <span className="text-sm">2023.03 - 2023.08</span>
+                      <span className="text-sm">2024.04 - 2024.11</span>
                     </div>
                   </div>
 

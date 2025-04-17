@@ -135,7 +135,7 @@ const Etc: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white shadow-sm border border-gray-100">
+            {/* <Card className="bg-white shadow-sm border border-gray-100">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
@@ -157,7 +157,7 @@ const Etc: React.FC = () => {
                   </ul>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </motion.div>
         </div>
       </div>
