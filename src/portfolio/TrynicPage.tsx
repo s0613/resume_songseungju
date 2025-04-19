@@ -33,7 +33,7 @@ const TrynicPage: React.FC = () => {
                         <p className="text-lg text-gray-700 leading-relaxed">
                             Trynic는 패션 중소기업을 위한 AI 영상 생성 플랫폼으로, 누구나 모델을 선택하고 자사 의류 이미지를 입힌 후,
                             레퍼런스 영상을 기반으로 자신만의 패션 영상을 만들 수 있는 서비스입니다. 기존의 영상 제작 비용과 시간이
-                            부담되던 소규모 브랜드들도 이 플랫폼을 통해 손쉽게 마케팅 콘텐츠를 생성할 수 있도록 돕습니다.
+                            부담되던 소규모 브랜드들도 이 플랫폼을 통해 손쉽게 마케팅 콘텐츠를 제작할 수 있도록 돕습니다.
                         </p>
                     </div>
                 </section>
@@ -49,9 +49,9 @@ const TrynicPage: React.FC = () => {
                                 <div className="h-px bg-gray-300 flex-grow ml-4"></div>
                             </h2>
                             <p className="text-gray-700 text-lg leading-relaxed">
-                                Trynic는 AI 영상 생성 기술을 활용하여 실제 모델에 옷을 입히고, 기존 영상 스타일을 레퍼런스로 활용해
-                                새로운 콘텐츠를 자동 생성합니다. 이를 통해 사용자는 비용과 시간의 부담 없이 마케팅 콘텐츠를 지속적으로
-                                제작할 수 있습니다.
+                                Trynic는 AI 영상 기술을 활용하여 실제 모델에 옷을 입히고, 기존 영상 스타일을 레퍼런스로 활용해
+                                새로운 콘텐츠를 만들 수 있도록 지원합니다. 이를 통해 사용자는 비용과 시간의 부담 없이 마케팅 콘텐츠를
+                                꾸준히 제작할 수 있습니다.
                             </p>
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
@@ -97,9 +97,8 @@ const TrynicPage: React.FC = () => {
                                 <div className="h-px bg-gray-300 flex-grow ml-4"></div>
                             </h2>
                             <p className="text-gray-700 text-lg leading-relaxed">
-                                Trynic는 AI 영상 생성 기술을 활용하여 실제 모델에 옷을 입히고, 기존 영상 스타일을 레퍼런스로 활용해
-                                새로운 콘텐츠를 자동 생성합니다. 이를 통해 사용자는 비용과 시간의 부담 없이 마케팅 콘텐츠를 지속적으로
-                                제작할 수 있습니다.
+                                Trynic는 모델 이미지와 의류 이미지, 영상 스타일을 결합하여 마케팅에 활용할 수 있는 콘텐츠를 제작할 수 있게 도와줍니다.
+                                복잡한 촬영 과정을 단순화하고, 브랜드가 원하는 스타일로 손쉽게 영상 콘텐츠를 구성할 수 있도록 설계되었습니다.
                             </p>
                         </div>
                     </div>
@@ -118,8 +117,8 @@ const TrynicPage: React.FC = () => {
                                 {[
                                     "모델 선택 및 AI 의상 입히기 기능",
                                     "레퍼런스 영상을 기반으로 한 스타일 선택",
-                                    "프롬프트 및 의류 이미지 입력을 통한 AI 영상 생성",
-                                    "생성된 영상 다운로드 및 소셜 미디어 공유",
+                                    "프롬프트 및 의류 이미지 입력을 통한 영상 제작",
+                                    "완성된 영상 다운로드 및 소셜 미디어 공유",
                                 ].map((feature, index) => (
                                     <li key={index} className="flex items-start">
                                         <ArrowRight className="h-5 w-5 text-gray-500 mr-2 mt-1 flex-shrink-0" />
