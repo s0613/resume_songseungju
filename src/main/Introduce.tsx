@@ -83,13 +83,6 @@ const Introduce: React.FC = () => {
                   </p>
                 </div>
               </div>
-
-              <div className="mt-8 flex justify-end">
-                <div className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  <span>더 알아보기</span>
-                  <ChevronRight className="h-4 w-4 ml-1" />
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>

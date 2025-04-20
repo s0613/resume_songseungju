@@ -91,6 +91,7 @@ const Skill: React.FC = () => {
                     <Badge variant="secondary">AWS EC2</Badge>
                     <Badge variant="secondary">AWS S3</Badge>
                     <Badge variant="secondary">CloudFront</Badge>
+                    <Badge variant="secondary">AWS RDS</Badge>
                     <Badge variant="secondary">Nginx</Badge>
                     <Badge variant="secondary">Docker</Badge>
                   </div>
@@ -111,7 +112,13 @@ const Skill: React.FC = () => {
                     <Badge variant="secondary">GitHub</Badge>
                     <Badge variant="secondary">Figma</Badge>
                     <Badge variant="secondary">Postman</Badge>
-                    <Badge variant="secondary">VS Code</Badge>
+                    <Badge variant="secondary">Notion</Badge>
+                    <Badge variant="secondary">Slack</Badge>
+                    <Badge variant="secondary">Cursor AI</Badge>
+                    <Badge variant="secondary">ChatGpt</Badge>
+                    <Badge variant="secondary">Copilot</Badge>
+
+
                   </div>
                 </div>
               </CardContent>
