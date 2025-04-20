@@ -120,7 +120,7 @@ const Etc: React.FC = () => {
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Calendar className="h-4 w-4 mr-2" />
-                    <span className="text-sm">2024.02</span>
+                    <span className="text-sm">2025.03</span>
                   </div>
                 </div>
 

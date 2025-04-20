@@ -3,17 +3,21 @@
 import type React from "react";
 import { motion } from "framer-motion";
 import useIsTop from "@/hooks/use-is-top"; // 경로는 실제 프로젝트 구조에 맞게 수정하세요.
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const Header: React.FC = () => {
   const isTop = useIsTop();
+  const pathname = usePathname();
+  const isPortfolioPage = pathname.includes("/portfolio/");
 
   const menuItems = [
-    { name: "SSJ", href: "#heroSection" },
-    { name: "Introduce", href: "#introduce" },
-    { name: "Skill", href: "#skill" },
-    { name: "Expe&proj", href: "#experienceAndProject" },
-    { name: "Education", href: "#education" },
-    { name: "ETC", href: "#etc" },
+    { name: "SSJ", href: isPortfolioPage ? "/" : "#heroSection" },
+    { name: "Introduce", href: isPortfolioPage ? "/#introduce" : "#introduce" },
+    { name: "Skill", href: isPortfolioPage ? "/#skill" : "#skill" },
+    { name: "Expe&proj", href: isPortfolioPage ? "/#experienceAndProject" : "#experienceAndProject" },
+    { name: "Education", href: isPortfolioPage ? "/#education" : "#education" },
+    { name: "ETC", href: isPortfolioPage ? "/#etc" : "#etc" },
   ];
 
   return (
@@ -46,9 +50,9 @@ const Header: React.FC = () => {
                 ${isTop ? "text-gray-800" : "text-gray-600"}
               `}
             >
-              <a href="/" className="hover:text-gray-900">
+              <Link href="/" className="hover:text-gray-900">
                 Portfolio
-              </a>
+              </Link>
             </motion.div>
 
             {/* 메뉴 영역 */}
@@ -60,7 +64,7 @@ const Header: React.FC = () => {
             >
               {menuItems.map((item) => (
                 <li key={item.href}>
-                  <a
+                  <Link
                     href={item.href}
                     className={`
                       px-2 py-1 rounded-lg text-sm
@@ -72,7 +76,7 @@ const Header: React.FC = () => {
                     `}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </motion.ul>
