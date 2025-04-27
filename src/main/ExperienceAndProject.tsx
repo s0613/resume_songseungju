@@ -89,9 +89,9 @@ const ExperienceAndProject: React.FC = () => {
 
                   <ul className="space-y-2 text-gray-700 mt-4">
                     {[
-                      "서비스 컨셉 정의부터 전체 기획, 디자인, 개발까지 1인 주도",
+                      "서비스 컨셉 정의부터 전체 기획, 디자인, 개발까지 수행",
                       "Next.js + Tailwind CSS 기반 UI 및 UX 구현",
-                      "Spring Boot 기반 사용자 인증 및 검색 기능 개발",
+                      "Spring Boot 기반 사용자 인증 및 보안 개선",
                       "AWS S3 및 CloudFront를 활용한 리소스 최적화",
                       "창업지원단 Launch Pad 최우수상 수상",
                     ].map((item, index) => (
