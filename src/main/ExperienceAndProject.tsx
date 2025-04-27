@@ -70,7 +70,7 @@ const ExperienceAndProject: React.FC = () => {
                   </div>
 
                   <p className="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
-                    레퍼런스 기반 AI 생성 이미지와 영상을 제공하는 웹사이트 – 기획부터 개발, 배포까지 전 과정 단독 수행
+                    레퍼런스 기반 AI 생성 이미지와 영상을 제공하는 웹사이트 – 기획부터 개발, 배포까지 전 과정 동시 수행
                   </p>
 
                   <div className="flex flex-wrap gap-2 mt-4">
