@@ -41,8 +41,8 @@ const Introduce: React.FC = () => {
           >
             <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                안녕하세요, <span className="font-medium text-gray-900">송승주</span>입니다. 저는 문제를 정의하고 직접
-                해결하는 '<span className="font-medium text-gray-900">실행 중심</span>' 풀스택 개발자입니다.
+                안녕하세요, <span className="font-medium text-gray-900">송승주</span>입니다. 저는 고객의 문제를 정의하고 기술로 해결하는{' '}
+                '<span className="font-medium text-gray-900">Problem Solver</span>'입니다.
               </p>
 
               <div className="my-6 flex items-center">
@@ -61,25 +61,23 @@ const Introduce: React.FC = () => {
                 <div className="flex items-start">
                   <Server className="h-5 w-5 text-gray-500 mt-1 mr-3 flex-shrink-0" />
                   <p className="text-gray-700">
-                    단순한 개발자가 아닌, 고객 문제를 정의하고 MVP로 시장에 실험해보는 창업형 개발자를 지향합니다.
-                    실제로 &quot;러닝 기반 매칭 서비스(RunningToYou)&quot;, &quot;의료영상 AI 판독 솔루션(MediVu)&quot;
-                    등 기획부터 런칭까지 직접 주도한 프로젝트들을 경험하며 실행력을 쌓아왔습니다.
+                    단순한 개발자가 아닌, 고객의 문제를 정의하고 이를 MVP로 실험하며 빠르게 해결하는 창업형 개발자로 활동하고 있습니다.
+                    &quot;러닝 기반 매칭 서비스(RunningToYou)&quot;, &quot;의료영상 AI 판독 솔루션(MediVu)&quot; 등 실사용자 대상의 프로젝트를 직접 기획하고 주도해왔습니다.
                   </p>
                 </div>
 
                 <div className="flex items-start">
                   <Rocket className="h-5 w-5 text-gray-500 mt-1 mr-3 flex-shrink-0" />
                   <p className="text-gray-700">
-                    저는 완벽한 제품보다 빠른 실험을 중시합니다. 빠르게 만들고, 시장에 던지고, 피드백을 통해 개선하는
-                    개발을 합니다.
+                    저는 완벽한 제품보다 빠른 문제 해결과 시장 검증을 중시합니다. 빠르게 만들고, 사용자에게 전달하고, 실질적인 피드백으로 발전시킵니다.
                   </p>
                 </div>
 
                 <div className="flex items-start">
                   <Cloud className="h-5 w-5 text-gray-500 mt-1 mr-3 flex-shrink-0" />
                   <p className="text-gray-700">
-                    지금도 고객 문제를 정의하고 MVP를 제작하며, 더 나은 사용자 경험을 만드는 데 집중하고 있습니다. 함께
-                    실험하고 성장할 수 있는 기회를 찾고 있습니다.
+                    지금 이 순간에도 문제 해결 중심의 개발을 이어가며, 더 나은 사용자 경험과 가치를 만드는 데 집중하고 있습니다.
+                    함께 실험하고 성장할 기회를 찾고 있습니다.
                   </p>
                 </div>
               </div>
