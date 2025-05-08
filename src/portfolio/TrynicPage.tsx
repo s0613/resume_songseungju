@@ -194,7 +194,7 @@ const TrynicPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
                             {
-                                title: "Launch Pad 창업경진대회 최우수상 수상",
+                                title: "Launch Pad 창업경진대회 최우수상, 기업가 정신 재단상 수상",
                                 icon: "🏆",
                             },
                             {

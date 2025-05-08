@@ -94,6 +94,7 @@ const ExperienceAndProject: React.FC = () => {
                       "Spring Boot 기반 사용자 인증 및 보안 개선",
                       "AWS S3 및 CloudFront를 활용한 리소스 최적화",
                       "창업지원단 Launch Pad 최우수상 수상",
+                      "기업가 정신 재단상 수상",
                     ].map((item, index) => (
                       <li key={index} className="flex items-start">
                         <ChevronRight className="h-5 w-5 mr-2 transform transition-transform duration-300 group-hover:translate-x-1 text-gray-500 group-hover:text-gray-700" />

@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { ChevronRight, Code, Server, Cloud, Rocket } from "lucide-react"
+import { Code, Server, Cloud, Rocket } from "lucide-react"
 import { motion } from "framer-motion"
 
 const Introduce: React.FC = () => {
