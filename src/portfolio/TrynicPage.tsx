@@ -4,7 +4,7 @@ import type React from "react"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ExternalLink } from "lucide-react"
 
 const TrynicPage: React.FC = () => {
     return (
@@ -14,7 +14,18 @@ const TrynicPage: React.FC = () => {
                 <Image src="/Trynic/trynicHero.png" alt="Trynic 히어로 이미지" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Trynic</h1>
+                    <div className="flex items-center gap-4 mb-4">
+                        <h1 className="text-4xl md:text-5xl font-bold text-white">Trynic</h1>
+                        <a
+                            href="https://trynicai.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white hover:text-gray-200 transition-colors"
+                            aria-label="Trynic 웹사이트 방문"
+                        >
+                            <ExternalLink className="h-6 w-6 md:h-8 md:w-8" />
+                        </a>
+                    </div>
                     <p className="text-lg text-white max-w-3xl">패션 중소기업을 위한 AI 영상 생성 플랫폼</p>
                     <div className="flex flex-wrap justify-center gap-2 mt-6">
                         <Badge className="bg-white/20 text-white hover:bg-white/30">Next.js</Badge>
@@ -187,7 +198,7 @@ const TrynicPage: React.FC = () => {
                 {/* Progress Section */}
                 <section>
                     <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center">
-                        <span className="mr-2">Progress & What's Next</span>
+                        <span className="mr-2">Progress &amp; What&apos;s Next</span>
                         <div className="h-px bg-gray-300 flex-grow ml-4"></div>
                     </h2>
 
