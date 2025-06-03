@@ -128,7 +128,7 @@ const Etc: React.FC = () => {
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start">
                       <ChevronRight className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-1" />
-                      <span>AI 기반 영상 생성 서비스 'Trynic' 프로젝트로 수상</span>
+                      <span>AI 기반 영상 생성 서비스 &apos;Trynic&apos; 프로젝트로 수상</span>
                     </li>
                   </ul>
                 </div>

@@ -38,7 +38,7 @@ const RunningToYouPage: React.FC = () => {
                             </h2>
                             <p className="text-gray-700 text-lg leading-relaxed">
                                 RunningToYou는 운동이라는 공통된 행위를 통해 자연스럽게 서로를 알아가는 새로운 형태의 만남 서비스를
-                                제안합니다. 기존 데이팅 앱의 과몰입 구조나 불편한 채팅 중심의 상호작용을 배제하고, '함께 뛴다'는 경험을
+                                제안합니다. 기존 데이팅 앱의 과몰입 구조나 불편한 채팅 중심의 상호작용을 배제하고, &apos;함께 뛴다&apos;는 경험을
                                 중심으로 관계를 쌓도록 설계했습니다.
                             </p>
                         </div>
@@ -181,7 +181,7 @@ const RunningToYouPage: React.FC = () => {
                 {/* What's Next Section */}
                 <section className="mb-10">
                     <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center">
-                        <span className="mr-2">What's Next</span>
+                        <span className="mr-2">What&apos;s Next</span>
                         <div className="h-px bg-gray-300 flex-grow ml-4"></div>
                     </h2>
 

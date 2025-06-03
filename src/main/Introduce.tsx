@@ -42,7 +42,7 @@ const Introduce: React.FC = () => {
             <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
                 안녕하세요, <span className="font-medium text-gray-900">송승주</span>입니다. 저는 고객의 문제를 정의하고 기술로 해결하는{' '}
-                '<span className="font-medium text-gray-900">Problem Solver</span>'입니다.
+                &apos;<span className="font-medium text-gray-900">Problem Solver</span>&apos;입니다.
               </p>
 
               <div className="my-6 flex items-center">
