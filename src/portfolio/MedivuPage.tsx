@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 const MediVuPage: React.FC = () => {
     return (
@@ -67,11 +68,26 @@ const MediVuPage: React.FC = () => {
             <div className="space-y-4">
                 <h2 className="text-2xl font-semibold text-gray-700">Current Progress</h2>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li>실험실 특화형 선도대학 창업지원 사업계획서 단독 작성 및 제출</li>
+                    <li>실험실 특화형 선도대학 창업지원 사업계획서 단독 작성 및 예창 합격</li>
                     <li>Next.js 기반 랜딩페이지 프로토타입 개발 진행 중</li>
                     <li>Python 기반 PDF 판독문 가명화 프로토타입 개발 중</li>
+                    <li>창업 관련 서류 업무 및 정부지원사업 신청 업무 수행</li>
                 </ul>
-                {/* <랜딩페이지 캡처 이미지 or 사업계획서 제출 이미지> */}
+                
+                {/* 프로토타입 스크린샷 */}
+                <div className="mt-8">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">프로토타입 스크린샷</h3>
+                    <div className="relative w-full max-w-4xl mx-auto">
+                        <Image
+                            src="/medivu/screenshot2.webp"
+                            alt="MediVu 프로토타입 스크린샷"
+                            width={1200}
+                            height={800}
+                            className="rounded-lg shadow-lg border border-gray-200"
+                            priority
+                        />
+                    </div>
+                </div>
             </div>
 
             {/* 향후 계획 */}

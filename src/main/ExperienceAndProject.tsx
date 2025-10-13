@@ -93,6 +93,7 @@ const ExperienceAndProject: React.FC = () => {
                       "Next.js + Tailwind CSS 기반 UI 및 UX 구현",
                       "Spring Boot 기반 사용자 인증 및 보안 개선",
                       "AWS S3 및 CloudFront를 활용한 리소스 최적화",
+                      "중소벤처기업부 예비창업패키지 선정",
                       "창업지원단 Launch Pad 최우수상 수상",
                       "기업가 정신 재단상 수상",
                     ].map((item, index) => (
@@ -139,7 +140,7 @@ const ExperienceAndProject: React.FC = () => {
                     </div>
                     <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
                       <Calendar className="h-4 w-4 mr-2" />
-                      <span className="text-sm">2025.03 ~ 현재</span>
+                      <span className="text-sm">2025.03 ~ 2025.10</span>
                     </div>
                   </div>
 
@@ -161,10 +162,11 @@ const ExperienceAndProject: React.FC = () => {
 
                   <ul className="space-y-2 text-gray-700 mt-4">
                     {[
+                      "실험실 특화 창업지원 사업계획서 단독 작성 및 예창 합격",
                       "MCP(Model Context Protocol)를 활용한 구조 제안",
-                      "실험실 특화 창업지원 사업계획서 단독 작성",
                       "서비스 흐름에 맞춘 랜딩페이지 디자인 및 개발 진행 중",
                       "PDF 판독문 내 개인정보 가명화 프로토타입 기능 개발 중",
+                      "창업 관련 서류 업무 및 정부지원사업 신청 업무 수행",
                     ].map((item, index) => (
                       <li key={index} className="flex items-start">
                         <ChevronRight className="h-5 w-5 mr-2 transform transition-transform duration-300 group-hover:translate-x-1 text-gray-500 group-hover:text-gray-700" />
@@ -254,44 +256,6 @@ const ExperienceAndProject: React.FC = () => {
               </Card>
             </Link>
 
-            {/* 최적 진입 시간 웹사이트 */}
-            <Card className="bg-white shadow-sm border border-gray-100 overflow-hidden">
-              <CardContent className="p-6 relative">
-                <div className="flex items-center justify-between mb-4 relative">
-                  <div className="flex items-center space-x-2">
-                    <Briefcase className="h-5 w-5 text-gray-500" />
-                    <h3 className="text-xl font-semibold text-gray-800">최적 진입 시간 웹사이트</h3>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    <span className="text-sm">2025.01 - 2025.02</span>
-                  </div>
-                </div>
-
-                <p className="text-gray-700">
-                  Django와 Next.js를 활용한 사용자 방문 최적 시간 분석 외주 프로젝트
-                </p>
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {["Django", "Next.js", "REST API"].map((tech) => (
-                    <Badge key={tech} variant="secondary" className="bg-gray-100 text-gray-800">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-                <ul className="space-y-2 text-gray-700 mt-4">
-                  {[
-                    "Django 백엔드 + Next.js 프론트엔드 기획 및 구현",
-                    "시간대별 유입 패턴 분석 및 UX 최적화 반영",
-                    "전체 API 설계 및 데이터 통합 관리",
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start">
-                      <ChevronRight className="h-5 w-5 mr-2 text-gray-500" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
           </motion.div>
         </div>
       </div>

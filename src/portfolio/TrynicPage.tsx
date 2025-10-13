@@ -11,7 +11,7 @@ const TrynicPage: React.FC = () => {
         <div className="bg-white min-h-screen">
             {/* Hero section with overlay text */}
             <section className="relative h-[500px] w-full">
-                <Image src="/Trynic/trynicHero.png" alt="Trynic 히어로 이미지" fill className="object-cover" priority />
+                <Image src="/Trynic/trynicHero.webp" alt="Trynic 히어로 이미지" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
                     <div className="flex items-center gap-4 mb-4">
@@ -67,7 +67,7 @@ const TrynicPage: React.FC = () => {
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
                             <Image
-                                src="/Trynic/trynicdetail.png"
+                                src="/Trynic/trynicdetail.webp"
                                 alt="Trynic 서비스 상세"
                                 fill
                                 className="object-contain bg-gray-50"
@@ -96,7 +96,7 @@ const TrynicPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg">
                             <Image
-                                src="/Trynic/fash_change.png"
+                                src="/Trynic/fash_change.webp"
                                 alt="Trynic 패션 변환 예시"
                                 fill
                                 className="object-contain bg-gray-50"
@@ -140,7 +140,7 @@ const TrynicPage: React.FC = () => {
                         </div>
                         <div className="lg:col-span-3 relative h-[400px] rounded-xl overflow-hidden shadow-lg">
                             <Image
-                                src="/Trynic/trynicgeneration.png"
+                                src="/Trynic/trynicgeneration.webp"
                                 alt="Trynic AI 영상 생성 프로세스"
                                 fill
                                 className="object-contain bg-gray-50"
@@ -195,6 +195,27 @@ const TrynicPage: React.FC = () => {
                     </div>
                 </section>
 
+                {/* Traction & Field Activities Section */}
+                <section className="mb-20">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                        <div className="space-y-6 order-2 md:order-1">
+                            <h2 className="text-3xl font-bold text-gray-800 flex items-center">
+                                <span className="mr-2">Traction & Field Activities</span>
+                                <div className="h-px bg-gray-300 flex-grow ml-4"></div>
+                            </h2>
+                            <div className="prose max-w-none">
+                                <ul className="list-disc pl-5 text-gray-700 text-lg space-y-2">
+                                    <li>서비스 테스트와 검증을 위해 예비창업패키지에 신청하여 선정되었습니다.</li>
+                                    <li>SURF 창업 박람회에 참가하여 실제 고객과 투자자를 만나 적극적으로 활동했습니다.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
+                            <Image src="/Trynic/surf.webp" alt="SURF 창업 박람회 현장" fill className="object-contain rotate-90" />
+                        </div>
+                    </div>
+                </section>
+
                 {/* Progress Section */}
                 <section>
                     <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center">
@@ -207,6 +228,14 @@ const TrynicPage: React.FC = () => {
                             {
                                 title: "Launch Pad 창업경진대회 최우수상, 기업가 정신 재단상 수상",
                                 icon: "🏆",
+                            },
+                            {
+                                title: "중소벤처기업부 예비창업패키지 선정 (서비스 테스트 및 검증)",
+                                icon: "✅",
+                            },
+                            {
+                                title: "SURF 창업 박람회 참가, 고객·투자자 미팅 및 피드백 수집",
+                                icon: "🤝",
                             },
                             {
                                 title: "AI 영상 퀄리티 향상 및 사용자 프롬프트 커스터마이징 기능 개발 예정",

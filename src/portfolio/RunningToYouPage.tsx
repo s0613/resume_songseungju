@@ -11,7 +11,7 @@ const RunningToYouPage: React.FC = () => {
         <div className="bg-white min-h-screen">
             {/* Hero section with overlay text */}
             <section className="relative h-[500px] w-full">
-                <Image src="/runningtoyou/hero.png" alt="RunningToYou 히어로 이미지" fill className="object-cover" priority />
+                <Image src="/runningtoyou/hero.webp" alt="RunningToYou 히어로 이미지" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
 
@@ -45,7 +45,7 @@ const RunningToYouPage: React.FC = () => {
                         <div className="relative h-[300px] rounded-xl overflow-hidden shadow-lg bg-gray-50 flex items-center justify-center p-6">
                             <div className="relative w-[200px] h-[200px]">
                                 <Image
-                                    src="/runningtoyou/runningtoyouLogo.png"
+                                    src="/runningtoyou/runningtoyouLogo.webp"
                                     alt="RunningToYou 로고"
                                     fill
                                     className="object-contain"
@@ -92,7 +92,7 @@ const RunningToYouPage: React.FC = () => {
                 <section className="mb-20 bg-gray-50 p-6 rounded-xl">
                     <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">서비스 소개</h2>
                     <div className="relative w-full h-[500px] rounded-xl overflow-hidden">
-                        <Image src="/runningtoyou/CTA.png" alt="RunningToYou 서비스 소개" fill className="object-contain" />
+                        <Image src="/runningtoyou/CTA.webp" alt="RunningToYou 서비스 소개" fill className="object-contain" />
                     </div>
                 </section>
 

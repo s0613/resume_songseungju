@@ -135,6 +135,66 @@ const Etc: React.FC = () => {
               </CardContent>
             </Card>
 
+            <Card className="bg-white shadow-sm border border-gray-100">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-5 w-5 text-gray-500" />
+                    <h3 className="text-xl font-semibold text-gray-800">제13회 아랩 액셀러레이팅 프로그램 최우수상</h3>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start">
+                      <ChevronRight className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-1" />
+                      <span>AI 기반 영상 생성 서비스 &apos;Trynic&apos;으로 수상</span>
+                    </li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white shadow-sm border border-gray-100">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-5 w-5 text-gray-500" />
+                    <h3 className="text-xl font-semibold text-gray-800">Moong 커넥톤 우수상</h3>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start">
+                      <ChevronRight className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-1" />
+                      <span>AI 기반 영상 생성 서비스 &apos;Trynic&apos;으로 수상</span>
+                    </li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-white shadow-sm border border-gray-100">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Award className="h-5 w-5 text-gray-500" />
+                    <h3 className="text-xl font-semibold text-gray-800">아이로드 글로벌 해커톤 대상</h3>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start">
+                      <ChevronRight className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0 mt-1" />
+                      <span>&apos;한국자동차산업수출협동조합&apos; 주관 대회</span>
+                    </li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* <Card className="bg-white shadow-sm border border-gray-100">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
