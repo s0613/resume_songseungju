@@ -116,6 +116,81 @@ const ExperienceAndProject: React.FC = () => {
               </Card>
             </Link>
 
+            {/* Totaload */}
+            <Link href="/portfolio/totaload" className="block group">
+              <Card
+                className="bg-white shadow-sm border border-gray-100 transition-all duration-500
+                  group-hover:shadow-xl group-hover:border-gray-300 group-hover:scale-[1.02]
+                  group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gray-50
+                  group-hover:border-opacity-80 cursor-pointer overflow-hidden"
+              >
+                <CardContent className="p-6 relative">
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent
+                      group-hover:via-gray-50/30 opacity-0 group-hover:opacity-100
+                      transition-opacity duration-1000 ease-in-out"
+                  />
+
+                  <div className="flex items-center justify-between mb-4 relative">
+                    <div className="flex items-center space-x-2">
+                      <Briefcase className="h-5 w-5 text-gray-500 group-hover:text-gray-700 transition-colors duration-300" />
+                      <h3 className="text-xl font-semibold text-gray-800 group-hover:text-black transition-colors duration-300">
+                        Totaload
+                      </h3>
+                    </div>
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      <span className="text-sm">2024.06 ~ 2024.12</span>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
+                    중고차 수출 과정의 디지털 인증서 자동 발급 SaaS – AI 판독과 규정 매핑을 통한 원스톱 솔루션
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {["Spring Boot", "Python AI", "AWS", "OCR", "PDF", "전자서명"].map(
+                      (tech) => (
+                        <Badge
+                          key={tech}
+                          variant="secondary"
+                          className="transition-all duration-300 group-hover:bg-gray-200 group-hover:text-gray-800"
+                        >
+                          {tech}
+                        </Badge>
+                      )
+                    )}
+                  </div>
+
+                  <ul className="space-y-2 text-gray-700 mt-4">
+                    {[
+                      "한국 중고차 수출 협동 조합 해커톤 대상 수상",
+                      "정부지원사업 딥테크 분야 예비창업패키지 선정",
+                      "중고차 수출 과정의 불일치/재작업/신뢰 문제 해결을 위한 SaaS 개발",
+                      "AI OCR을 활용한 차량 정보 자동 판독 및 정합성 검사 시스템 구축",
+                      "수입국별 규정 매핑 및 디지털 인증서(PDF+QR/전자서명) 자동 발급",
+                      "AWS 인프라 구축 및 파일럿 운영을 통한 실제 업계 플로우 검증",
+                      "발급소요시간, 재작업률, 바이어 검증 성공률 3개 핵심지표 트래킹 체계 구축",
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <ChevronRight className="h-5 w-5 mr-2 transform transition-transform duration-300 group-hover:translate-x-1 text-gray-500 group-hover:text-gray-700" />
+                        <span className="group-hover:text-gray-900 transition-colors duration-300">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 relative">
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-all duration-300 group-hover:translate-x-2">
+                      <span className="text-sm font-medium">상세히 보기</span>
+                      <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
             {/* MediVu */}
             <Link href="/portfolio/medivu" className="block group">
               <Card
@@ -166,7 +241,7 @@ const ExperienceAndProject: React.FC = () => {
                       "MCP(Model Context Protocol)를 활용한 구조 제안",
                       "서비스 흐름에 맞춘 랜딩페이지 디자인 및 개발 진행 중",
                       "PDF 판독문 내 개인정보 가명화 프로토타입 기능 개발 중",
-                      "창업 관련 서류 업무 및 정부지원사업 신청 업무 수행",
+                      "정부지원사업 선정으로 총 1억원 지원금 수령",
                     ].map((item, index) => (
                       <li key={index} className="flex items-start">
                         <ChevronRight className="h-5 w-5 mr-2 transform transition-transform duration-300 group-hover:translate-x-1 text-gray-500 group-hover:text-gray-700" />
