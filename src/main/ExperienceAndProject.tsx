@@ -140,7 +140,7 @@ const ExperienceAndProject: React.FC = () => {
                     </div>
                     <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
                       <Calendar className="h-4 w-4 mr-2" />
-                      <span className="text-sm">2024.06 ~ 2024.12</span>
+                      <span className="text-sm">2025.07 ~ 현재</span>
                     </div>
                   </div>
 
