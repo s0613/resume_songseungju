@@ -57,7 +57,7 @@ const Education: React.FC = () => {
 
                 <div className="space-y-4">
                   <div className="flex items-center">
-                    <Badge variant="secondary">컴퓨터공학과 졸업예정</Badge>
+                    <Badge variant="secondary">컴퓨터공학과 졸업</Badge>
                   </div>
 
                   <ul className="space-y-2 text-gray-700">
