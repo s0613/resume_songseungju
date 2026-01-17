@@ -140,7 +140,7 @@ const ExperienceAndProject: React.FC = () => {
                     </div>
                     <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
                       <Calendar className="h-4 w-4 mr-2" />
-                      <span className="text-sm">2024.11 ~ 현재</span>
+                      <span className="text-sm">2025.11 ~ 2026.01</span>
                     </div>
                   </div>
 
@@ -164,7 +164,7 @@ const ExperienceAndProject: React.FC = () => {
 
                   <ul className="space-y-2 text-gray-700 mt-4">
                     {[
-                      "Flutter 기반 iOS/Android 크로스플랫폼 모바일 앱 개발",
+                      "Flutter 모바일 앱 UX 개선",
                       "Spring Boot 백엔드 및 JWT/OAuth2 인증 시스템 구축",
                       "Next.js 보호자 대시보드 개발 (WebSocket 실시간 모니터링)",
                       "Gemini AI 연동 맞춤형 피드백 및 PDF 리포트 자동 생성",

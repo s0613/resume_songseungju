@@ -242,7 +242,7 @@ const CogmoPage: React.FC = () => {
                         {[
                             "전체 시스템 아키텍처 설계 및 API 명세서 작성",
                             "Spring Boot 백엔드 개발 (인증, 테스트, AI 연동, PDF 생성)",
-                            "Flutter 모바일 앱 개발 (소셜 로그인, 테스트 UI)",
+                            "Flutter 모바일 앱 UX 개선",
                             "Next.js 보호자 대시보드 개발 (실시간 모니터링)",
                             "AWS 인프라 구축 및 배포 자동화",
                             "Gemini AI 프롬프트 엔지니어링",
