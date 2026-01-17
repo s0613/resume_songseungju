@@ -116,6 +116,80 @@ const ExperienceAndProject: React.FC = () => {
               </Card>
             </Link>
 
+            {/* Cogmo */}
+            <Link href="/portfolio/cogmo" className="block group">
+              <Card
+                className="bg-white shadow-sm border border-gray-100 transition-all duration-500
+                  group-hover:shadow-xl group-hover:border-gray-300 group-hover:scale-[1.02]
+                  group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gray-50
+                  group-hover:border-opacity-80 cursor-pointer overflow-hidden"
+              >
+                <CardContent className="p-6 relative">
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent
+                      group-hover:via-gray-50/30 opacity-0 group-hover:opacity-100
+                      transition-opacity duration-1000 ease-in-out"
+                  />
+
+                  <div className="flex items-center justify-between mb-4 relative">
+                    <div className="flex items-center space-x-2">
+                      <Briefcase className="h-5 w-5 text-gray-500 group-hover:text-gray-700 transition-colors duration-300" />
+                      <h3 className="text-xl font-semibold text-gray-800 group-hover:text-black transition-colors duration-300">
+                        Cogmo 안녕
+                      </h3>
+                    </div>
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      <span className="text-sm">2024.11 ~ 현재</span>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
+                    고령자를 위한 AI 기반 인지건강 측정 및 관리 플랫폼 – 모바일 앱, 보호자 대시보드, 백엔드 풀스택 개발
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {["Flutter", "Spring Boot", "Next.js", "Gemini AI", "AWS", "WebSocket"].map(
+                      (tech) => (
+                        <Badge
+                          key={tech}
+                          variant="secondary"
+                          className="transition-all duration-300 group-hover:bg-gray-200 group-hover:text-gray-800"
+                        >
+                          {tech}
+                        </Badge>
+                      )
+                    )}
+                  </div>
+
+                  <ul className="space-y-2 text-gray-700 mt-4">
+                    {[
+                      "Flutter 기반 iOS/Android 크로스플랫폼 모바일 앱 개발",
+                      "Spring Boot 백엔드 및 JWT/OAuth2 인증 시스템 구축",
+                      "Next.js 보호자 대시보드 개발 (WebSocket 실시간 모니터링)",
+                      "Gemini AI 연동 맞춤형 피드백 및 PDF 리포트 자동 생성",
+                      "AWS 인프라 구축 (EC2, S3, SNS, SES) 및 배포 자동화",
+                      "6개 영역 인지기능 테스트 시스템 설계 및 구현",
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <ChevronRight className="h-5 w-5 mr-2 transform transition-transform duration-300 group-hover:translate-x-1 text-gray-500 group-hover:text-gray-700" />
+                        <span className="group-hover:text-gray-900 transition-colors duration-300">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 relative">
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-all duration-300 group-hover:translate-x-2">
+                      <span className="text-sm font-medium">상세히 보기</span>
+                      <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
             {/* Totaload */}
             <Link href="/portfolio/totaload" className="block group">
               <Card
