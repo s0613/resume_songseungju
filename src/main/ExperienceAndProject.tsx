@@ -190,6 +190,80 @@ const ExperienceAndProject: React.FC = () => {
               </Card>
             </Link>
 
+            {/* Mone */}
+            <Link href="/portfolio/mone" className="block group">
+              <Card
+                className="bg-white shadow-sm border border-gray-100 transition-all duration-500
+                  group-hover:shadow-xl group-hover:border-gray-300 group-hover:scale-[1.02]
+                  group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gray-50
+                  group-hover:border-opacity-80 cursor-pointer overflow-hidden"
+              >
+                <CardContent className="p-6 relative">
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent
+                      group-hover:via-gray-50/30 opacity-0 group-hover:opacity-100
+                      transition-opacity duration-1000 ease-in-out"
+                  />
+
+                  <div className="flex items-center justify-between mb-4 relative">
+                    <div className="flex items-center space-x-2">
+                      <Briefcase className="h-5 w-5 text-gray-500 group-hover:text-gray-700 transition-colors duration-300" />
+                      <h3 className="text-xl font-semibold text-gray-800 group-hover:text-black transition-colors duration-300">
+                        MONE
+                      </h3>
+                    </div>
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      <span className="text-sm">2026.01 ~ 현재</span>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
+                    선상 면세점을 위한 풀스택 통합 관리 시스템 – 예약·주문·정산·인사급여 등 13개 도메인 백엔드 및 승객 웹 개발
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {["Django", "Python", "DRF", "Next.js", "TypeScript", "PostgreSQL"].map(
+                      (tech) => (
+                        <Badge
+                          key={tech}
+                          variant="secondary"
+                          className="transition-all duration-300 group-hover:bg-gray-200 group-hover:text-gray-800"
+                        >
+                          {tech}
+                        </Badge>
+                      )
+                    )}
+                  </div>
+
+                  <ul className="space-y-2 text-gray-700 mt-4">
+                    {[
+                      "Django DRF 기반 13개 도메인 REST API 설계 및 구현",
+                      "예약→주문→결제→재고 전 과정 트랜잭션 흐름 설계",
+                      "월별마감보고, 매출정산보고, 부가세신고자료 자동 생성",
+                      "고정·변동비용 경비 관리 및 Excel 내보내기 구현",
+                      "Next.js 승객 웹 및 Toss 결제 위젯 연동",
+                      "Playwright E2E 테스트 및 보안 정책 내재화",
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <ChevronRight className="h-5 w-5 mr-2 transform transition-transform duration-300 group-hover:translate-x-1 text-gray-500 group-hover:text-gray-700" />
+                        <span className="group-hover:text-gray-900 transition-colors duration-300">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 relative">
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-all duration-300 group-hover:translate-x-2">
+                      <span className="text-sm font-medium">상세히 보기</span>
+                      <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
             {/* Totaload */}
             <Link href="/portfolio/totaload" className="block group">
               <Card
