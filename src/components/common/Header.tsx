@@ -67,10 +67,7 @@ const Header: React.FC = () => {
             >
               <Link
                 href="/s-skills"
-                className="text-sm font-semibold tracking-widest uppercase transition-all duration-300"
-                style={{ color: "rgb(200, 140, 0)", textShadow: "0 0 12px rgba(255,172,2,0.45)" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgb(255,172,2)"; (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 20px rgba(255,172,2,0.7)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgb(200,140,0)"; (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 12px rgba(255,172,2,0.45)"; }}
+                className="text-xs font-bold tracking-[0.22em] uppercase bg-gradient-to-r from-amber-700 via-yellow-500 to-amber-600 bg-clip-text text-transparent hover:from-amber-600 hover:via-yellow-400 hover:to-amber-500 transition-all duration-300"
               >
                 SJ Company
               </Link>
