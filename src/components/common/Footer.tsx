@@ -3,8 +3,11 @@
 import type React from "react";
 import { motion } from "framer-motion";
 import { Github, Mail, Linkedin } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const Footer: React.FC = () => {
+  const pathname = usePathname();
+  if (pathname === "/s-skills") return null;
   const socialLinks = [
     {
       name: "GitHub",

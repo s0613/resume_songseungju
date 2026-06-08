@@ -11,7 +11,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['"Instrument Serif"', 'serif'],
+      },
       colors: {
+        cream: '#DEDBC8',
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

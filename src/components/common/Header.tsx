@@ -10,6 +10,9 @@ const Header: React.FC = () => {
   const isTop = useIsTop();
   const pathname = usePathname();
   const isPortfolioPage = pathname.includes("/portfolio/");
+  const isSSkillsPage = pathname === "/s-skills";
+
+  if (isSSkillsPage) return null;
 
   const menuItems = [
     { name: "SSJ", href: isPortfolioPage ? "/" : "#heroSection" },
