@@ -410,6 +410,75 @@ const ExperienceAndProject: React.FC = () => {
               </Card>
             </Link>
 
+            {/* S-skills */}
+            <Link href="/portfolio/s-skills" className="block group">
+              <Card
+                className="bg-white shadow-sm border border-gray-100 transition-all duration-500
+                  group-hover:shadow-xl group-hover:border-gray-300 group-hover:scale-[1.02]
+                  group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gray-50
+                  group-hover:border-opacity-80 cursor-pointer overflow-hidden"
+              >
+                <CardContent className="p-6 relative">
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent
+                      group-hover:via-gray-50/30 opacity-0 group-hover:opacity-100
+                      transition-opacity duration-1000 ease-in-out"
+                  />
+
+                  <div className="flex items-center justify-between mb-4 relative">
+                    <div className="flex items-center space-x-2">
+                      <Briefcase className="h-5 w-5 text-gray-500 group-hover:text-gray-700 transition-colors duration-300" />
+                      <h3 className="text-xl font-semibold text-gray-800 group-hover:text-black transition-colors duration-300">
+                        S-skills
+                      </h3>
+                    </div>
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      <span className="text-sm">2025.12 - 현재</span>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
+                    혼자 일하는 개발자의 팀 — Claude Code 역할 기반 AI 개발 오케스트레이터 오픈소스
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {["Claude Code", "TypeScript", "Multi-Agent", "Open Source"].map((tech) => (
+                      <Badge
+                        key={tech}
+                        variant="secondary"
+                        className="transition-all duration-300 group-hover:bg-gray-200 group-hover:text-gray-800"
+                      >
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+
+                  <ul className="space-y-2 text-gray-700 mt-4">
+                    {[
+                      "PM, Design, Tech Lead, Frontend, Backend, Security, QA 7개 전문가 에이전트 설계 및 구현",
+                      "claude plugin install 한 줄 설치, /sj-company로 자동 라우팅",
+                      "v1.0 → v3.1.0 지속적 업그레이드, MIT 오픈소스 공개",
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start">
+                        <ChevronRight className="h-5 w-5 mr-2 transform transition-transform duration-300 group-hover:translate-x-1 text-gray-500 group-hover:text-gray-700" />
+                        <span className="group-hover:text-gray-900 transition-colors duration-300">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 relative">
+                    <div className="flex items-center text-gray-600 group-hover:text-gray-800 transition-all duration-300 group-hover:translate-x-2">
+                      <span className="text-sm font-medium">상세히 보기</span>
+                      <ArrowRight className="h-4 w-4 ml-1 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
             {/* RunningToYou */}
             <Link href="/portfolio/runningtoyou" className="block group">
               <Card
