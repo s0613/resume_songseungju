@@ -33,7 +33,7 @@ const Header: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4">
         <nav
           className={`
-            mx-auto
+            mx-auto relative
             transition-all duration-300
             ${isTop
               ? "mt-6 px-6 py-3 rounded-2xl bg-white/70 backdrop-blur-sm"
@@ -55,6 +55,24 @@ const Header: React.FC = () => {
             >
               <Link href="/" className="hover:text-gray-900">
                 Portfolio
+              </Link>
+            </motion.div>
+
+            {/* 중앙 SJ Company 링크 */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="absolute left-1/2 -translate-x-1/2"
+            >
+              <Link
+                href="/s-skills"
+                className="text-sm font-semibold tracking-widest uppercase transition-all duration-300"
+                style={{ color: "rgb(200, 140, 0)", textShadow: "0 0 12px rgba(255,172,2,0.45)" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgb(255,172,2)"; (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 20px rgba(255,172,2,0.7)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "rgb(200,140,0)"; (e.currentTarget as HTMLAnchorElement).style.textShadow = "0 0 12px rgba(255,172,2,0.45)"; }}
+              >
+                SJ Company
               </Link>
             </motion.div>
 
