@@ -12,17 +12,17 @@ const navItems = [
 ];
 
 const STEPS = [
-  { delay: 300,  text: "/sj-company 로그인 기능 만들어줘",  color: "#E1E0CC",                   cursor: true  },
-  { delay: 900,  text: "태스크 크기 감지: Medium",          color: "rgba(222,219,200,0.45)",    cursor: false },
-  { delay: 1600, text: "[ PM ]  요구사항 분석 중...",       color: "#a78bfa",                   cursor: false },
-  { delay: 2600, text: "✓  PM Brief 완료",                  color: "#34d399",                   cursor: false },
-  { delay: 3200, text: "[ Tech Lead ]  서브에이전트 디스패치", color: "#60a5fa",                cursor: false },
-  { delay: 3700, text: "  ├─ sj-dev-backend    running",    color: "#60a5fa",                   cursor: false },
-  { delay: 4000, text: "  ├─ sj-dev-frontend   running",    color: "#60a5fa",                   cursor: false },
-  { delay: 4300, text: "  └─ sj-dev-security   running",    color: "#60a5fa",                   cursor: false },
-  { delay: 6200, text: "✓  구현 완료 — 3개 에이전트",       color: "#34d399",                   cursor: false },
-  { delay: 6800, text: "[ QA ]  검증 중...",                color: "#fbbf24",                   cursor: false },
-  { delay: 7900, text: "✓  PASS — 모든 검증 통과",          color: "#34d399",                   cursor: false },
+  { delay: 300,  text: "/sj-company 로그인 기능 만들어줘",  color: "#111111",                cursor: true  },
+  { delay: 900,  text: "태스크 크기 감지: Medium",          color: "rgba(10,10,10,0.35)",    cursor: false },
+  { delay: 1600, text: "[ PM ]  요구사항 분석 중...",       color: "#4F46E5",                cursor: false },
+  { delay: 2600, text: "✓  PM Brief 완료",                  color: "#059669",                cursor: false },
+  { delay: 3200, text: "[ Tech Lead ]  서브에이전트 디스패치", color: "#1D4ED8",             cursor: false },
+  { delay: 3700, text: "  ├─ sj-dev-backend    running",    color: "#1D4ED8",                cursor: false },
+  { delay: 4000, text: "  ├─ sj-dev-frontend   running",    color: "#1D4ED8",                cursor: false },
+  { delay: 4300, text: "  └─ sj-dev-security   running",    color: "#1D4ED8",                cursor: false },
+  { delay: 6200, text: "✓  구현 완료 — 3개 에이전트",       color: "#059669",                cursor: false },
+  { delay: 6800, text: "[ QA ]  검증 중...",                color: "#B45309",                cursor: false },
+  { delay: 7900, text: "✓  PASS — 모든 검증 통과",          color: "#059669",                cursor: false },
 ];
 
 function TerminalWindow() {
@@ -69,38 +69,38 @@ function TerminalWindow() {
     <div
       className="w-full h-full rounded-xl flex flex-col"
       style={{
-        background: "rgba(6,6,14,0.96)",
-        border: "1px solid rgba(99,102,241,0.3)",
-        boxShadow: "0 0 80px rgba(99,102,241,0.18), 0 0 30px rgba(99,102,241,0.1), 0 0 0 1px rgba(255,255,255,0.03)",
+        background: "#FAFAF8",
+        border: "1px solid rgba(10,10,10,0.1)",
+        boxShadow: "0 32px 80px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04)",
       }}
     >
       {/* Title bar */}
       <div className="flex items-center gap-2 px-4 py-3 shrink-0"
-        style={{ borderBottom: "1px solid rgba(99,102,241,0.12)" }}>
+        style={{ borderBottom: "1px solid rgba(10,10,10,0.07)" }}>
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
         </div>
-        <span className="text-[10px] text-gray-600 ml-2 font-mono">claude-code — s-skills</span>
+        <span className="text-[10px] ml-2 font-mono" style={{ color: "rgba(10,10,10,0.3)" }}>
+          claude-code — s-skills
+        </span>
       </div>
 
       {/* Body */}
       <div className="flex-1 p-4 md:p-5 font-mono text-[11px] md:text-xs space-y-2 overflow-hidden">
-        {/* Input line */}
         <div className="flex items-center gap-1.5">
-          <span style={{ color: "#6366f1" }}>❯</span>
-          <span style={{ color: "#E1E0CC" }}>
+          <span style={{ color: "#4F46E5" }}>❯</span>
+          <span style={{ color: "#111111" }}>
             {STEPS[0].text.slice(0, charCount)}
           </span>
           <motion.span
             animate={{ opacity: [1, 0] }}
             transition={{ duration: 0.5, repeat: Infinity }}
             className="inline-block w-[5px] h-[13px] align-middle rounded-sm"
-            style={{ background: "#6366f1" }}
+            style={{ background: "#4F46E5" }}
           />
         </div>
-        {/* Response lines */}
         {STEPS.slice(1).map((s, i) =>
           visible.includes(i + 1) ? (
             <motion.div
@@ -120,66 +120,41 @@ function TerminalWindow() {
 
 export function HeroSection() {
   return (
-    <section className="h-screen p-4 md:p-5 bg-black">
+    <section className="h-screen p-4 md:p-5" style={{ background: "#FAFAF8" }}>
       <div
         className="relative h-full rounded-2xl md:rounded-[2rem] overflow-hidden"
-        style={{ background: "#04040a" }}
+        style={{ background: "#FFFFFF", border: "1px solid rgba(10,10,10,0.07)" }}
       >
-        {/* ── Background layers ── */}
-
-        {/* Grid */}
+        {/* Subtle dot grid */}
         <div className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)," +
-              "linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
+            backgroundImage: "radial-gradient(rgba(10,10,10,0.06) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
           }}
         />
-        {/* Top-right strong indigo spotlight */}
-        <div className="absolute pointer-events-none"
-          style={{
-            right: "-8%", top: "-15%", width: "75%", height: "100%",
-            background: "radial-gradient(ellipse 50% 55% at 65% 22%, rgba(99,102,241,0.55) 0%, rgba(139,92,246,0.25) 40%, transparent 70%)",
-          }}
-        />
-        {/* Left warm violet glow */}
-        <div className="absolute pointer-events-none"
-          style={{
-            left: "-5%", bottom: "0", width: "55%", height: "65%",
-            background: "radial-gradient(ellipse 55% 50% at 30% 85%, rgba(168,85,247,0.28) 0%, transparent 65%)",
-          }}
-        />
-        {/* Center accent */}
-        <div className="absolute pointer-events-none"
-          style={{
-            left: "35%", top: "20%", width: "30%", height: "40%",
-            background: "radial-gradient(ellipse at center, rgba(129,140,248,0.12) 0%, transparent 70%)",
-          }}
-        />
-        {/* Noise */}
-        <div className="noise-overlay absolute inset-0 opacity-35 mix-blend-overlay pointer-events-none" />
-        {/* Bottom gradient to next section */}
+        {/* Bottom fade */}
         <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-          style={{ background: "linear-gradient(to top, rgba(4,4,10,0.9) 0%, transparent 100%)" }}
-        />
-        {/* Right vignette */}
-        <div className="absolute top-0 bottom-0 right-0 w-16 pointer-events-none"
-          style={{ background: "linear-gradient(to left, #04040a 0%, transparent 100%)" }}
+          style={{ background: "linear-gradient(to top, rgba(255,255,255,0.95) 0%, transparent 100%)" }}
         />
 
-        {/* ── Pill nav ── */}
+        {/* ── Nav ── */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
           <nav className="rounded-b-2xl md:rounded-b-3xl px-5 md:px-8 py-2.5 flex items-center gap-4 sm:gap-8"
-            style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(16px)" }}>
+            style={{
+              background: "rgba(255,255,255,0.92)",
+              backdropFilter: "blur(16px)",
+              borderBottom: "1px solid rgba(10,10,10,0.07)",
+              borderLeft: "1px solid rgba(10,10,10,0.07)",
+              borderRight: "1px solid rgba(10,10,10,0.07)",
+            }}>
             {navItems.map((item) => (
               <a key={item.name} href={item.href}
                 target={item.href.startsWith("http") ? "_blank" : undefined}
                 rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="text-[10px] sm:text-xs md:text-sm transition-colors duration-200"
-                style={{ color: "rgba(225,224,204,0.6)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#E1E0CC")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(225,224,204,0.6)")}
+                className="text-[10px] sm:text-xs transition-colors duration-200"
+                style={{ color: "rgba(10,10,10,0.45)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#0A0A0A")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(10,10,10,0.45)")}
               >
                 {item.name}
               </a>
@@ -187,7 +162,7 @@ export function HeroSection() {
           </nav>
         </div>
 
-        {/* ── Version badge (top-left) ── */}
+        {/* ── Version badge ── */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -197,17 +172,17 @@ export function HeroSection() {
           <span
             className="inline-flex items-center gap-1.5 text-[10px] font-mono px-3 py-1 rounded-full"
             style={{
-              background: "rgba(99,102,241,0.1)",
-              border: "1px solid rgba(99,102,241,0.22)",
-              color: "#a5b4fc",
+              background: "rgba(79,70,229,0.07)",
+              border: "1px solid rgba(79,70,229,0.15)",
+              color: "#4F46E5",
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#4F46E5] animate-pulse" />
             v2.9.0
           </span>
         </motion.div>
 
-        {/* ── Stats row (bottom-center fill) ── */}
+        {/* ── Stats row ── */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -216,18 +191,18 @@ export function HeroSection() {
           style={{ left: "50%", transform: "translateX(-50%)" }}
         >
           {[
-            { val: "13+", label: "Skills" },
+            { val: "19+", label: "Skills" },
             { val: "7축", label: "Agent Validation" },
             { val: "1 cmd", label: "Full Pipeline" },
           ].map(({ val, label }) => (
             <div key={label} className="text-center">
-              <div className="text-lg font-semibold" style={{ color: "#E1E0CC" }}>{val}</div>
-              <div className="text-[9px] text-gray-600 tracking-widest uppercase">{label}</div>
+              <div className="text-lg font-semibold" style={{ color: "#0A0A0A" }}>{val}</div>
+              <div className="text-[9px] tracking-widest uppercase" style={{ color: "rgba(10,10,10,0.3)" }}>{label}</div>
             </div>
           ))}
         </motion.div>
 
-        {/* ── Terminal (right side, absolutely positioned) ── */}
+        {/* ── Terminal (right side) ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -238,44 +213,38 @@ export function HeroSection() {
             right: "4%",
             bottom: "18%",
             width: "clamp(280px, 44%, 580px)",
-            filter: "drop-shadow(0 0 40px rgba(99,102,241,0.2))",
           }}
         >
           <TerminalWindow />
         </motion.div>
 
-        {/* ── Left content (absolute bottom-left) ── */}
+        {/* ── Left content ── */}
         <div className="absolute z-10 left-6 md:left-10 right-6 md:right-[50%] bottom-7 md:bottom-10">
-          {/* Title */}
           <div className="overflow-hidden mb-5">
             <motion.h1
               initial={{ y: "110%" }}
               animate={{ y: 0 }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              className="font-medium tracking-[-0.06em] leading-[0.85] whitespace-nowrap"
+              className="font-black tracking-[-0.06em] leading-[0.85] whitespace-nowrap"
               style={{
                 fontSize: "clamp(3.5rem, 8vw, 8.5rem)",
-                background: "linear-gradient(95deg, #E1E0CC 0%, #E1E0CC 55%, #a5b4fc 85%, #818cf8 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                color: "#0A0A0A",
               }}
             >
               S‑SKILLS
             </motion.h1>
           </div>
 
-          {/* Description + CTA */}
           <div className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-7">
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs sm:text-sm max-w-[230px] sm:max-w-[260px]"
-              style={{ color: "rgba(222,219,200,0.52)", lineHeight: 1.55 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-xs sm:text-sm max-w-[240px]"
+              style={{ color: "rgba(10,10,10,0.5)", lineHeight: 1.6 }}
             >
-              Claude Code용 역할 기반 개발 오케스트레이터. 태스크를 설명하면
-              전체 파이프라인이 자동 라우팅된다.
+              Claude Code용 역할 기반 오케스트레이터.
+              태스크를 설명하면 전체 파이프라인이 자동 라우팅된다.
             </motion.p>
 
             <motion.a
@@ -284,12 +253,16 @@ export function HeroSection() {
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.58, ease: [0.16, 1, 0.3, 1] }}
-              className="group inline-flex items-center gap-2 bg-[#DEDBC8] rounded-full pl-5 pr-1.5 py-1.5 text-sm font-medium text-black shrink-0 hover:gap-3 transition-all duration-300"
+              transition={{ duration: 0.7, delay: 0.58 }}
+              className="group inline-flex items-center gap-2 rounded-full pl-5 pr-1.5 py-1.5 text-sm font-medium shrink-0 transition-all duration-300"
+              style={{ background: "#0A0A0A", color: "#FFFFFF" }}
             >
               Install Now
-              <span className="bg-black rounded-full w-9 h-9 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <ArrowRight className="w-4 h-4 text-[#DEDBC8]" />
+              <span
+                className="rounded-full w-9 h-9 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                style={{ background: "#4F46E5" }}
+              >
+                <ArrowRight className="w-4 h-4 text-white" />
               </span>
             </motion.a>
           </div>

@@ -1,393 +1,171 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
-const vp = { once: true, margin: "-40px" } as const;
+const vp = { once: true, margin: "-30px" } as const;
 
-/* ── Mini terminal for the featured card ── */
-const TERMINAL_LINES = [
-  { text: "$ /sj-company 결제 모듈 만들어줘", color: "#a5b4fc", delay: 0 },
-  { text: "", color: "", delay: 0.4 },
-  { text: "[Medium] 태스크 크기 감지 완료", color: "rgba(165,180,252,0.45)", delay: 0.7 },
-  { text: "◈ PM 분석 중...", color: "#a78bfa", delay: 1.3 },
-  { text: "✓  PM Brief — 완료", color: "#34d399", delay: 2.1 },
-  { text: "", color: "", delay: 2.5 },
-  { text: "◆ Tech Lead → 3 agents dispatched", color: "#60a5fa", delay: 2.8 },
-  { text: "  ├─ sj-dev-backend     running", color: "#60a5fa", delay: 3.2 },
-  { text: "  ├─ sj-dev-frontend    running", color: "#60a5fa", delay: 3.5 },
-  { text: "  └─ sj-dev-security    running", color: "#60a5fa", delay: 3.8 },
-  { text: "", color: "", delay: 5.0 },
-  { text: "✓  구현 완료 — 3 에이전트", color: "#34d399", delay: 5.3 },
-  { text: "◇ QA 검증 중...", color: "#fbbf24", delay: 5.8 },
-  { text: "✓  PASS — 모든 검증 통과", color: "#34d399", delay: 7.0 },
-];
+/*
+  모든 6개 카테고리를 동등하게 보여주는 에디토리얼 목록.
+  색상: 검정/회색 + 인디고(라벨 전용) 단 하나만 사용.
+*/
 
-function MiniTerminal() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true });
-  const [visible, setVisible] = useState<number[]>([]);
-  const timerRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
-
-  useEffect(() => {
-    if (!inView) return;
-    timerRefs.current.forEach(clearTimeout);
-    timerRefs.current = [];
-    setVisible([]);
-
-    TERMINAL_LINES.forEach((line, i) => {
-      const t = setTimeout(() => {
-        setVisible((p) => [...p, i]);
-      }, line.delay * 1000);
-      timerRefs.current.push(t);
-    });
-
-    return () => timerRefs.current.forEach(clearTimeout);
-  }, [inView]);
-
-  return (
-    <div
-      ref={ref}
-      className="rounded-xl overflow-hidden"
-      style={{
-        background: "rgba(6,6,14,0.95)",
-        border: "1px solid rgba(99,102,241,0.2)",
-        fontFamily: "monospace",
-        fontSize: "11px",
-      }}
-    >
-      {/* titlebar */}
-      <div
-        className="flex items-center gap-1.5 px-4 py-2.5"
-        style={{ borderBottom: "1px solid rgba(99,102,241,0.1)" }}
-      >
-        <div className="w-2 h-2 rounded-full bg-[#ff5f57]" />
-        <div className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
-        <div className="w-2 h-2 rounded-full bg-[#28c840]" />
-        <span className="ml-2 text-[9px] font-mono" style={{ color: "rgba(165,180,252,0.3)" }}>
-          claude-code — s-skills demo
-        </span>
-      </div>
-      {/* body */}
-      <div className="p-4 space-y-1 min-h-[200px]">
-        {TERMINAL_LINES.map((line, i) =>
-          visible.includes(i) ? (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -4 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              {line.text ? (
-                <span style={{ color: line.color, whiteSpace: "pre" }}>{line.text}</span>
-              ) : (
-                <div className="h-2" />
-              )}
-            </motion.div>
-          ) : null
-        )}
-        {visible.length > 0 && visible.length < TERMINAL_LINES.length && (
-          <motion.span
-            animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.5, repeat: Infinity }}
-            className="inline-block w-1.5 h-3 align-middle"
-            style={{ background: "#6366f1" }}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ── QA Score visual ── */
-const AXES = [
-  { label: "Runtime Loop", score: 9, color: "#A78BFA" },
-  { label: "Orchestration", score: 10, color: "#818CF8" },
-  { label: "Role Separation", score: 9, color: "#C4B5FD" },
-  { label: "Tool Hierarchy", score: 8, color: "#A78BFA" },
-  { label: "State & Context", score: 10, color: "#818CF8" },
-  { label: "Guardrails", score: 9, color: "#C4B5FD" },
-  { label: "Observability", score: 8, color: "#A78BFA" },
-];
-
-function QAScoreCard() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true });
-
-  return (
-    <div ref={ref} className="space-y-2.5">
-      {AXES.map(({ label, score, color }, i) => (
-        <div key={label} className="flex items-center gap-3">
-          <span
-            className="text-[9px] font-medium w-20 shrink-0"
-            style={{ color: "rgba(237,233,223,0.45)" }}
-          >
-            {label}
-          </span>
-          <div className="flex-1 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.07)" }}>
-            <motion.div
-              className="h-full rounded-full"
-              style={{ background: color }}
-              initial={{ width: 0 }}
-              animate={inView ? { width: `${(score / 10) * 100}%` } : { width: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-            />
-          </div>
-          <span
-            className="text-[9px] font-mono tabular-nums w-4 text-right shrink-0"
-            style={{ color }}
-          >
-            {score}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ── Routing showcase ── */
-const ROUTES = [
-  { cmd: "/sj-company 로그인 만들어줘", badge: "Medium", agents: "PM → TL → FE + BE + Sec", color: "#6366F1", bg: "#EEF2FF" },
-  { cmd: "/sj-company 매일 파일 정리", badge: "Tiny", agents: "sj-automation", color: "#059669", bg: "#D1FAE5" },
-  { cmd: "/sj-company 인스타 포스팅 써줘", badge: "Small", agents: "sj-marketing", color: "#D97706", bg: "#FEF3C7" },
-  { cmd: "/sj-company 에이전트 구조 점검", badge: "Small", agents: "sj-agent-review (7-axis)", color: "#7C3AED", bg: "#EDE9FE" },
+const CAPABILITIES = [
+  {
+    num: "01",
+    category: "개발 파이프라인",
+    desc: "PM 분석부터 QA 검증까지 자동으로. 태스크 크기를 감지해 Tiny·Small·Medium·Large·xLarge 최적 워크플로우를 실행한다.",
+    commands: [
+      "/sj-company 로그인 기능 만들어줘",
+      "/sj-company 결제 API 구현해줘",
+    ],
+    agents: "PM · TechLead · Frontend · Backend · Database · Security · DevOps · QA",
+  },
+  {
+    num: "02",
+    category: "macOS 자동화",
+    desc: "launchd 스케줄러, AppleScript, shell 스크립트를 조합해 반복 작업을 완전히 자동화한다. 매일, 매주 실행되는 루틴을 한 줄로 설정한다.",
+    commands: [
+      "/sj-company 매일 파일 정리해줘",
+      "/sj-company 앱 실행 자동화해줘",
+    ],
+    agents: "sj-automation · launchd · AppleScript · shell",
+  },
+  {
+    num: "03",
+    category: "UI 자동화",
+    desc: "화면을 직접 제어한다. Playwright · PyAutoGUI · cliclick으로 웹 브라우저부터 데스크탑 앱까지 모든 UI를 자동화할 수 있다.",
+    commands: [
+      "/sj-company 로그인 자동화해줘",
+      "/sj-company 버튼 클릭 스크립트 만들어줘",
+    ],
+    agents: "sj-ui-auto · Playwright · PyAutoGUI · cliclick",
+  },
+  {
+    num: "04",
+    category: "마케팅 · SEO",
+    desc: "SNS 카피, 블로그 포스팅, Google / Naver 검색 색인까지. 마케팅 파이프라인 전체를 에이전트가 처리한다.",
+    commands: [
+      "/sj-company 인스타 포스팅 써줘",
+      "/sj-company 구글 색인 등록해줘",
+    ],
+    agents: "sj-marketing · sj-seo · Search Console · SNS",
+  },
+  {
+    num: "05",
+    category: "에이전트 설계",
+    desc: "10축 아키텍처로 에이전트를 설계하고 7축 심사(0–70점)로 품질을 보증한다. PASS / WARN / FAIL 판정으로 배포 전 구조를 검증한다.",
+    commands: [
+      "/sj-agent-dev 에이전트 설계해줘",
+      "/sj-agent-review 구조 점검해줘",
+    ],
+    agents: "sj-agent-dev · sj-agent-review · 7-axis · PASS/WARN/FAIL",
+  },
+  {
+    num: "06",
+    category: "문서 · 테스트",
+    desc: "코드베이스를 분석해 표준 문서를 자동 생성하고 건강 점수(0–100)를 산출한다. Playwright 루프로 기능별 심화 테스트를 반복 실행한다.",
+    commands: [
+      "/docs-organize",
+      "/pw-loop 기능별 테스트 반복해줘",
+    ],
+    agents: "docs-organize · pw-loop · test-scenario · obsidian-writer",
+  },
 ];
 
 export function SkillsSection() {
   return (
-    <section id="features" className="py-28 md:py-40 px-6 md:px-10" style={{ background: "#FFFFFF" }}>
-      <div className="max-w-6xl mx-auto">
+    <section id="features" className="py-28 md:py-40 px-6 md:px-10" style={{ background: "#F9F8F5" }}>
+      <div className="max-w-5xl mx-auto">
 
-        {/* Section header */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={vp}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-16"
+          className="mb-20"
         >
-          <p className="text-[10px] tracking-[4px] uppercase font-semibold mb-5" style={{ color: "#6366F1" }}>
+          <p className="text-[10px] tracking-[4px] uppercase font-semibold mb-5" style={{ color: "#4F46E5" }}>
             전체 기능
           </p>
           <h2
             style={{
-              fontSize: "clamp(2.4rem, 5vw, 4.5rem)",
+              fontSize: "clamp(2.4rem, 5vw, 4.8rem)",
               fontWeight: 800,
               lineHeight: 0.95,
               letterSpacing: "-0.04em",
+              color: "#0A0A0A",
             }}
           >
-            <span style={{ color: "#0F0F1A" }}>19개 스킬.</span>
-            <br />
-            <span style={{ color: "rgba(15,15,26,0.2)" }}>하나의 진입점.</span>
+            개발만이 아니다.<br />
+            <span style={{ color: "rgba(10,10,10,0.22)" }}>6개 영역, 19개 스킬.</span>
           </h2>
         </motion.div>
 
-        {/* ─── Bento grid ─── */}
-        <div className="grid md:grid-cols-2 gap-4">
-
-          {/* ① Big dark card — terminal demo (rows 1+2 on left) */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={vp}
-            transition={{ duration: 0.65, delay: 0, ease: [0.16, 1, 0.3, 1] }}
-            className="md:row-span-2 rounded-3xl p-7 flex flex-col gap-6"
-            style={{
-              background: "#0A0A14",
-              border: "1px solid rgba(99,102,241,0.12)",
-              boxShadow: "0 0 60px rgba(99,102,241,0.08)",
-            }}
-          >
-            <div>
-              <p
-                className="text-[10px] tracking-[3px] uppercase font-semibold mb-3"
-                style={{ color: "#818CF8" }}
-              >
-                Live Demo
-              </p>
-              <div
-                style={{
-                  fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1.05,
-                  color: "#EDE9DF",
-                }}
-              >
-                1 CMD
-              </div>
-              <div
-                style={{
-                  fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1.05,
-                  color: "rgba(237,233,223,0.2)",
-                }}
-              >
-                Full Pipeline
-              </div>
-            </div>
-            <MiniTerminal />
-          </motion.div>
-
-          {/* ② QA Score card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={vp}
-            transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-3xl p-7"
-            style={{
-              background: "#1A0E3B",
-              border: "1px solid rgba(139,92,246,0.15)",
-            }}
-          >
-            <div className="flex items-start justify-between mb-5">
-              <div>
-                <p
-                  className="text-[10px] tracking-[3px] uppercase font-semibold mb-1"
-                  style={{ color: "#A78BFA" }}
-                >
-                  Agent Review
-                </p>
-                <div
-                  className="flex items-baseline gap-1"
-                >
-                  <span style={{ fontSize: "2.5rem", fontWeight: 800, color: "#C4B5FD", lineHeight: 1, letterSpacing: "-0.04em" }}>63</span>
-                  <span className="text-sm font-mono" style={{ color: "rgba(196,181,253,0.4)" }}>/70</span>
-                </div>
-              </div>
+        {/* Editorial capability list */}
+        <div>
+          {CAPABILITIES.map(({ num, category, desc, commands, agents }, i) => (
+            <motion.div
+              key={num}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={vp}
+              transition={{ duration: 0.5, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+              className="grid md:grid-cols-[56px_1fr_1fr] gap-6 md:gap-10 py-10 md:py-12"
+              style={{ borderTop: "1px solid rgba(10,10,10,0.07)" }}
+            >
+              {/* Number */}
               <span
-                className="text-xs font-bold tracking-wider px-3 py-1.5 rounded-full"
-                style={{
-                  background: "rgba(52,211,153,0.12)",
-                  color: "#34D399",
-                  border: "1px solid rgba(52,211,153,0.25)",
-                }}
+                className="text-sm font-mono tabular-nums"
+                style={{ color: "rgba(10,10,10,0.2)", paddingTop: "3px" }}
               >
-                PASS
+                {num}
               </span>
-            </div>
-            <QAScoreCard />
-          </motion.div>
 
-          {/* ③ Stats card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={vp}
-            transition={{ duration: 0.6, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-3xl p-7 flex gap-6"
-            style={{
-              background: "#F0F4FF",
-              border: "1px solid rgba(99,102,241,0.12)",
-            }}
-          >
-            {[
-              { val: "19", label: "전문 스킬", color: "#4338CA" },
-              { val: "6", label: "카테고리", color: "#6366F1" },
-              { val: "10+", label: "서브에이전트", color: "#818CF8" },
-            ].map(({ val, label, color }) => (
-              <div key={label} className="flex-1">
-                <div style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", fontWeight: 800, color, letterSpacing: "-0.04em", lineHeight: 1 }}>
-                  {val}
-                </div>
-                <div className="text-[10px] mt-1.5 tracking-wide uppercase font-medium" style={{ color: "rgba(67,56,202,0.5)" }}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-
-        </div>
-
-        {/* ─── Routing showcase ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={vp}
-          transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 rounded-3xl p-7 md:p-10"
-          style={{
-            background: "#F9F8F5",
-            border: "1px solid rgba(15,15,26,0.06)",
-          }}
-        >
-          <p
-            className="text-[10px] tracking-[3px] uppercase font-semibold mb-7"
-            style={{ color: "rgba(15,15,26,0.3)" }}
-          >
-            스마트 라우팅 — 입력 → 최적 에이전트
-          </p>
-          <div className="grid sm:grid-cols-2 gap-3">
-            {ROUTES.map(({ cmd, badge, agents, color, bg }, i) => (
-              <motion.div
-                key={cmd}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={vp}
-                transition={{ duration: 0.45, delay: 0.15 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                className="rounded-2xl p-5"
-                style={{ background: "#FFFFFF", border: "1px solid rgba(15,15,26,0.07)" }}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className="text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full"
-                    style={{ color, background: bg }}
-                  >
-                    {badge}
-                  </span>
-                </div>
-                <code className="text-xs font-mono block mb-2.5" style={{ color: "#3730A3" }}>
-                  {cmd}
-                </code>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px]" style={{ color: "rgba(15,15,26,0.2)" }}>→</span>
-                  <span className="text-xs font-medium" style={{ color: "rgba(15,15,26,0.5)" }}>
-                    {agents}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* ─── Auto-Learn banner ─── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={vp}
-          transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-4 rounded-3xl p-7 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-8"
-          style={{
-            background: "linear-gradient(135deg, #022C22 0%, #064E3B 100%)",
-            border: "1px solid rgba(52,211,153,0.15)",
-          }}
-        >
-          <div className="flex-1">
-            <p className="text-[10px] tracking-[3px] uppercase font-semibold mb-2" style={{ color: "#34D399" }}>
-              Auto-Learn
-            </p>
-            <p style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)", fontWeight: 700, color: "#ECFDF5", lineHeight: 1.2, letterSpacing: "-0.03em" }}>
-              세션이 끝날 때마다<br />패턴이 자동 학습된다.
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            {["Stop", "→ asyncRewake", "→ Claude 재기동", "→ 패턴 추출", "→ skills/ 저장"].map((s, i) => (
-              <div key={s} className="text-center">
-                <div
-                  className="text-[9px] whitespace-nowrap font-mono"
-                  style={{ color: i === 0 ? "rgba(52,211,153,0.5)" : i === 4 ? "#34D399" : "rgba(52,211,153,0.35)" }}
+              {/* Category + description */}
+              <div>
+                <h3
+                  className="font-bold mb-3"
+                  style={{ fontSize: "clamp(1.1rem, 2vw, 1.4rem)", color: "#0A0A0A", letterSpacing: "-0.02em" }}
                 >
-                  {s}
-                </div>
-                {i < 4 && <div style={{ display: "none" }} />}
+                  {category}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed mb-4"
+                  style={{ color: "rgba(10,10,10,0.5)", lineHeight: 1.75 }}
+                >
+                  {desc}
+                </p>
+                <p
+                  className="text-[10px] font-mono"
+                  style={{ color: "rgba(10,10,10,0.28)" }}
+                >
+                  {agents}
+                </p>
               </div>
-            ))}
-          </div>
-        </motion.div>
+
+              {/* Example commands */}
+              <div className="space-y-2">
+                {commands.map((cmd) => (
+                  <div
+                    key={cmd}
+                    className="flex items-center gap-2 rounded-lg px-4 py-3"
+                    style={{ background: "#FFFFFF", border: "1px solid rgba(10,10,10,0.07)" }}
+                  >
+                    <span style={{ color: "#4F46E5", fontSize: "10px", fontFamily: "monospace" }}>❯</span>
+                    <code
+                      className="text-xs font-mono"
+                      style={{ color: "#1D4ED8" }}
+                    >
+                      {cmd}
+                    </code>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+          <div style={{ borderTop: "1px solid rgba(10,10,10,0.07)" }} />
+        </div>
 
       </div>
     </section>
