@@ -10,7 +10,7 @@ const TotaroWebPage: React.FC = () => {
     return (
         <div className="bg-white min-h-screen">
             <section className="relative h-[500px] w-full">
-                <Image src="/TotaroWeb/totaroweb_hero.png" alt="Totaro Web 히어로" fill className="object-cover object-top" priority />
+                <Image src="/TotaroWeb/totaroweb_hero.webp" alt="Totaro Web 히어로" fill className="object-cover object-top" priority />
                 <div className="absolute inset-0 bg-black/50" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Totaro Web</h1>
@@ -50,7 +50,7 @@ const TotaroWebPage: React.FC = () => {
                             </p>
                         </div>
                         <div className="relative h-[380px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
-                            <Image src="/TotaroWeb/totaroweb_categories.png" alt="Totaro Web 카테고리" fill className="object-cover object-top" />
+                            <Image src="/TotaroWeb/totaroweb_categories.webp" alt="Totaro Web 카테고리" fill className="object-cover object-top" />
                         </div>
                     </div>
                 </section>
@@ -70,7 +70,7 @@ const TotaroWebPage: React.FC = () => {
                 <section className="mb-20">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                         <div className="relative h-[380px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/TotaroWeb/totaroweb_suppliers.png" alt="Totaro Web 공급업체" fill className="object-cover object-top" />
+                            <Image src="/TotaroWeb/totaroweb_suppliers.webp" alt="Totaro Web 공급업체" fill className="object-cover object-top" />
                         </div>
                         <div className="space-y-6">
                             <h2 className="text-3xl font-bold text-gray-800 flex items-center">
@@ -111,7 +111,7 @@ const TotaroWebPage: React.FC = () => {
                             </ul>
                         </div>
                         <div className="lg:col-span-3 relative h-[420px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/TotaroWeb/totaroweb_insights.png" alt="Totaro Web 인사이트" fill className="object-cover object-top" />
+                            <Image src="/TotaroWeb/totaroweb_insights.webp" alt="Totaro Web 인사이트" fill className="object-cover object-top" />
                         </div>
                     </div>
                 </section>
@@ -157,7 +157,7 @@ const TotaroWebPage: React.FC = () => {
                         <div className="h-px bg-gray-300 flex-grow ml-4" />
                     </h2>
                     <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg">
-                        <Image src="/TotaroWeb/totaroweb_features.png" alt="Totaro Web 기능" fill className="object-cover object-top" />
+                        <Image src="/TotaroWeb/totaroweb_features.webp" alt="Totaro Web 기능" fill className="object-cover object-top" />
                     </div>
                 </section>
 

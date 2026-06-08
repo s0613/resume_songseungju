@@ -11,7 +11,7 @@ const CogmoPage: React.FC = () => {
         <div className="bg-white min-h-screen">
             {/* Hero section with overlay text */}
             <section className="relative h-[500px] w-full">
-                <Image src="/Cogmo/cogmoHero.png" alt="Cogmo 히어로 이미지" fill className="object-cover" priority />
+                <Image src="/Cogmo/cogmoHero.webp" alt="Cogmo 히어로 이미지" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
                     <div className="flex items-center gap-4 mb-4">
@@ -61,7 +61,7 @@ const CogmoPage: React.FC = () => {
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
                             <Image
-                                src="/Cogmo/cogmoOverview.png"
+                                src="/Cogmo/cogmoOverview.webp"
                                 alt="Cogmo 서비스 개요"
                                 fill
                                 className="object-contain bg-gray-50"
@@ -91,7 +91,7 @@ const CogmoPage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg">
                             <Image
-                                src="/Cogmo/cogmoSolution.png"
+                                src="/Cogmo/cogmoSolution.webp"
                                 alt="Cogmo 솔루션"
                                 fill
                                 className="object-contain bg-gray-50"
@@ -139,7 +139,7 @@ const CogmoPage: React.FC = () => {
                         </div>
                         <div className="lg:col-span-3 relative h-[400px] rounded-xl overflow-hidden shadow-lg">
                             <Image
-                                src="/Cogmo/cogmoFeatures.png"
+                                src="/Cogmo/cogmoFeatures.webp"
                                 alt="Cogmo 주요 기능"
                                 fill
                                 className="object-contain bg-gray-50"
@@ -224,7 +224,7 @@ const CogmoPage: React.FC = () => {
                     </h2>
                     <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg">
                         <Image
-                            src="/Cogmo/cogmoArchitecture.png"
+                            src="/Cogmo/cogmoArchitecture.webp"
                             alt="Cogmo 시스템 아키텍처"
                             fill
                             className="object-contain bg-gray-50"

@@ -11,7 +11,7 @@ const MonePage: React.FC = () => {
         <div className="bg-white min-h-screen">
             {/* Hero section with overlay text */}
             <section className="relative h-[500px] w-full">
-                <Image src="/mone/moneHero.png" alt="MONE 히어로 이미지" fill className="object-cover object-top" priority />
+                <Image src="/mone/moneHero.webp" alt="MONE 히어로 이미지" fill className="object-cover object-top" priority />
                 <div className="absolute inset-0 bg-black/50" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
                     <div className="flex items-center gap-4 mb-4">
@@ -62,7 +62,7 @@ const MonePage: React.FC = () => {
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
                             <Image
-                                src="/mone/moneHero.png"
+                                src="/mone/moneHero.webp"
                                 alt="MONE 대시보드"
                                 fill
                                 className="object-cover object-top"
@@ -137,7 +137,7 @@ const MonePage: React.FC = () => {
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg">
                             <Image
-                                src="/mone/moneExpense.png"
+                                src="/mone/moneExpense.webp"
                                 alt="MONE 비용 관리 화면"
                                 fill
                                 className="object-cover object-top"
@@ -157,7 +157,7 @@ const MonePage: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center mb-12">
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg">
                             <Image
-                                src="/mone/moneSettlement.png"
+                                src="/mone/moneSettlement.webp"
                                 alt="MONE 정산 관리 화면"
                                 fill
                                 className="object-cover object-top"
@@ -186,7 +186,7 @@ const MonePage: React.FC = () => {
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
                             <Image
-                                src="/mone/moneList.png"
+                                src="/mone/moneList.webp"
                                 alt="MONE 목록 화면"
                                 fill
                                 className="object-cover object-top"

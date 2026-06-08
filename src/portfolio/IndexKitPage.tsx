@@ -10,7 +10,7 @@ const IndexKitPage: React.FC = () => {
     return (
         <div className="bg-white min-h-screen">
             <section className="relative h-[500px] w-full">
-                <Image src="/IndexKit/indexkitHero.png" alt="IndexKit 히어로" fill className="object-cover" priority />
+                <Image src="/IndexKit/indexkitHero.webp" alt="IndexKit 히어로" fill className="object-cover" priority />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
                     <div className="flex items-center gap-4 mb-4">
@@ -61,7 +61,7 @@ const IndexKitPage: React.FC = () => {
                             </p>
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
-                            <Image src="/IndexKit/indexkitOverview.png" alt="IndexKit 개요" fill className="object-cover" />
+                            <Image src="/IndexKit/indexkitOverview.webp" alt="IndexKit 개요" fill className="object-cover" />
                         </div>
                     </div>
                 </section>
@@ -81,7 +81,7 @@ const IndexKitPage: React.FC = () => {
                 <section className="mb-20">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/IndexKit/indexkitSolution.png" alt="IndexKit 솔루션" fill className="object-cover" />
+                            <Image src="/IndexKit/indexkitSolution.webp" alt="IndexKit 솔루션" fill className="object-cover" />
                         </div>
                         <div className="space-y-6">
                             <h2 className="text-3xl font-bold text-gray-800 flex items-center">
@@ -121,7 +121,7 @@ const IndexKitPage: React.FC = () => {
                             </ul>
                         </div>
                         <div className="lg:col-span-3 relative h-[400px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/IndexKit/indexkitFeatures.png" alt="IndexKit 주요 기능" fill className="object-cover" />
+                            <Image src="/IndexKit/indexkitFeatures.webp" alt="IndexKit 주요 기능" fill className="object-cover" />
                         </div>
                     </div>
                 </section>
@@ -167,7 +167,7 @@ const IndexKitPage: React.FC = () => {
                         <div className="h-px bg-gray-300 flex-grow ml-4" />
                     </h2>
                     <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg">
-                        <Image src="/IndexKit/indexkitArchitecture.png" alt="IndexKit 아키텍처" fill className="object-cover" />
+                        <Image src="/IndexKit/indexkitArchitecture.webp" alt="IndexKit 아키텍처" fill className="object-cover" />
                     </div>
                 </section>
 

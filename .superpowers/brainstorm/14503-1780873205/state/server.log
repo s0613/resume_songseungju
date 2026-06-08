@@ -1,0 +1,5 @@
+{"type":"server-started","port":57751,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:57751","screen_dir":"/Users/songseungju/me/resume_songseungju/.superpowers/brainstorm/14503-1780873205/content","state_dir":"/Users/songseungju/me/resume_songseungju/.superpowers/brainstorm/14503-1780873205/state"}
+{"type":"screen-added","file":"/Users/songseungju/me/resume_songseungju/.superpowers/brainstorm/14503-1780873205/content/visual-direction.html"}
+{"source":"user-event","type":"click","text":"Claude Code Plugin\n        S-SKL\n        \n        역할 기반 개발 오케스트레이터 / PM → Design → Tech Lead → QA 파이프라인 자동 라우팅\n      \n      \n      2.9\n    \n    \n      B — Swiss Editorial\n      블랙/화이트 고대비. 대형 타이포그래피. 텍스트 슬라이드 인, 라인 드로우, 스크롤 숫자 카운터.","choice":"b","id":null,"timestamp":1780874311085}
+{"type":"screen-added","file":"/Users/songseungju/me/resume_songseungju/.superpowers/brainstorm/14503-1780873205/content/visual-direction-v2.html"}
+{"type":"server-stopped","reason":"idle timeout"}

@@ -11,7 +11,7 @@ const SSkillsPage: React.FC = () => {
         <div className="bg-white min-h-screen">
             {/* Hero */}
             <section className="relative h-[500px] w-full">
-                <Image src="/s-skills-hero.png" alt="S-skills 히어로 이미지" fill className="object-cover object-center" priority />
+                <Image src="/s-skills-hero.webp" alt="S-skills 히어로 이미지" fill className="object-cover object-center" priority />
                 <div className="absolute inset-0 bg-black/60" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">S-skills</h1>
@@ -66,7 +66,7 @@ const SSkillsPage: React.FC = () => {
                         </div>
                         <div className="relative h-[350px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
                             <Image
-                                src="/s-skills-hero.png"
+                                src="/s-skills-hero.webp"
                                 alt="S-skills 개요"
                                 fill
                                 className="object-cover object-center"

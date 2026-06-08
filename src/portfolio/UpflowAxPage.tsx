@@ -10,7 +10,7 @@ const UpflowAxPage: React.FC = () => {
     return (
         <div className="bg-white min-h-screen">
             <section className="relative h-[500px] w-full">
-                <Image src="/UpflowAx/upflow_dashboard.png" alt="Upflow AX 대시보드" fill className="object-cover object-top" priority />
+                <Image src="/UpflowAx/upflow_dashboard.webp" alt="Upflow AX 대시보드" fill className="object-cover object-top" priority />
                 <div className="absolute inset-0 bg-black/55" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6 sm:px-10 md:px-20 lg:px-32">
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Upflow AX</h1>
@@ -50,7 +50,7 @@ const UpflowAxPage: React.FC = () => {
                             </p>
                         </div>
                         <div className="relative h-[380px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
-                            <Image src="/UpflowAx/upflow_features.png" alt="Upflow AX 기능" fill className="object-cover object-top" />
+                            <Image src="/UpflowAx/upflow_features.webp" alt="Upflow AX 기능" fill className="object-cover object-top" />
                         </div>
                     </div>
                 </section>
@@ -69,7 +69,7 @@ const UpflowAxPage: React.FC = () => {
                 <section className="mb-20">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                         <div className="relative h-[380px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/UpflowAx/upflow_dashboard.png" alt="Upflow AX 대시보드" fill className="object-cover object-top" />
+                            <Image src="/UpflowAx/upflow_dashboard.webp" alt="Upflow AX 대시보드" fill className="object-cover object-top" />
                         </div>
                         <div className="space-y-6">
                             <h2 className="text-3xl font-bold text-gray-800 flex items-center">
@@ -110,7 +110,7 @@ const UpflowAxPage: React.FC = () => {
                             </ul>
                         </div>
                         <div className="lg:col-span-3 relative h-[420px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/UpflowAx/upflow_overview.png" alt="Upflow AX 오버뷰" fill className="object-cover object-top" />
+                            <Image src="/UpflowAx/upflow_overview.webp" alt="Upflow AX 오버뷰" fill className="object-cover object-top" />
                         </div>
                     </div>
                 </section>
