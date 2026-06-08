@@ -29,7 +29,7 @@ const HeroSection: React.FC = () => {
           {/* Profile picture with enhanced styling */}
           <div className="relative">
             <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-white shadow-lg">
-              <Image src="/IM.webp" alt="Profile Picture" width={256} height={256} className="object-cover" />
+              <Image src="/IM.jpg" alt="Profile Picture" width={256} height={256} className="object-cover" />
             </div>
             <div className="absolute -bottom-2 -right-2 bg-white p-2 rounded-full shadow-md">
               <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
