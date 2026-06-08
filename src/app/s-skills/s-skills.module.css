@@ -300,7 +300,54 @@
 .footerMeta a { color: var(--orange-dim); text-decoration: none; }
 .footerMeta a:hover { color: var(--orange); }
 
+/* OUTSOURCE */
+.outsourceBlock {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px 0;
+    border-top: 1px solid rgba(255,172,2,0.2);
+    border-bottom: 1px solid rgba(255,172,2,0.2);
+}
+.outsourceText { flex: 1; }
+.outsourceTitle {
+    font-family: var(--hero);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--orange);
+    margin: 0 0 12px;
+    line-height: 1.15;
+}
+.outsourceDesc {
+    font-size: 14px;
+    color: var(--orange-dim);
+    line-height: 1.7;
+    max-width: 520px;
+}
+.outsourceCta {
+    flex-shrink: 0;
+    display: inline-block;
+    padding: 14px 28px;
+    border: 1.5px solid var(--orange);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+.outsourceCta:hover {
+    background: var(--orange);
+    color: #c8d9ec;
+}
+
 @media (max-width: 900px) {
+    .outsourceBlock { flex-direction: column; align-items: flex-start; }
+    .outsourceCta { width: 100%; text-align: center; }
     .nav, .hero, .section, .footer {
         padding-left: 24px;
         padding-right: 24px;

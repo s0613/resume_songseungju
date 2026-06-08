@@ -21,8 +21,8 @@ export default function SSkillsPage() {
                 <a href="/s-skills" className={s.navLogo}>S-SKILLS</a>
                 <ul className={s.navLinks}>
                     <li><a href="https://github.com/s0613/S-skills">Docs</a></li>
-                    <li><a href="#">Portal</a></li>
-                    <li><a href="#">Desktop App</a></li>
+                    <li><a href="/s-skills#outsource">외주</a></li>
+                    <li><a href="/">이력서 →</a></li>
                 </ul>
                 <a href="https://github.com/s0613/S-skills" className={s.navGh}>GH</a>
             </nav>
@@ -155,6 +155,21 @@ export default function SSkillsPage() {
                     </div>
                 </div>
             </main>
+
+                {/* Outsource */}
+                <div className={s.section} id="outsource">
+                    <p className={s.sectionLabel}>외주</p>
+                    <div className={s.outsourceBlock}>
+                        <div className={s.outsourceText}>
+                            <h2 className={s.outsourceTitle}>막혔을 때, 전문가에게 넘기세요</h2>
+                            <p className={s.outsourceDesc}>
+                                /outsource 스킬이 현재 상황을 정리하고 필요한 전문가를 찾아드립니다.
+                                풀스택 개발, UI/UX, 보안 감사, AI 에이전트 설계까지.
+                            </p>
+                        </div>
+                        <a href="/" className={s.outsourceCta}>이력서 보기 →</a>
+                    </div>
+                </div>
 
             {/* Footer */}
             <footer className={s.footer}>

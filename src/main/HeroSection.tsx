@@ -4,7 +4,7 @@ import Image from "next/image"
 import type React from "react"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Terminal, Mail, Github, Smartphone, Linkedin } from "lucide-react"
+import { Terminal, Mail, Github, Linkedin } from "lucide-react"
 import { motion } from "framer-motion"
 
 const HeroSection: React.FC = () => {
@@ -72,22 +72,6 @@ const HeroSection: React.FC = () => {
                 >
                   github.com/s0613
                 </a>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-                viewport={{ once: true }}
-                className="flex items-center"
-              >
-                <Smartphone className="h-5 w-5 text-gray-500 mr-3 flex-shrink-0" />
-                <HoverCard>
-                  <HoverCardTrigger className="text-gray-700 cursor-pointer">연락처 보기</HoverCardTrigger>
-                  <HoverCardContent className="bg-white border border-gray-100 shadow-md">
-                    <p className="text-gray-700">이메일로 연락주세요.</p>
-                  </HoverCardContent>
-                </HoverCard>
               </motion.div>
 
               <motion.div
