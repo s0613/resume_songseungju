@@ -207,46 +207,6 @@ export function HeroSection() {
           </span>
         </motion.div>
 
-        {/* ── Pipeline flow visualization (center-left fill) ── */}
-        <div className="absolute hidden lg:flex flex-col justify-center z-10 pointer-events-none"
-          style={{ left: "22%", top: "10%", bottom: "28%", width: "clamp(160px, 18%, 220px)" }}
-        >
-          {/* Vertical connecting line */}
-          <div className="absolute left-[11px] top-8 bottom-8 w-px"
-            style={{ background: "linear-gradient(to bottom, rgba(167,139,250,0.5), rgba(96,165,250,0.5), rgba(52,211,153,0.5), rgba(251,191,36,0.5))" }}
-          />
-
-          {[
-            { role: "PM", sub: "요구사항 분석", color: "#a78bfa", delay: 1.0 },
-            { role: "Design", sub: "UI/UX 명세", color: "#60a5fa", delay: 1.3 },
-            { role: "Tech Lead", sub: "서브에이전트 디스패치", color: "#34d399", delay: 1.6 },
-            { role: "QA", sub: "검증 + 판정", color: "#fbbf24", delay: 1.9 },
-          ].map(({ role, sub, color, delay }) => (
-            <motion.div
-              key={role}
-              initial={{ opacity: 0, x: -12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
-              className="relative flex items-center gap-3 mb-5 last:mb-0"
-            >
-              {/* Node circle */}
-              <div className="relative shrink-0 w-6 h-6 rounded-full flex items-center justify-center"
-                style={{ background: `${color}18`, border: `1px solid ${color}55`, boxShadow: `0 0 10px ${color}35` }}
-              >
-                <div className="w-2 h-2 rounded-full" style={{ background: color, boxShadow: `0 0 5px ${color}` }} />
-              </div>
-
-              {/* Card */}
-              <div className="rounded-xl px-3 py-2"
-                style={{ background: "rgba(8,8,16,0.82)", border: `1px solid ${color}22`, backdropFilter: "blur(8px)" }}
-              >
-                <div className="text-xs font-semibold leading-tight" style={{ color }}>{role}</div>
-                <div className="text-[9px] leading-tight mt-0.5" style={{ color: "rgba(160,160,160,0.7)" }}>{sub}</div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
         {/* ── Stats row (bottom-center fill) ── */}
         <motion.div
           initial={{ opacity: 0 }}

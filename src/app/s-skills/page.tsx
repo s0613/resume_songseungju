@@ -6,7 +6,7 @@ import { InstallSection } from "@/components/s-skills/InstallSection";
 
 export default function SSkillsPage() {
   return (
-    <div className="s-skills-page bg-black min-h-screen">
+    <div className="s-skills-page min-h-screen" style={{ background: "#04040C" }}>
       <HeroSection />
       <AboutSection />
       <SkillsSection />
