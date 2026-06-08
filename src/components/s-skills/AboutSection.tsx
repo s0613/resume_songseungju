@@ -1,6 +1,34 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
+
+function CountUp({ to }: { to: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (!inView || started.current || !ref.current) return;
+    started.current = true;
+
+    const startTime = performance.now();
+    const duration = 1300;
+
+    const update = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - (1 - progress) ** 3;
+      const current = Math.round(eased * to);
+      if (ref.current) ref.current.textContent = String(current);
+      if (progress < 1) requestAnimationFrame(update);
+    };
+
+    requestAnimationFrame(update);
+  }, [inView, to]);
+
+  return <span ref={ref}>0</span>;
+}
 
 const ROUTING_TABLE = [
   { input: "/sj-company 로그인 기능 만들어줘", output: "PM → Tech Lead → 서브에이전트 병렬 → QA" },
@@ -14,11 +42,11 @@ const ROUTING_TABLE = [
 ];
 
 const TASK_SIZES = [
-  { size: "Tiny", label: "즉시 구현", color: "#34D399" },
-  { size: "Small", label: "2파일 이내", color: "#60A5FA" },
-  { size: "Medium", label: "PM → TL 병렬", color: "#A78BFA" },
-  { size: "Large", label: "다단계 계획", color: "#FBBF24" },
-  { size: "xLarge", label: "Ultracode", color: "#F87171" },
+  { size: "Tiny", label: "즉시 구현", color: "#059669", bg: "#D1FAE5", border: "#6EE7B7" },
+  { size: "Small", label: "2파일 이내", color: "#1D4ED8", bg: "#DBEAFE", border: "#93C5FD" },
+  { size: "Medium", label: "PM → TL 병렬", color: "#7C3AED", bg: "#EDE9FE", border: "#C4B5FD" },
+  { size: "Large", label: "다단계 계획", color: "#B45309", bg: "#FEF3C7", border: "#FCD34D" },
+  { size: "xLarge", label: "Ultracode", color: "#DC2626", bg: "#FEE2E2", border: "#FCA5A5" },
 ];
 
 function FadeIn({
@@ -45,7 +73,7 @@ function FadeIn({
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-28 md:py-40 px-6 md:px-10" style={{ background: "#05050D" }}>
+    <section id="about" className="py-28 md:py-40 px-6 md:px-10" style={{ background: "#FAFAF7" }}>
       <div className="max-w-5xl mx-auto">
 
         {/* Label */}
@@ -58,7 +86,7 @@ export function AboutSection() {
           </p>
         </FadeIn>
 
-        {/* Giant headline */}
+        {/* Giant headline — dark on light */}
         <FadeIn delay={0.08}>
           <h2
             style={{
@@ -69,11 +97,11 @@ export function AboutSection() {
               marginBottom: "2rem",
             }}
           >
-            <span style={{ color: "#EDE9DF" }}>태스크를 말하면,</span>
+            <span style={{ color: "#0F0F1A" }}>태스크를 말하면,</span>
             <br />
-            <span style={{ color: "rgba(237,233,223,0.38)" }}>알맞은 전문가가</span>
+            <span style={{ color: "rgba(15,15,26,0.4)" }}>알맞은 전문가가</span>
             <br />
-            <span style={{ color: "rgba(237,233,223,0.22)" }}>알아서 간다.</span>
+            <span style={{ color: "rgba(15,15,26,0.2)" }}>알아서 간다.</span>
           </h2>
         </FadeIn>
 
@@ -81,9 +109,18 @@ export function AboutSection() {
         <FadeIn delay={0.14}>
           <p
             className="text-base leading-relaxed mb-20 max-w-lg"
-            style={{ color: "rgba(237,233,223,0.45)", lineHeight: 1.7 }}
+            style={{ color: "rgba(15,15,26,0.5)", lineHeight: 1.7 }}
           >
-            <code style={{ color: "#A5B4FC", fontFamily: "monospace", fontSize: "0.85em" }}>
+            <code
+              style={{
+                color: "#4338CA",
+                fontFamily: "monospace",
+                fontSize: "0.85em",
+                background: "#EEF2FF",
+                padding: "2px 6px",
+                borderRadius: "4px",
+              }}
+            >
               /sj-company
             </code>{" "}
             하나로 태스크 규모를 자동 판단하고 PM · 개발 · QA · 자동화 · 마케팅까지
@@ -91,33 +128,33 @@ export function AboutSection() {
           </p>
         </FadeIn>
 
-        {/* Stats row — oversized numbers, no cards */}
+        {/* CountUp stats row */}
         <FadeIn delay={0.2}>
           <div
             className="flex flex-wrap gap-x-14 gap-y-8 pb-20"
-            style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+            style={{ borderBottom: "1px solid rgba(15,15,26,0.08)" }}
           >
             {[
-              { val: "19", label: "전문 스킬" },
-              { val: "10", label: "서브에이전트" },
-              { val: "7", label: "심사 축" },
-              { val: "1", label: "명령어" },
-            ].map(({ val, label }) => (
+              { to: 19, label: "전문 스킬" },
+              { to: 10, label: "서브에이전트" },
+              { to: 7, label: "심사 축" },
+              { to: 1, label: "명령어" },
+            ].map(({ to, label }) => (
               <div key={label}>
                 <div
                   style={{
                     fontSize: "clamp(3rem, 5vw, 4.5rem)",
                     fontWeight: 800,
                     lineHeight: 1,
-                    color: "#EDE9DF",
+                    color: "#0F0F1A",
                     letterSpacing: "-0.04em",
                   }}
                 >
-                  {val}
+                  <CountUp to={to} />
                 </div>
                 <div
                   className="text-[10px] mt-2 tracking-[3px] uppercase"
-                  style={{ color: "rgba(237,233,223,0.3)" }}
+                  style={{ color: "rgba(15,15,26,0.3)" }}
                 >
                   {label}
                 </div>
@@ -126,15 +163,15 @@ export function AboutSection() {
           </div>
         </FadeIn>
 
-        {/* Routing table — terminal log style */}
+        {/* Routing table */}
         <FadeIn delay={0.26}>
           <p
             className="text-[10px] tracking-[4px] uppercase font-semibold mt-16 mb-5"
-            style={{ color: "rgba(237,233,223,0.25)" }}
+            style={{ color: "rgba(15,15,26,0.25)" }}
           >
             자동 라우팅 예시
           </p>
-          <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+          <div style={{ borderTop: "1px solid rgba(15,15,26,0.07)" }}>
             {ROUTING_TABLE.map(({ input, output }, i) => (
               <motion.div
                 key={i}
@@ -143,21 +180,21 @@ export function AboutSection() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: 0.04 * i }}
                 className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-6 py-4"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+                style={{ borderBottom: "1px solid rgba(15,15,26,0.06)" }}
               >
                 <code
-                  className="shrink-0 text-xs font-mono"
-                  style={{ color: "#818CF8" }}
+                  className="shrink-0 text-xs font-mono px-2 py-1 rounded-md"
+                  style={{ color: "#3730A3", background: "#EEF2FF" }}
                 >
                   {input}
                 </code>
                 <span
                   className="hidden sm:block shrink-0 text-xs font-mono"
-                  style={{ color: "rgba(255,255,255,0.18)" }}
+                  style={{ color: "rgba(15,15,26,0.2)" }}
                 >
                   →
                 </span>
-                <span className="text-sm" style={{ color: "rgba(237,233,223,0.5)" }}>
+                <span className="text-sm" style={{ color: "rgba(15,15,26,0.55)" }}>
                   {output}
                 </span>
               </motion.div>
@@ -168,23 +205,16 @@ export function AboutSection() {
         {/* Task size badges */}
         <FadeIn delay={0.32}>
           <div className="mt-12 flex flex-wrap gap-2.5">
-            {TASK_SIZES.map(({ size, label, color }) => (
+            {TASK_SIZES.map(({ size, label, color, bg, border }) => (
               <div
                 key={size}
                 className="flex items-center gap-2 rounded-full px-4 py-2"
-                style={{
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
+                style={{ background: bg, border: `1px solid ${border}` }}
               >
-                <div
-                  className="w-1.5 h-1.5 rounded-full shrink-0"
-                  style={{ background: color, boxShadow: `0 0 6px ${color}80` }}
-                />
                 <span className="text-xs font-semibold" style={{ color }}>
                   {size}
                 </span>
-                <span className="text-xs" style={{ color: "rgba(237,233,223,0.3)" }}>
+                <span className="text-xs" style={{ color: "rgba(15,15,26,0.45)" }}>
                   {label}
                 </span>
               </div>
