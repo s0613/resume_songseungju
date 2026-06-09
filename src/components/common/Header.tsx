@@ -12,7 +12,8 @@ const Header: React.FC = () => {
   const isPortfolioPage = pathname.includes("/portfolio/");
   const isSSkillsPage = pathname === "/s-skills";
 
-  if (isSSkillsPage) return null;
+  const isHomePage = pathname === "/";
+  if (isSSkillsPage || isHomePage) return null;
 
   const menuItems = [
     { name: "SSJ", href: isPortfolioPage ? "/" : "#heroSection" },

@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 const Footer: React.FC = () => {
   const pathname = usePathname();
-  if (pathname === "/s-skills") return null;
+  if (pathname === "/s-skills" || pathname === "/") return null;
   const socialLinks = [
     {
       name: "GitHub",
