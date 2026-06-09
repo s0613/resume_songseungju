@@ -81,7 +81,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     return (
         <div className={s.root}>
             <div className={s.bgImg}>
-                <Image src="/adam-creation.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "25% 30%", opacity: 0.22 }} priority />
+                <Image src="/adam-creation.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "25% 30%", opacity: 0.1 }} priority />
             </div>
             <div className={s.bgOverlay} />
 

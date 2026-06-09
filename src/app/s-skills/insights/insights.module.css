@@ -99,7 +99,11 @@
 .navGh:hover { opacity: 1; }
 
 /* MAIN */
-.main { padding: 0 48px 80px; }
+.main {
+    padding: 0 48px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+}
 
 /* PAGE HEADER */
 .pageHeader {
@@ -416,7 +420,8 @@
 .footerMeta a:hover { color: var(--orange); }
 
 @media (max-width: 900px) {
-    .nav, .main, .footer { padding-left: 24px; padding-right: 24px; }
+    .nav, .footer { padding-left: 24px; padding-right: 24px; }
+    .main { padding-left: 24px; padding-right: 24px; }
     .navLinks { display: none; }
     .cardNews { grid-template-columns: repeat(2, 1fr); }
     .card:nth-child(2) { border-right: none; }
@@ -430,7 +435,8 @@
 }
 
 @media (max-width: 480px) {
-    .nav, .main, .footer { padding-left: 16px; padding-right: 16px; }
+    .nav, .footer { padding-left: 16px; padding-right: 16px; }
+    .main { padding-left: 16px; padding-right: 16px; }
     .cardNews { grid-template-columns: 1fr; }
     .card { border-right: none; border-bottom: 1px solid rgba(255,172,2,0.2); }
     .card:last-child { border-bottom: none; }

@@ -20,11 +20,11 @@ export const articles: Article[] = [
     {
         slug: "start-with-harness",
         num: "01",
-        title: "1인 개발 클로드 코드로 시작하나요?",
+        title: "1인 개발, 클로드 코드로 시작하나요?",
         titleBreak: "이 하네스로 시작하세요!",
         date: "2026 · June",
         tag: "Getting Started",
-        lead: "Claude Code를 켰는데 뭘 시켜야 할지 막막하다면, 이미 수백 시간의 1인 개발 경험이 녹아있는 하네스가 있습니다. 설치 한 줄로 PM부터 QA까지 팀이 생깁니다.",
+        lead: "Claude Code를 켰는데 뭘 시켜야 할지 막막하다면, 수백 시간의 1인 개발 경험이 녹아있는 하네스가 있습니다. 카파시 하네스·gstack·Hermes에서 핵심만 뽑아 1인 개발 현실에 맞게 재조합했습니다. 설치 한 줄로 PM부터 QA까지 팀이 생깁니다.",
         blocks: [
             {
                 type: "cardNews",
@@ -44,7 +44,7 @@ export const articles: Article[] = [
                     {
                         num: "03",
                         title: "병렬 에이전트",
-                        body: "Database → Backend + Security 병렬 → Frontend. 혼자 개발하면서도 팀처럼 동시에 여러 역할이 작업하는 경험을 합니다.",
+                        body: "Database → Backend + Security 병렬 → Frontend. 혼자 개발하면서도 팀처럼 동시에 여러 역할이 작업합니다.",
                         tag: "4 agents · parallel dispatch",
                     },
                     {
@@ -57,70 +57,47 @@ export const articles: Article[] = [
             },
             {
                 type: "paragraph",
-                content: "Claude Code를 처음 쓰면 빈 터미널 앞에서 멈추게 됩니다. \"어디서부터 시작하지?\", \"이걸 어떻게 나눠야 하지?\". S-Skills 하네스는 그 공백을 채워줍니다. 수백 시간의 1인 개발 경험을 바탕으로 만들어진 워크플로우가 여러분의 첫 번째 Claude Code 팀을 즉시 구성해줍니다.",
+                content: "Claude Code를 처음 쓰면 빈 터미널 앞에서 멈추게 됩니다. \"어디서부터 시작하지?\", \"이걸 어떻게 나눠야 하지?\". 하네스는 그 공백을 채워줍니다. 수백 시간의 1인 개발 경험을 바탕으로 만들어진 워크플로우가 첫 번째 Claude Code 팀을 즉시 구성해줍니다.",
             },
             {
                 type: "paragraph",
-                content: "핵심은 __의도 기반 라우팅__입니다. \"디자인 만들어줘\", \"보안 점검해줘\", \"회고해줘\" — 말 그대로 의도를 입력하면 하네스가 적절한 전문가를 자동으로 투입합니다. 여러분은 제품에만 집중하면 됩니다.",
+                content: "핵심은 __의도 기반 라우팅__입니다. \"디자인 만들어줘\", \"보안 점검해줘\", \"회고해줘\" — 의도를 입력하면 하네스가 적절한 전문가를 자동으로 투입합니다. 여러분은 제품에만 집중하면 됩니다.",
             },
-            {
-                type: "cta",
-                text: "지금 바로 시작하세요. __claude plugin install s0613/S-skills__ 하나로 PM, 디자이너, 개발자, QA, 보안 전문가가 Claude Code 안에 생깁니다.",
-                btnText: "GitHub에서 설치 →",
-                btnHref: "https://github.com/s0613/S-skills",
-            },
-        ],
-    },
-    {
-        slug: "harness-philosophy",
-        num: "02",
-        title: "카파시, gstack, Hermes에서 배운 것들",
-        titleBreak: "— 1인 개발자의 하네스 철학",
-        date: "2026 · June",
-        tag: "Deep Dive",
-        lead: "카파시 하네스의 반복 철학, gstack의 다중 에이전트 조율, Hermes의 기억 관리. 유명한 하네스들에서 핵심만 뽑아 1인 개발 현실에 맞게 재조합했습니다.",
-        blocks: [
             { type: "heading", content: "유명 하네스에서 뭘 배웠나" },
             {
                 type: "harnessRefs",
                 refs: [
                     {
                         name: "Karpathy Harness",
-                        desc: "Karpathy가 공개한 Claude Code 워크플로우. 빠른 반복(iteration)을 위해 컨텍스트를 최소화하고, 작은 단위로 태스크를 쪼개 모델에게 명확한 목표를 주는 것이 핵심입니다. 모델을 믿되, 루프를 짧게 유지하라.",
+                        desc: "Karpathy가 공개한 Claude Code 워크플로우. 컨텍스트를 최소화하고 작은 단위로 태스크를 쪼개 모델에게 명확한 목표를 주는 것이 핵심입니다. 루프를 짧게, 반복을 빠르게.",
                         tag: "Iteration · Context Control",
                     },
                     {
                         name: "gstack",
-                        desc: "멀티에이전트 오케스트레이션 패턴의 실전 구현. 에이전트들이 서로 채널을 통해 직접 소통하고, Tech Lead가 병렬 디스패치와 수렴을 조율하는 구조는 gstack의 팀 채널 설계에서 직접 영감받았습니다.",
+                        desc: "멀티에이전트 오케스트레이션의 실전 구현. 에이전트들이 채널로 직접 소통하고 Tech Lead가 병렬 디스패치와 수렴을 조율하는 구조를 그대로 채택했습니다.",
                         tag: "Multi-Agent Orchestration",
                     },
                     {
                         name: "Hermes",
-                        desc: "컨텍스트를 절대 자동 삭제하지 않고 archive만 한다는 불변식. 과거 결정과 학습을 누적해 다음 사이클에 활용하는 context.md 시스템은 Hermes의 memory curator 철학입니다.",
+                        desc: "컨텍스트를 절대 자동 삭제하지 않고 archive만 하는 불변식. 과거 결정과 학습을 누적해 다음 사이클에 활용하는 context.md 시스템은 Hermes의 memory curator 철학입니다.",
                         tag: "Memory · Context",
                     },
                 ],
             },
-            { type: "heading", content: "1인 개발의 현실과 하네스" },
+            { type: "heading", content: "1인 개발의 현실" },
             {
                 type: "paragraph",
-                content: "혼자 개발하면 PM도 나, 디자이너도 나, 개발자도 나, QA도 나입니다. 역할 전환마다 컨텍스트가 끊기고, 집중력이 분산되고, 중요한 것을 놓칩니다. 하네스는 그 전환 비용을 없애줍니다. 각 역할을 전문 에이전트가 맡고, 여러분은 \"무엇을 만들지\"만 결정하면 됩니다.",
+                content: "혼자 개발하면 PM도 나, 디자이너도 나, 개발자도 나, QA도 나입니다. 역할 전환마다 컨텍스트가 끊기고, 집중력이 분산됩니다. 하네스는 각 역할을 전문 에이전트가 맡아 그 전환 비용을 없애줍니다. 카파시 하네스의 통찰처럼 — 실력보다 루프 속도가 이깁니다. 기획→설계→구현→검증 루프가 자동화되면 아이디어에서 동작하는 코드까지의 시간이 극적으로 줄어듭니다.",
             },
-            { type: "heading", content: "반복 가능한 워크플로우의 힘" },
             {
                 type: "paragraph",
-                content: "카파시 하네스의 핵심 통찰은 단순합니다 — 실력보다 루프 속도가 이깁니다. 하네스를 쓰면 기획→설계→구현→검증의 루프가 자동화됩니다. 한 번 익히면 어떤 프로젝트에서든 같은 속도를 냅니다. 아이디어에서 동작하는 코드까지 걸리는 시간이 극적으로 줄어듭니다.",
-            },
-            { type: "heading", content: "독립 QA의 중요성" },
-            {
-                type: "paragraph",
-                content: "가장 중요하지만 혼자 개발할 때 가장 놓치기 쉬운 것이 독립적인 검증입니다. 내가 만든 것을 내가 검증하면 편향이 생깁니다. S-Skills의 QA 에이전트는 구현자 산출물을 참조하지 않습니다. PM 브리프와 실제 파일만 보고 검증합니다. 혼자서도 팀의 품질을 낼 수 있는 이유입니다.",
+                content: "가장 놓치기 쉬운 것이 독립적인 검증입니다. 내가 만든 것을 내가 검증하면 편향이 생깁니다. S-Skills의 QA 에이전트는 구현자 산출물을 참조하지 않습니다. PM 브리프와 실제 파일만 보고 검증합니다. __혼자서도 팀의 품질__을 낼 수 있는 이유입니다.",
             },
             {
                 type: "cta",
-                text: "유명 하네스들의 핵심을 1인 개발 현실에 맞게 조합한 워크플로우. __/sj-company로 바로 시작__하고, 혼자서도 팀의 속도를 경험하세요.",
-                btnText: "S-SKILLS 보기 →",
-                btnHref: "/s-skills",
+                text: "__claude plugin install s0613/S-skills__ — 이 한 줄로 PM, 디자이너, 개발자, QA, 보안 전문가가 Claude Code 안에 생깁니다.",
+                btnText: "GitHub에서 설치 →",
+                btnHref: "https://github.com/s0613/S-skills",
             },
         ],
     },
