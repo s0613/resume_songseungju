@@ -22,6 +22,7 @@ export default function SSkillsPage() {
                 <a href="/s-skills" className={s.navLogo}>S-SKILLS</a>
                 <ul className={s.navLinks}>
                     <li><a href="https://github.com/s0613/S-skills">Docs</a></li>
+                    <li><a href="/s-skills/insights">인사이트</a></li>
                     <li><a href="/s-skills#outsource">외주</a></li>
                     <li><a href="/">이력서 →</a></li>
                 </ul>

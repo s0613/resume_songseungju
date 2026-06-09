@@ -10,7 +10,7 @@ const Header: React.FC = () => {
   const isTop = useIsTop();
   const pathname = usePathname();
   const isPortfolioPage = pathname.includes("/portfolio/");
-  const isSSkillsPage = pathname === "/s-skills";
+  const isSSkillsPage = pathname === "/s-skills" || pathname.startsWith("/s-skills/");
 
   const isHomePage = pathname === "/";
   if (isSSkillsPage || isHomePage) return null;
