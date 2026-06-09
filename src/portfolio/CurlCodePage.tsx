@@ -51,7 +51,7 @@ const CurlCodePage: React.FC = () => {
                             </p>
                         </div>
                         <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg order-1 md:order-2">
-                            <Image src="/CurlCode/curlcodeHero.webp" alt="Curl CODE 언어 선택" fill className="object-contain bg-[#f5ede8]" />
+                            <Image src="/CurlCode/curlcodeHero.webp" alt="Curl CODE 언어 선택" fill className="object-cover object-top" />
                         </div>
                     </div>
                 </section>
@@ -71,7 +71,7 @@ const CurlCodePage: React.FC = () => {
                 <section className="mb-20">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                         <div className="relative h-[500px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/CurlCode/curlcodeSolution.webp" alt="Curl CODE 설문" fill className="object-contain bg-[#f5ede8]" />
+                            <Image src="/CurlCode/curlcodeSolution.webp" alt="Curl CODE 설문" fill className="object-cover object-top" />
                         </div>
                         <div className="space-y-6">
                             <h2 className="text-3xl font-bold text-gray-800 flex items-center">
@@ -113,7 +113,7 @@ const CurlCodePage: React.FC = () => {
                             </ul>
                         </div>
                         <div className="lg:col-span-3 relative h-[500px] rounded-xl overflow-hidden shadow-lg">
-                            <Image src="/CurlCode/curlcodeFeatures.webp" alt="Curl CODE 기능" fill className="object-contain bg-[#f5ede8]" />
+                            <Image src="/CurlCode/curlcodeFeatures.webp" alt="Curl CODE 기능" fill className="object-cover object-top" />
                         </div>
                     </div>
                 </section>

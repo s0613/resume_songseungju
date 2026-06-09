@@ -130,9 +130,9 @@ const EXPERIENCES = [
         href: "/portfolio/totarocos",
         date: "2025.11 ~ 진행중",
         desc: "해외 바이어와 한국 화장품 공급사를 연결하는 K-Beauty B2B 소싱 플랫폼",
-        tags: ["Next.js 16", "Supabase", "Google Gemini", "KFDA 데이터", "Playwright"],
+        tags: ["Next.js 16", "Supabase", "Google Gemini", "MFDS 데이터", "Playwright"],
         bullets: [
-            "KFDA→Naver 화장품 데이터 파이프라인 설계 및 상품 DB 자동 구축",
+            "MFDS→Naver 화장품 데이터 파이프라인 설계 및 상품 DB 자동 구축",
             "Gemini AI 기반 성분 설명·OEM/ODM 견적 채팅 구현",
             "Supabase RLS 기반 역할별 데이터 접근 제어",
         ],
