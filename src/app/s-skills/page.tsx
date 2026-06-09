@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import SketchCanvas from "@/components/s-skills/SketchCanvas"
 import s from "./s-skills.module.css"
 
 export default function SSkillsPage() {
@@ -12,7 +13,7 @@ export default function SSkillsPage() {
         <div className={s.root}>
             {/* Background */}
             <div className={s.bgImg}>
-                <Image src="/hermes-bg.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "center top", opacity: 0.14 }} priority />
+                <Image src="/adam-creation.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "25% 30%", opacity: 0.22 }} priority />
             </div>
             <div className={s.bgOverlay} />
 
@@ -69,6 +70,7 @@ export default function SSkillsPage() {
                             <div><span className={s.tLabel}>✓ 완료</span> <span className={s.tOut}>— 4개 에이전트 · 테스트 통과</span></div>
                         </div>
                         <div className={s.demoRight}>
+                            <SketchCanvas />
                             <span className={s.demoRightLabel}>S-Skills</span>
                         </div>
                     </div>
