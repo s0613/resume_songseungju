@@ -255,29 +255,31 @@ export default function ResumePage() {
                             </div>
                             <div className={s.introDivider} />
                             <p className={s.introPara}>
-                                프론트는 <span className={s.introStrong}>Next.js 15+</span>와 Tailwind, shadcn/ui로 빠르게 UX를 검증하고,
-                                백엔드는 <span className={s.introStrong}>Spring Boot·JPA·MariaDB</span>로 안정적으로 서비스화합니다.
-                                AWS EC2·S3·CloudFront 기반 배포와 운영에 익숙하고, 영상·의료·데이터 분석 등
-                                다양한 도메인의 사이드 프로젝트를 실제 사용자 검증 단계까지 끌고 간 경험이 있습니다.
+                                아이디어가 생기면 직접 만들어 검증합니다.
+                                <span className={s.introStrong}> Next.js · Spring Boot · AWS</span> 스택으로
+                                기획부터 배포까지 혼자 수행하고, 실제 사용자에게 닿는 수준까지
+                                끌고 가는 것에 익숙합니다. 의료·물류·뷰티·AI 등 도메인을 가리지 않고
+                                빠르게 컨텍스트를 익혀 제품을 만들어왔습니다.
                             </p>
                             <p className={s.introPara}>
-                                필요하면 기획·문서화·마케팅까지 직접 수행해 &ldquo;작동하는 서비스&rdquo;를 끝까지 완성합니다.
-                                Claude Code 기반 AI 오케스트레이터 <span className={s.introStrong}>S-Skills</span>를 직접 개발해
-                                1인 개발 생산성을 팀 수준으로 끌어올렸습니다.
+                                기획·문서·마케팅도 필요하면 직접 합니다. 개발뿐 아니라
+                                정부 지원사업 선정, 해커톤 수상, 제품 론칭까지 전 과정을 수행했습니다.
+                                Claude Code 기반 AI 오케스트레이터 <span className={s.introStrong}>S-Skills</span>를 직접 만들어
+                                1인 개발 생산성을 팀 수준으로 끌어올렸고, 현재도 오픈소스로 운영 중입니다.
                             </p>
                             <div className={s.introDivider} />
                             <div className={s.introBullets}>
                                 <div className={s.introBullet}>
                                     <span className={s.introBulletDot} />
-                                    <span>1인 풀스택 개발자이자 스타트업 지향형 메이커. 기획→개발→배포→지표 검증을 일괄 수행합니다.</span>
+                                    <span>팀 없이도 제품을 출시한 경험이 여러 번. 기획·개발·배포·마케팅을 혼자 끝냅니다.</span>
                                 </div>
                                 <div className={s.introBullet}>
                                     <span className={s.introBulletDot} />
-                                    <span>Totaload, Trynic, MediVu, RunningToYou 등 실전 프로젝트를 주도했습니다.</span>
+                                    <span>예비창업패키지 3회 선정, 해커톤 대상 등 아이디어를 사업화하는 실전 감각이 있습니다.</span>
                                 </div>
                                 <div className={s.introBullet}>
                                     <span className={s.introBulletDot} />
-                                    <span>빠른 학습과 완결형 실행력으로 초기 제품을 &ldquo;사용 가능한 수준&rdquo;까지 끌어올리는 데 강점이 있습니다.</span>
+                                    <span>모르는 도메인도 빠르게 파고들어 작동하는 수준까지 만드는 것에 강점이 있습니다.</span>
                                 </div>
                             </div>
                         </div>
@@ -357,9 +359,9 @@ export default function ResumePage() {
                                 </div>
                                 <div className={s.eduDegree}>컴퓨터공학과 졸업</div>
                                 <div className={s.eduBullets}>
-                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>알고리즘·자료구조·운영체제·네트워크·데이터베이스 기본 이론 습득</span></div>
-                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>웹프로그래밍·소프트웨어 공학 등 실습 중심 과목 수료</span></div>
-                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>학부 프로젝트를 통해 팀 협업 및 발표 경험</span></div>
+                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>재학 중 스타트업 활동 병행 — 예비창업패키지 선정, 해커톤 수상, 제품 론칭까지</span></div>
+                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>졸업 시점 10개 이상 프로젝트 경험, AI·클라우드·풀스택 독학으로 스택 확장</span></div>
+                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>해병대 복무(2020~2022) 후 복학, 이후 개발에 집중</span></div>
                                 </div>
                                 <div className={s.eduTags}>
                                     <span className={s.eduTag}>C++</span>
@@ -374,14 +376,8 @@ export default function ResumePage() {
                                     <span className={s.eduDate}>2017.03 ~ 2020.02</span>
                                 </div>
                                 <div className={s.eduDegree}>일반고 / 이과</div>
-                                <div className={s.eduBullets}>
-                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>고2 과학중점반 입성 후 성적 상승</span></div>
-                                    <div className={s.eduBullet}><span className={s.introBulletDot} /><span>인하대학교 컴퓨터공학과 합격</span></div>
-                                </div>
                                 <div className={s.eduTags}>
-                                    <span className={s.eduTag}>벡터 1등급</span>
-                                    <span className={s.eduTag}>영어 1등급</span>
-                                    <span className={s.eduTag}>지구과학 1등급</span>
+                                    <span className={s.eduTag}>이과</span>
                                 </div>
                             </div>
                         </div>
@@ -404,8 +400,8 @@ export default function ResumePage() {
                                         <span className={s.etcMeta}>2020.11 ~ 2022.05 · 통신병 · 병장 전역</span>
                                     </div>
                                     <div className={s.etcBullets}>
-                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>Republic of Korea Marine Corps</span></div>
-                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>강인한 정신력과 팀워크 경험을 바탕으로 협업 능력 강화</span></div>
+                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>통신병 — 군 무선통신 장비 운용 실무</span></div>
+                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>극한 환경에서의 팀 운용·의사결정 경험</span></div>
                                     </div>
                                 </div>
                                 <div className={s.etcBlock}>
@@ -413,9 +409,9 @@ export default function ResumePage() {
                                         <span className={s.etcTitle}>창업 동아리 — 인하벤처클럽</span>
                                     </div>
                                     <div className={s.etcBullets}>
-                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>아이디어 발굴 및 비즈니스 모델 설계</span></div>
-                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>팀 프로젝트를 통한 실전 창업 경험</span></div>
-                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>프로젝트 기획·운영·사용자 피드백 기반 서비스 개선</span></div>
+                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>선배 창업자·투자자 네트워크 연결 및 초기 창업 방법론 습득</span></div>
+                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>Trynic 창업 기반 마련 — 팀 빌딩, 사업계획서 최초 작성</span></div>
+                                        <div className={s.etcBullet}><span className={s.etcBulletDot}>›</span><span>사용자 인터뷰 기반 피벗 경험</span></div>
                                     </div>
                                 </div>
                             </div>
