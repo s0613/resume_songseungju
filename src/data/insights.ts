@@ -101,6 +101,74 @@ export const articles: Article[] = [
             },
         ],
     },
+    {
+        slug: "context-is-everything",
+        num: "02",
+        title: "세션이 끝나도 기억하는 AI 팀",
+        titleBreak: "— 컨텍스트 누적의 힘",
+        date: "2026 · June",
+        tag: "Deep Dive",
+        lead: "Claude Code의 가장 큰 약점은 기억력입니다. 세션이 끊기면 지난번 결정도, 거부한 디자인도, 학습한 도메인 지식도 사라집니다. S-Skills 하네스는 이 문제를 구조적으로 해결합니다.",
+        blocks: [
+            {
+                type: "cardNews",
+                cards: [
+                    {
+                        num: "PM",
+                        title: "pm-context.md",
+                        body: "PM이 매 사이클마다 새로 알게 된 요구사항·리스크·도메인 인사이트를 날짜와 함께 누적합니다. 다음 세션에서 PM은 이 파일부터 읽습니다.",
+                        tag: "docs/sj-company/pm-context.md",
+                    },
+                    {
+                        num: "디자인",
+                        title: "design-context.md",
+                        body: "거부된 방향은 design-banned.md에 봉인되고, 승인된 방향은 누적됩니다. 실행할수록 브랜드 정체성이 선명해집니다.",
+                        tag: "docs/sj-company/design-context.md",
+                    },
+                    {
+                        num: "개발",
+                        title: "dev-context.md",
+                        body: "아키텍처 결정, 놓쳤던 엣지케이스, 반복된 버그 패턴이 쌓입니다. 새 에이전트가 투입돼도 프로젝트 히스토리를 즉시 파악합니다.",
+                        tag: "docs/sj-company/dev-context.md",
+                    },
+                    {
+                        num: "QA",
+                        title: "qa-context.md",
+                        body: "이전 사이클에서 놓친 검증 항목이 다음 QA에 자동 반영됩니다. 같은 버그는 두 번 통과하지 못합니다.",
+                        tag: "docs/sj-company/qa-context.md",
+                    },
+                ],
+            },
+            {
+                type: "paragraph",
+                content: "대부분의 AI 코딩 도구는 매 세션이 백지에서 시작합니다. 지난번에 왜 그 구조를 선택했는지, 어떤 방향을 거부했는지, 어디서 막혔는지 — 모두 다시 설명해야 합니다. 혼자 개발할수록 이 반복 설명 비용이 쌓입니다.",
+            },
+            {
+                type: "paragraph",
+                content: "S-Skills 하네스는 Hermes의 __\"절대 삭제하지 않고 archive만 한다\"__ 불변식을 채택합니다. 각 역할 에이전트(PM·디자인·개발·QA)는 사이클이 끝날 때 새로 배운 인사이트 1~3줄을 자기 context.md에 날짜와 함께 남깁니다. 다음 세션에서 그 파일을 읽는 것이 첫 번째 액션입니다.",
+            },
+            { type: "heading", content: "PROJECT.md — 프로젝트의 단일 진실" },
+            {
+                type: "paragraph",
+                content: "각 context.md가 역할별 기억이라면, PROJECT.md는 프로젝트 전체의 현재 상태입니다. goal, 지난 세션 요약, 다음 태스크, 블로커가 단 하나의 파일에 담깁니다. /sj-company를 인자 없이 실행하면 이 파일을 읽고 브리핑부터 시작합니다.",
+            },
+            {
+                type: "paragraph",
+                content: "200줄이 넘어가는 context.md는 자동으로 큐레이션됩니다. 오래된 항목은 요약 1~3줄로 압축되고, 중복은 통합됩니다. __기억은 무한히 쌓이지 않고, 밀도가 높아집니다.__",
+            },
+            { type: "heading", content: "실전에서 느끼는 차이" },
+            {
+                type: "paragraph",
+                content: "처음 한두 사이클은 하네스 없이 쓰는 것과 크게 다르지 않습니다. 차이는 열 번째 사이클부터 납니다. PM은 이미 도메인을 알고 있고, 디자인 에이전트는 거부된 방향을 반복하지 않으며, QA는 이전 사이클의 놓친 항목을 기억하고 있습니다. 프로젝트가 오래될수록 팀이 더 정교해집니다.",
+            },
+            {
+                type: "cta",
+                text: "세션이 끊겨도 기억하는 AI 팀. __context.md 시스템__은 S-Skills 하네스를 설치하는 순간 자동으로 시작됩니다.",
+                btnText: "S-SKILLS 시작하기 →",
+                btnHref: "/s-skills",
+            },
+        ],
+    },
 ]
 
 export function getArticle(slug: string) {
