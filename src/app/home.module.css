@@ -619,6 +619,7 @@
     .sectionLabel { position: static; }
     .hero { padding-bottom: 60px; }
     .heroName { font-size: clamp(56px, 14vw, 120px); }
+    .heroContacts { gap: 20px; }
     .skillsGrid { grid-template-columns: 1fr; }
     .skillCat:nth-child(odd) { border-right: none; padding-right: 0; }
     .skillCat:nth-child(even) { padding-left: 0; }
@@ -626,8 +627,21 @@
     .skillCat:last-child { border-bottom: none; }
     .navLinks { display: none; }
     .navSSkills { display: none; }
+    .introProfile { flex-direction: column; }
     .expHeader { flex-direction: column; gap: 4px; }
+    .eduHeader { flex-direction: column; gap: 4px; }
+    .etcHeader { flex-direction: column; gap: 4px; }
     .awardItem { flex-direction: column; gap: 4px; }
+    .awardProject { white-space: normal; }
     .footer { flex-direction: column; gap: 16px; align-items: flex-start; }
     .footerMeta { flex-wrap: wrap; gap: 16px; }
+    .footerSSkills { display: none; }
+}
+
+@media (max-width: 480px) {
+    .navInner { padding: 0 16px; }
+    .hero, .section, .footer { padding-left: 16px; padding-right: 16px; }
+    .heroName { font-size: clamp(40px, 13vw, 72px); }
+    .heroContacts { gap: 12px; }
+    .section { padding-top: 60px; padding-bottom: 60px; }
 }
