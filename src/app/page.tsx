@@ -192,15 +192,22 @@ export default function ResumePage() {
 
             {/* Nav */}
             <nav className={s.nav}>
-                <a href="/" className={s.navLogo}>SONG SEUNGJU</a>
-                <ul className={s.navLinks}>
-                    <li><a href="#introduce">About</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#education">Education</a></li>
-                    <li><a href="/s-skills">S-Skills →</a></li>
-                </ul>
-                <a href="https://github.com/s0613" className={s.navGh} target="_blank" rel="noopener noreferrer">GitHub</a>
+                <div className={s.navInner}>
+                    <div className={s.navBrand}>
+                        <a href="/" className={s.navLogo}>SONG SEUNGJU</a>
+                        <span className={s.navSub}>Fullstack Developer · 2026</span>
+                    </div>
+                    <ul className={s.navLinks}>
+                        <li><a href="#introduce">About</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#experience">Experience</a></li>
+                        <li><a href="#education">Education</a></li>
+                    </ul>
+                    <div className={s.navRight}>
+                        <a href="https://github.com/s0613" className={s.navGh} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                        <a href="/s-skills" className={s.navSSkills}>S-Skills</a>
+                    </div>
+                </div>
             </nav>
 
             <main className={s.main}>
