@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import { articles, getArticle, type Block } from "@/data/insights"
@@ -5,6 +6,27 @@ import s from "../insights.module.css"
 
 export function generateStaticParams() {
     return articles.map((a) => ({ slug: a.slug }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params
+    const article = getArticle(slug)
+    if (!article) return {}
+
+    const title = article.titleBreak ? `${article.title} ${article.titleBreak}` : article.title
+    const url = `/s-skills/insights/${slug}`
+
+    return {
+        title: `${title} | S-Skills 인사이트`,
+        description: article.lead,
+        alternates: { canonical: url },
+        openGraph: {
+            title,
+            description: article.lead,
+            url,
+            type: "article",
+        },
+    }
 }
 
 function renderBlock(block: Block, i: number) {

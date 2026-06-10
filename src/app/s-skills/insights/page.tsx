@@ -1,7 +1,14 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { articles } from "@/data/insights"
 import s from "./insights.module.css"
+
+export const metadata: Metadata = {
+    title: "S-Skills 인사이트 | AI 에이전트 하네스",
+    description: "Claude Code 하네스, AI 에이전트 오케스트레이션, 모델 분석에 대한 인사이트 모음.",
+    alternates: { canonical: "/s-skills/insights" },
+}
 
 export default function InsightsIndexPage() {
     const sortedArticles = [...articles].sort((a, b) => Number(b.num) - Number(a.num))
