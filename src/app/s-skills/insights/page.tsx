@@ -7,7 +7,7 @@ export default function InsightsIndexPage() {
     return (
         <div className={s.root}>
             <div className={s.bgImg}>
-                <Image src="/adam-creation.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "25% 30%", opacity: 0.1 }} priority />
+                <Image src="/adam-creation.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "25% 30%", opacity: 0.04 }} priority />
             </div>
             <div className={s.bgOverlay} />
 
