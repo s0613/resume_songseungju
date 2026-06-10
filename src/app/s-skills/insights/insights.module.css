@@ -27,8 +27,8 @@
     --orange: rgb(255, 172, 2);
     --orange-dim: rgba(255, 172, 2, 0.65);
     --orange-faint: rgba(255, 172, 2, 0.18);
-    --text: rgba(45, 32, 22, 0.88);
-    --text-dim: rgba(45, 32, 22, 0.62);
+    --text: #2d2016;
+    --text-dim: rgba(45, 32, 22, 0.72);
     --font: collapseFont, 'Inter', system-ui, sans-serif;
     --mono: courierPrime, 'Courier New', monospace;
     --hero: rulesExpanded, Impact, sans-serif;
@@ -103,7 +103,7 @@
 /* MAIN */
 .main {
     padding: 0 48px 80px;
-    max-width: 900px;
+    max-width: 1080px;
     margin: 0 auto;
 }
 
@@ -216,14 +216,14 @@
     line-height: 1.05;
     color: var(--orange);
     margin: 0 0 14px;
-    max-width: 680px;
+    max-width: 820px;
     transition: opacity 0.15s;
 }
 .articleCardLead {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--text);
-    line-height: 1.7;
-    max-width: 560px;
+    line-height: 1.75;
+    max-width: 700px;
     margin-bottom: 16px;
 }
 .articleCardMore {
@@ -279,19 +279,19 @@
 
 .articleTitle {
     font-family: var(--hero);
-    font-size: clamp(26px, 3.5vw, 48px);
+    font-size: clamp(28px, 4vw, 54px);
     line-height: 1.05;
     letter-spacing: 0em;
     color: var(--orange);
-    margin: 0 0 20px;
-    max-width: 760px;
+    margin: 0 0 24px;
+    max-width: 920px;
 }
 
 .articleLead {
-    font-size: 15px;
+    font-size: 19px;
     color: var(--text);
     line-height: 1.75;
-    max-width: 640px;
+    max-width: 860px;
     margin-bottom: 0;
 }
 
@@ -300,21 +300,21 @@
     padding-top: 48px;
 }
 .bodyParagraph {
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text);
-    line-height: 1.8;
-    max-width: 680px;
-    margin-bottom: 20px;
+    line-height: 1.85;
+    max-width: 860px;
+    margin-bottom: 24px;
 }
 .bodyHeading {
     font-family: var(--font);
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--orange);
-    margin: 36px 0 12px;
-    max-width: 680px;
+    margin: 44px 0 14px;
+    max-width: 860px;
 }
 
 /* CARD NEWS */
@@ -341,7 +341,7 @@
     letter-spacing: -0.02em;
 }
 .cardTitle {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -349,9 +349,9 @@
     margin-bottom: 10px;
 }
 .cardBody {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--text);
-    line-height: 1.65;
+    line-height: 1.7;
 }
 .cardTag {
     display: inline-block;
@@ -362,21 +362,21 @@
 }
 
 /* ARTICLE BODY */
-.articleBody { max-width: 680px; }
+.articleBody { max-width: 860px; }
 .articleBody p {
-    font-size: 14px;
+    font-size: 17px;
     color: var(--text);
-    line-height: 1.8;
-    margin-bottom: 20px;
+    line-height: 1.85;
+    margin-bottom: 24px;
 }
 .articleBody h3 {
     font-family: var(--font);
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--orange);
-    margin: 36px 0 12px;
+    margin: 44px 0 14px;
 }
 
 /* HARNESS REFS */
@@ -395,15 +395,15 @@
 .harnessRef:last-child { border-right: none; }
 .harnessRefName {
     font-family: var(--mono);
-    font-size: 13px;
+    font-size: 14px;
     color: var(--orange);
     margin-bottom: 6px;
     letter-spacing: 0.04em;
 }
 .harnessRefDesc {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--text);
-    line-height: 1.6;
+    line-height: 1.65;
 }
 .harnessRefTag {
     display: inline-block;
@@ -429,10 +429,10 @@
     gap: 32px;
 }
 .ctaText {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--text);
-    line-height: 1.65;
-    max-width: 480px;
+    line-height: 1.7;
+    max-width: 560px;
 }
 .ctaText strong {
     color: var(--orange);
