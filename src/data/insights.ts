@@ -455,6 +455,104 @@ export const articles: Article[] = [
             },
         ],
     },
+    {
+        slug: "why-giants-build-agent-platforms",
+        num: "06",
+        title: "대기업이 앞다퉈",
+        titleBreak: "에이전트 플랫폼을 만드는 이유",
+        date: "2026 · June",
+        tag: "Industry Analysis",
+        lead: "2025년 10월 AWS가 Bedrock AgentCore를 정식 출시했고, 2026년 6월 LG CNS가 AIND를 공개했으며, 같은 시기 구글은 Vertex AI를 Gemini Enterprise Agent Platform으로 재편했습니다. 세 회사가 거의 동시에 만든 것은 더 똑똑한 모델이 아닙니다. 모델을 '돌리는 판' — 에이전트 플랫폼입니다. 왜 모두가 같은 곳으로 달려가고 있을까요.",
+        blocks: [
+            {
+                type: "cardNews",
+                cards: [
+                    {
+                        num: "AWS",
+                        title: "Bedrock AgentCore",
+                        body: "2025년 10월 정식 출시. Runtime·Gateway·Memory·Identity·Observability 5개 서비스로 분리됩니다. 8시간 실행, 세션 격리, A2A 프로토콜. 모델과 프레임워크는 가리지 않습니다.",
+                        tag: "GA 2025.10 · 5 services",
+                    },
+                    {
+                        num: "Google",
+                        title: "Gemini Enterprise Agent Platform",
+                        body: "Cloud Next 2026에서 Vertex AI를 재편. ADK(Python·Go·Java·TS) + Agent Engine 런타임 + 200개 이상 모델. 그 200개 안에 Anthropic Claude도 들어 있습니다.",
+                        tag: "구 Vertex AI · ADK v1.0",
+                    },
+                    {
+                        num: "LG CNS",
+                        title: "AIND",
+                        body: "2026년 6월 8일 공개. 요구사항 분석·설계·코딩·검증을 역할별 에이전트가 분담하고, 개발 표준·보안 규정·소스코드를 구조화한 'Knowledge Foundation' 온톨로지가 핵심입니다. Cline과 공동 개발.",
+                        tag: "2026.06.08 · w/ Cline",
+                    },
+                    {
+                        num: "공통",
+                        title: "모델은 갈아끼운다",
+                        body: "AgentCore는 어떤 파운데이션 모델이든, Vertex는 200개 중 무엇이든, LG CNS는 Claude Enterprise 위에서. 세 플랫폼 모두 모델을 부품으로 취급합니다.",
+                        tag: "model-agnostic",
+                    },
+                ],
+            },
+            {
+                type: "paragraph",
+                content: "세 회사가 만든 것을 한 겹 벗겨보면 공통점이 선명합니다. __아무도 모델 그 자체를 팔지 않습니다.__ AgentCore는 \"어떤 파운데이션 모델이든\" 돌아간다고 못 박고, Gemini Enterprise Agent Platform은 자사 Gemini 옆에 경쟁사 Claude를 포함한 200개 모델을 나란히 올렸으며, LG CNS AIND는 앤트로픽 Claude Enterprise와 오픈소스 Cline 위에 얹혔습니다. 모델은 언제든 교체 가능한 부품이고, 진짜 제품은 그 부품을 둘러싼 __판__입니다.",
+            },
+            { type: "heading", content: "왜 모델이 아니라 플랫폼인가" },
+            {
+                type: "paragraph",
+                content: "첫 번째 이유는 모델이 너무 빠르게 상향평준화되기 때문입니다. 6개월마다 SOTA가 바뀝니다. 모델 한 개에 회사의 운명을 걸면 다음 분기에 처음부터 다시 만들어야 합니다. 반대로 그 위에 깔린 __오케스트레이션·거버넌스·통합 레이어__는 한 번 구축하면 모델만 갈아끼우며 계속 씁니다. 가치는 빠르게 낡는 모델에서 천천히 쌓이는 플랫폼으로 이동합니다. 거대 기업이 베팅하는 곳은 당연히 후자입니다.",
+            },
+            {
+                type: "paragraph",
+                content: "두 번째 이유가 더 본질적입니다. __엔터프라이즈가 원하는 것은 지능이 아니라 통제입니다.__ 은행 코어뱅킹, 사내 API, 고객 데이터를 실제로 건드리는 에이전트에는 권한 관리, 감사 로그, 관측 가능성, 신원 인증이 반드시 필요합니다. 모델 API 호출 한 줄에는 이런 것이 전혀 없습니다. 그래서 AgentCore는 Identity를 OAuth·Okta·Auth0와 붙이고 Observability를 별도 서비스로 떼어냈으며, LG CNS는 보안 규정과 개발 표준을 온톨로지로 구조화했습니다. 똑똑한 모델은 시작점일 뿐, 기업이 돈을 내는 지점은 통제 레이어입니다.",
+            },
+            { type: "heading", content: "세 플랫폼이 똑같이 그린 레이어" },
+            {
+                type: "harnessRefs",
+                refs: [
+                    {
+                        name: "런타임 — 에이전트를 안전하게 돌리는 자리",
+                        desc: "AgentCore Runtime은 세션을 격리하고 최대 8시간 장시간 실행을 보장합니다. Vertex Agent Engine은 관리형 런타임에 평가·세션·코드 실행을 묶었습니다. 에이전트를 '어디서 어떻게 돌리느냐'가 첫 번째 레이어입니다.",
+                        tag: "Runtime · isolation",
+                    },
+                    {
+                        name: "도구 게이트웨이 — 통합이 진짜 병목",
+                        desc: "AgentCore Gateway는 기존 MCP 서버, REST API, Lambda를 전부 에이전트 도구로 변환합니다. Vertex는 Apigee를 API-투-에이전트 다리로 쓰는 관리형 MCP를 내놨습니다. 모델은 똑똑한데 사내 시스템에 못 붙는 것 — 그 간극을 메우는 레이어가 락인의 핵심입니다.",
+                        tag: "MCP · tool integration",
+                    },
+                    {
+                        name: "메모리 — 세션이 끊겨도 남는 컨텍스트",
+                        desc: "AgentCore Memory는 단기(세션 내)와 장기(세션 간) 기억을 관리형으로 제공하고, Vertex는 Memory Bank를 별도로 둡니다. 에이전트가 지난 상호작용을 기억하는 것은 옵션이 아니라 기본 레이어가 됐습니다.",
+                        tag: "short-term + long-term",
+                    },
+                    {
+                        name: "거버넌스 — 휴먼 게이트의 엔터프라이즈판",
+                        desc: "신원 인증, 도구 사용 권한, 감사, 관측. 개인 하네스가 발행 직전 'Y/S/N' 승인으로 막는 그 게이트를, 대기업은 OAuth·VPC·PrivateLink·도구 거버넌스로 제도화합니다. 규모만 다를 뿐 원리는 같습니다.",
+                        tag: "Identity · Observability",
+                    },
+                ],
+            },
+            {
+                type: "paragraph",
+                content: "특히 도구 게이트웨이가 결정적입니다. 세 플랫폼이 약속이라도 한 듯 __MCP(Model Context Protocol)로 수렴__하고 있습니다. AgentCore Gateway가 기존 MCP 서버를 그대로 연결하고, 구글이 관리형 MCP 서버를 내놓고, A2A 프로토콜 v1.0이 이미 150개 조직에서 운영 중입니다. 모델이 아무리 똑똑해도 사내 시스템에 못 붙으면 쓸모가 없습니다. 그래서 통합 표준을 먼저 장악하는 쪽이 생태계를 가져갑니다. 클라우드 벤더에게는 자사 컴퓨트 위에서 에이전트가 돌며 다른 서비스를 소비하게 만드는 분배 채널이고, SI 기업에게는 고객사 지식을 온톨로지로 묶어두는 락인입니다.",
+            },
+            { type: "heading", content: "결국 모두가 만드는 건 '하네스'다" },
+            {
+                type: "paragraph",
+                content: "이 인사이트 시리즈에서 계속 말해온 것을 떠올려 보세요. 오케스트레이션, 컨텍스트 누적, 역할 분리, 모델 라우팅, 휴먼 게이트, 관측 가능성. __구글과 AWS와 LG CNS가 수십억을 들여 만들고 있는 것이 정확히 이 목록입니다.__ 1인 개발용 S-Skills 하네스가 수백 시간의 시행착오로 발견한 원리를, 대기업은 엔터프라이즈 스케일로 제품화하고 있을 뿐입니다. 개인이든 거대 기업이든, 모델을 실제로 일하게 만들려면 같은 결론에 도달합니다 — 모델 위에 판이 필요하다는 것.",
+            },
+            {
+                type: "paragraph",
+                content: "그래서 \"에이전트 플랫폼을 왜 만드는가\"라는 질문의 답은 단순합니다. __모델은 갈아끼우는 부품이 됐고, 남는 것은 판이기 때문__입니다. 모델 경쟁은 6개월짜리지만, 그 위에 깔린 오케스트레이션·메모리·거버넌스 레이어는 한 번 표준이 되면 오래 갑니다. 거대 기업이 플랫폼으로 달려가는 이유도, 1인 개발자가 하네스부터 갖춰야 하는 이유도 같은 곳을 가리킵니다. 하네스가 제품입니다.",
+            },
+            {
+                type: "cta",
+                text: "대기업이 수십억으로 만드는 그 레이어를, 1인 개발은 __설치 한 줄로__ 갖춥니다. 오케스트레이션·컨텍스트·역할 분리·휴먼 게이트 — 원리는 같습니다.",
+                btnText: "S-SKILLS 시작하기 →",
+                btnHref: "/s-skills",
+            },
+        ],
+    },
 ]
 
 export function getArticle(slug: string) {
