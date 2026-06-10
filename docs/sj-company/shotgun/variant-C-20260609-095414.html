@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>시안 C — Vercel 개발자 미니멀</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafafa;
+      --bg-card: #ffffff;
+      --text: #171717;
+      --text-body: #4d4d4d;
+      --text-mute: #888888;
+      --hairline: #ebebeb;
+      --hairline-strong: #a1a1a1;
+      --link: #0070f3;
+      --font-title: 'Inter', system-ui, sans-serif;
+      --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-title);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      padding: 0 40px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--hairline);
+      background: var(--bg);
+    }
+    .nav-brand {
+      font-family: var(--font-mono);
+      font-size: 13px; font-weight: 500;
+      letter-spacing: -0.03em; color: var(--text);
+    }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; color: var(--text-mute);
+      text-decoration: none;
+      transition: color 0.1s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-badge {
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--link);
+      border: 1px solid rgba(0,112,243,0.3);
+      padding: 4px 10px; border-radius: 4px;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 960px; margin: 0 auto;
+      padding: 80px 40px 60px;
+    }
+    .hero-breadcrumb {
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--text-mute);
+      letter-spacing: 0.04em;
+      margin-bottom: 40px;
+    }
+    .hero-breadcrumb span { color: var(--link); }
+    .hero-title {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 600;
+      line-height: 1.0;
+      letter-spacing: -2.5px;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .hero-sub {
+      font-size: 16px; font-weight: 400;
+      color: var(--text-body); line-height: 1.6;
+      letter-spacing: -0.01em;
+      max-width: 560px; margin-bottom: 48px;
+    }
+    .hero-meta {
+      display: flex; gap: 24px; align-items: center;
+      margin-bottom: 48px;
+    }
+    .meta-tag {
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--text-mute);
+      background: var(--bg-card);
+      border: 1px solid var(--hairline);
+      padding: 4px 10px; border-radius: 4px;
+    }
+    .meta-tag.active {
+      color: #0070f3;
+      border-color: rgba(0,112,243,0.3);
+      background: rgba(0,112,243,0.04);
+    }
+
+    /* PROJECT GRID */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--hairline);
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .project-card {
+      background: var(--bg-card);
+      padding: 24px;
+      transition: background 0.1s;
+      cursor: pointer;
+    }
+    .project-card:hover { background: #f5f5f5; }
+    .project-type {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.06em;
+      color: var(--text-mute);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .project-name {
+      font-size: 14px; font-weight: 600;
+      color: var(--text); letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .project-desc {
+      font-size: 12px; color: var(--text-body);
+      line-height: 1.5; letter-spacing: -0.01em;
+    }
+    .project-stack {
+      margin-top: 16px;
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .stack-tag {
+      font-family: var(--font-mono);
+      font-size: 10px; color: var(--text-mute);
+      background: var(--bg);
+      border: 1px solid var(--hairline);
+      padding: 2px 7px; border-radius: 3px;
+    }
+
+    /* FOOTER ROW */
+    .hero-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--hairline);
+    }
+    .footer-cmd {
+      font-family: var(--font-mono);
+      font-size: 12px; color: var(--text-mute);
+    }
+    .footer-cmd kbd {
+      background: var(--bg-card); border: 1px solid var(--hairline);
+      padding: 2px 6px; border-radius: 4px; font-size: 11px;
+      color: var(--text);
+    }
+    .contact-link {
+      font-size: 13px; font-weight: 500;
+      color: var(--link); text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+  </style>
+</head>
+<body>
+  <div style="position:fixed;top:12px;right:12px;background:#171717;color:#fff;padding:4px 10px;font-size:11px;border-radius:4px;z-index:9999;font-family:monospace;letter-spacing:0.05em">
+    C — Vercel 개발자
+  </div>
+
+  <nav>
+    <span class="nav-brand">~/songseungju</span>
+    <ul class="nav-links">
+      <li><a href="#">work</a></li>
+      <li><a href="#">stack</a></li>
+      <li><a href="#">writing</a></li>
+    </ul>
+    <span class="nav-badge">available for hire</span>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-breadcrumb">
+      <span>SongSeungJu</span> / portfolio / overview
+    </div>
+
+    <h1 class="hero-title">
+      Full-Stack<br>
+      Developer
+    </h1>
+    <p class="hero-sub">
+      Next.js · AI 에이전트 · TypeScript 전문 개발자.
+      아이디어를 프로덕션 수준 제품으로 빠르게 만듭니다.
+    </p>
+
+    <div class="hero-meta">
+      <span class="meta-tag active">● 외주 가능</span>
+      <span class="meta-tag">Seoul, KR</span>
+      <span class="meta-tag">Next.js 15</span>
+      <span class="meta-tag">Claude API</span>
+      <span class="meta-tag">Supabase</span>
+    </div>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-type">AI / SaaS</div>
+        <div class="project-name">Upflow Ax</div>
+        <div class="project-desc">AI 에이전트 기반 SI 프로세스 자동화 플랫폼</div>
+        <div class="project-stack">
+          <span class="stack-tag">Next.js</span>
+          <span class="stack-tag">Claude</span>
+          <span class="stack-tag">Supabase</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-type">커머스 / 플랫폼</div>
+        <div class="project-name">Totaro Web</div>
+        <div class="project-desc">코스프레 의상 커머스 서비스 풀스택 개발</div>
+        <div class="project-stack">
+          <span class="stack-tag">React</span>
+          <span class="stack-tag">TypeScript</span>
+          <span class="stack-tag">PostgreSQL</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-type">개발 도구</div>
+        <div class="project-name">S-Skills</div>
+        <div class="project-desc">Claude Code 전용 AI 에이전트 스킬 오케스트레이션 시스템</div>
+        <div class="project-stack">
+          <span class="stack-tag">TypeScript</span>
+          <span class="stack-tag">Claude API</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-footer">
+      <div class="footer-cmd">
+        <kbd>⌘</kbd> + <kbd>K</kbd> 로 빠른 연락
+      </div>
+      <a href="mailto:upflow999@gmail.com" class="contact-link">외주 문의하기 →</a>
+    </div>
+  </section>
+</body>
+</html>

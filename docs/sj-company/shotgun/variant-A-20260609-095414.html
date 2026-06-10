@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>시안 A — Stripe 에디토리얼</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-soft: #f6f9fc;
+      --text: #0d253d;
+      --text-mute: #64748d;
+      --accent: #533afd;
+      --accent-soft: #665efd;
+      --hairline: #e3e8ee;
+      --font-title: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-title);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 60px;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .nav-logo {
+      font-size: 14px; font-weight: 500;
+      letter-spacing: -0.02em; color: var(--text);
+      font-family: var(--font-mono);
+    }
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px; font-weight: 300; color: var(--text-mute);
+      text-decoration: none; letter-spacing: -0.01em;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-size: 13px; font-weight: 500;
+      color: var(--accent); text-decoration: none;
+      border: 1px solid var(--accent);
+      padding: 7px 16px; border-radius: 6px;
+      letter-spacing: -0.01em;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent); color: #fff; }
+
+    /* HERO */
+    .hero {
+      padding: 140px 48px 80px;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 80px;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-left {}
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.08em;
+      color: var(--accent);
+      background: rgba(83,58,253,0.06);
+      padding: 5px 12px; border-radius: 100px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(83,58,253,0.15);
+    }
+    .hero-tag::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .hero-title {
+      font-size: clamp(40px, 5vw, 60px);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -1.6px;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-desc {
+      font-size: 17px; font-weight: 300;
+      line-height: 1.7; color: var(--text-mute);
+      letter-spacing: -0.01em;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+    .hero-actions {
+      display: flex; gap: 12px; align-items: center;
+    }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      font-size: 14px; font-weight: 500;
+      padding: 12px 24px; border-radius: 8px;
+      text-decoration: none; letter-spacing: -0.01em;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { background: var(--accent-soft); transform: translateY(-1px); }
+    .btn-ghost {
+      font-size: 14px; font-weight: 300; color: var(--text-mute);
+      text-decoration: none; letter-spacing: -0.01em;
+      transition: color 0.15s;
+    }
+    .btn-ghost:hover { color: var(--text); }
+
+    /* RIGHT PANEL */
+    .hero-right {
+      background: var(--bg-soft);
+      border: 1px solid var(--hairline);
+      border-radius: 12px;
+      padding: 28px;
+      margin-top: 20px;
+    }
+    .panel-label {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.1em;
+      color: var(--text-mute);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .skill-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .skill-row:last-child { border-bottom: none; }
+    .skill-name {
+      font-size: 13px; font-weight: 400;
+      color: var(--text); letter-spacing: -0.01em;
+    }
+    .skill-bar {
+      flex: 1; height: 3px; background: var(--hairline);
+      margin: 0 16px; border-radius: 2px;
+      overflow: hidden;
+    }
+    .skill-fill {
+      height: 100%; background: var(--accent);
+      border-radius: 2px;
+    }
+    .skill-yrs {
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--text-mute);
+    }
+
+    /* STATS STRIP */
+    .stats {
+      border-top: 1px solid var(--hairline);
+      padding: 32px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+    .stat-item {}
+    .stat-num {
+      font-size: 32px; font-weight: 300;
+      letter-spacing: -1.2px; color: var(--text);
+      margin-bottom: 4px;
+    }
+    .stat-num span { font-size: 20px; color: var(--accent); }
+    .stat-label {
+      font-size: 12px; font-weight: 300; color: var(--text-mute);
+      letter-spacing: -0.01em;
+    }
+  </style>
+</head>
+<body>
+  <div style="position:fixed;top:12px;right:12px;background:#533afd;color:#fff;padding:4px 10px;font-size:11px;border-radius:4px;z-index:9999;font-family:monospace;letter-spacing:0.05em">
+    A — Stripe 에디토리얼
+  </div>
+
+  <nav>
+    <span class="nav-logo">SongSeungJu</span>
+    <ul class="nav-links">
+      <li><a href="#">포트폴리오</a></li>
+      <li><a href="#">기술 스택</a></li>
+      <li><a href="#">프로젝트</a></li>
+    </ul>
+    <a href="#" class="nav-cta">외주 문의</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">외주 · 프리랜서 개발</div>
+      <h1 class="hero-title">
+        아이디어를<br>
+        제품으로<br>
+        <em>만들어드립니다</em>
+      </h1>
+      <p class="hero-desc">
+        Full-Stack 개발자 송승주입니다. Next.js · AI 통합 · 에이전트 시스템을 전문으로 합니다.
+        기획부터 배포까지 단독으로 진행합니다.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">프로젝트 제안하기</a>
+        <a href="#" class="btn-ghost">포트폴리오 보기 →</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <p class="panel-label">// 기술 스택</p>
+      <div class="skill-row">
+        <span class="skill-name">Next.js / React</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        <span class="skill-yrs">5yr</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">AI 에이전트 / Claude API</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        <span class="skill-yrs">3yr</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">TypeScript</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        <span class="skill-yrs">4yr</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Supabase / PostgreSQL</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        <span class="skill-yrs">3yr</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Framer Motion / GSAP</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        <span class="skill-yrs">2yr</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-num">12<span>+</span></div>
+      <div class="stat-label">완료 프로젝트</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">5<span>yr</span></div>
+      <div class="stat-label">개발 경력</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100<span>%</span></div>
+      <div class="stat-label">납기 준수율</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3<span>일</span></div>
+      <div class="stat-label">평균 응답 시간</div>
+    </div>
+  </div>
+</body>
+</html>
