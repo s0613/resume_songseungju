@@ -4,6 +4,7 @@ import { articles } from "@/data/insights"
 import s from "./insights.module.css"
 
 export default function InsightsIndexPage() {
+    const sortedArticles = [...articles].sort((a, b) => Number(b.num) - Number(a.num))
     return (
         <div className={s.root}>
             <div className={s.bgImg}>
@@ -29,7 +30,7 @@ export default function InsightsIndexPage() {
                 </div>
 
                 <div className={s.articleList}>
-                    {articles.map((article) => (
+                    {sortedArticles.map((article) => (
                         <Link key={article.slug} href={`/s-skills/insights/${article.slug}`} className={s.articleCard}>
                             <div className={s.articleCardMeta}>
                                 <span className={s.articleNum}>{article.num}</span>

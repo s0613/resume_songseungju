@@ -133,14 +133,76 @@
 .articleList { display: flex; flex-direction: column; }
 
 .articleCard {
+    position: relative;
     display: block;
     padding: 44px 0;
     border-bottom: 1px solid var(--orange-faint);
     text-decoration: none;
-    transition: background 0.15s;
+    transition: border-color 0.25s;
 }
+.articleCard:hover { border-bottom-color: transparent; }
 .articleCard:hover .articleCardTitle { opacity: 0.8; }
 .articleCard:hover .articleCardMore { opacity: 1; }
+
+/* 유리 패널 — 호버 시 카드 전체가 글래스 버튼이 된다 */
+.articleCard::before {
+    content: "";
+    position: absolute;
+    inset: 14px -28px;
+    z-index: -1;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.16));
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+        0 18px 44px -20px rgba(255, 172, 2, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -1px 0 rgba(255, 172, 2, 0.12);
+    backdrop-filter: blur(14px) saturate(1.5);
+    -webkit-backdrop-filter: blur(14px) saturate(1.5);
+    opacity: 0;
+    transform: scale(0.985);
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+.articleCard:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* 글린트 — 호버 즉시 한 번, 이후 5초마다 빛이 쓸고 지나간다 */
+.articleCard::after {
+    content: "";
+    position: absolute;
+    inset: 14px -28px;
+    border-radius: 22px;
+    background: linear-gradient(
+        115deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.06) 43%,
+        rgba(255, 255, 255, 0.7) 50%,
+        rgba(255, 255, 255, 0.06) 57%,
+        transparent 65%
+    );
+    background-size: 280% 100%;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    opacity: 0;
+    pointer-events: none;
+}
+.articleCard:hover::after {
+    opacity: 1;
+    animation: glassGlint 5s linear infinite;
+}
+
+@keyframes glassGlint {
+    0% { background-position: 100% 0; }
+    22% { background-position: 0% 0; }
+    100% { background-position: 0% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .articleCard:hover::after { animation: none; }
+}
 
 .articleCardMeta {
     display: flex;
@@ -434,6 +496,7 @@
     .ctaBlock { flex-direction: column; align-items: flex-start; }
     .ctaBtn { width: 100%; text-align: center; }
     .footer { flex-direction: column; gap: 12px; align-items: flex-start; }
+    .articleCard::before, .articleCard::after { inset: 12px -16px; border-radius: 18px; }
 }
 
 @media (max-width: 480px) {
@@ -442,4 +505,5 @@
     .cardNews { grid-template-columns: 1fr; }
     .card { border-right: none; border-bottom: 1px solid rgba(255,172,2,0.2); }
     .card:last-child { border-bottom: none; }
+    .articleCard::before, .articleCard::after { inset: 10px -10px; border-radius: 16px; }
 }
