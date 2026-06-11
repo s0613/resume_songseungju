@@ -317,48 +317,81 @@
     max-width: 860px;
 }
 
-/* CARD NEWS */
+/* CARD NEWS — 인스타 카드뉴스 덱: 커버 카드 + 글래스 패널 */
 .cardNews {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    border: 1px solid rgba(255,172,2,0.3);
-    margin-bottom: 40px;
+    gap: 16px;
+    margin: 8px 0 48px;
 }
 .card {
-    background: rgba(45,32,22,0.04);
-    padding: 28px 24px 32px;
-    border-right: 1px solid rgba(255,172,2,0.25);
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    padding: 26px 22px 20px;
+    border-radius: 20px;
+    background: linear-gradient(165deg, rgba(255,255,255,0.88), rgba(255,255,255,0.42));
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow:
+        0 16px 36px -20px rgba(45,32,22,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.95),
+        inset 0 -1px 0 rgba(255,172,2,0.1);
+    backdrop-filter: blur(10px) saturate(1.4);
+    -webkit-backdrop-filter: blur(10px) saturate(1.4);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
-.card:last-child { border-right: none; }
+.card:hover {
+    transform: translateY(-8px) rotate(-0.6deg);
+    box-shadow:
+        0 28px 52px -22px rgba(255,172,2,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.95);
+}
+/* 첫 장 = 커버 카드 (솔리드 오렌지) */
+.card:first-child {
+    background: linear-gradient(165deg, rgb(255,186,32), rgb(255,158,0));
+    border-color: rgba(255,255,255,0.4);
+    box-shadow:
+        0 20px 44px -18px rgba(255,150,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.card:first-child:hover { transform: translateY(-8px) rotate(0.6deg); }
+.card:first-child .cardNum { color: #2d2016; }
+.card:first-child .cardTitle { color: #2d2016; }
+.card:first-child .cardBody { color: rgba(45,32,22,0.88); }
+.card:first-child .cardTag { color: rgba(45,32,22,0.6); border-top-color: rgba(45,32,22,0.25); }
 .cardNum {
     font-family: var(--hero);
-    font-size: 48px;
+    font-size: clamp(34px, 3.2vw, 50px);
     line-height: 1;
-    color: rgba(255,172,2,0.15);
-    margin-bottom: 12px;
+    color: var(--orange);
+    margin-bottom: 16px;
     letter-spacing: -0.02em;
+    word-break: keep-all;
 }
 .cardTitle {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--orange);
     margin-bottom: 10px;
 }
 .cardBody {
+    flex: 1;
     font-size: 14px;
     color: var(--text);
     line-height: 1.7;
 }
 .cardTag {
-    display: inline-block;
-    margin-top: 14px;
+    display: block;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(255,172,2,0.4);
     font-family: var(--mono);
     font-size: 10px;
-    color: rgba(255,172,2,0.45);
+    line-height: 1.5;
+    color: rgba(255,140,0,0.75);
+    word-break: break-word;
 }
 
 /* ARTICLE BODY */
@@ -487,9 +520,23 @@
     .nav, .footer { padding-left: 24px; padding-right: 24px; }
     .main { padding-left: 24px; padding-right: 24px; }
     .navLinks { display: none; }
-    .cardNews { grid-template-columns: repeat(2, 1fr); }
-    .card:nth-child(2) { border-right: none; }
-    .card:nth-child(3) { border-right: 1px solid rgba(255,172,2,0.2); }
+    /* 카드뉴스 — 모바일은 가로 스와이프 (스냅 캐러셀) */
+    .cardNews {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 14px;
+        margin-left: -24px;
+        margin-right: -24px;
+        padding: 6px 24px 18px;
+        scrollbar-width: none;
+    }
+    .cardNews::-webkit-scrollbar { display: none; }
+    .card {
+        flex: 0 0 min(300px, 76vw);
+        scroll-snap-align: center;
+        min-height: 280px;
+    }
     .harnessRefs { grid-template-columns: 1fr; }
     .harnessRef { border-right: none; border-bottom: 1px solid rgba(255,172,2,0.2); }
     .harnessRef:last-child { border-bottom: none; }
@@ -502,8 +549,6 @@
 @media (max-width: 480px) {
     .nav, .footer { padding-left: 16px; padding-right: 16px; }
     .main { padding-left: 16px; padding-right: 16px; }
-    .cardNews { grid-template-columns: 1fr; }
-    .card { border-right: none; border-bottom: 1px solid rgba(255,172,2,0.2); }
-    .card:last-child { border-bottom: none; }
+    .cardNews { margin-left: -16px; margin-right: -16px; padding: 6px 16px 18px; }
     .articleCard::before, .articleCard::after { inset: 10px -10px; border-radius: 16px; }
 }
