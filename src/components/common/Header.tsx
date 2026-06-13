@@ -11,9 +11,10 @@ const Header: React.FC = () => {
   const pathname = usePathname();
   const isPortfolioPage = pathname.includes("/portfolio/");
   const isSSkillsPage = pathname === "/s-skills" || pathname.startsWith("/s-skills/");
+  const isOpenTraderPage = pathname === "/open-trader" || pathname.startsWith("/open-trader/");
 
   const isHomePage = pathname === "/";
-  if (isSSkillsPage || isHomePage) return null;
+  if (isSSkillsPage || isOpenTraderPage || isHomePage) return null;
 
   const menuItems = [
     { name: "SSJ", href: isPortfolioPage ? "/" : "#heroSection" },
