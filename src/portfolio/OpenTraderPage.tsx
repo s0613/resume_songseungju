@@ -14,7 +14,7 @@ export default function OpenTraderPage() {
         <div className={s.root}>
             {/* Background — 보티첼리, 비너스의 탄생 */}
             <div className={s.bgImg}>
-                <Image src="/OpenTrader/venus-bg.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "center center", opacity: 0.34 }} priority />
+                <Image src="/OpenTrader/venus-bg.webp" alt="" fill style={{ objectFit: "cover", objectPosition: "center center", opacity: 0.1, filter: "blur(4px)" }} priority />
             </div>
             <div className={s.bgOverlay} />
 

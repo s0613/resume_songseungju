@@ -49,7 +49,8 @@
     height: 100%;
     object-fit: cover;
     object-position: center center;
-    opacity: 0.34;
+    opacity: 0.1;
+    filter: blur(4px);
 }
 .bgOverlay {
     position: fixed;
