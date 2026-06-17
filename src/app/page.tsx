@@ -205,6 +205,7 @@ export default function ResumePage() {
                     </ul>
                     <div className={s.navRight}>
                         <a href="https://github.com/s0613" className={s.navGh} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                        <a href="/blog" className={s.navSSkills}>Blog</a>
                         <a href="/open-trader" className={s.navSSkills}>open-trader</a>
                         <a href="/s-skills" className={s.navSSkills}>S-Skills</a>
                     </div>
