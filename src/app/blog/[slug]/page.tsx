@@ -108,7 +108,6 @@ export default async function BlogPostPage({
             <header className={s.topbar}>
                 <div className={s.topbarInner}>
                     <Link href="/blog" className={s.brand}>
-                        <span className={s.brandLogo}>B</span>
                         <span>
                             승주의 <span className={s.brandSub}>AI</span> 블로그
                         </span>
@@ -120,9 +119,8 @@ export default async function BlogPostPage({
                             href="https://github.com/s0613"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={s.topNavCta}
                         >
-                            이웃추가 +
+                            GitHub
                         </a>
                     </nav>
                 </div>
@@ -133,33 +131,9 @@ export default async function BlogPostPage({
                     <div className={s.profileCard}>
                         <div className={s.profileCover} />
                         <div className={s.profileBody}>
-                            <div className={s.profileAvatar}>{blogProfile.emoji}</div>
                             <div className={s.profileNick}>{blogProfile.nickname}</div>
                             <div className={s.profileHandle}>@{blogProfile.handle}</div>
                             <p className={s.profileIntro}>{blogProfile.intro}</p>
-                            <button type="button" className={s.neighborBtn}>
-                                + 이웃추가
-                            </button>
-                            <div className={s.profileStats}>
-                                <div className={s.statItem}>
-                                    <div className={s.statLabel}>이웃</div>
-                                    <div className={s.statValue}>
-                                        {blogProfile.neighbors.toLocaleString()}
-                                    </div>
-                                </div>
-                                <div className={s.statItem}>
-                                    <div className={s.statLabel}>오늘</div>
-                                    <div className={`${s.statValue} ${s.green}`}>
-                                        {blogProfile.todayVisitors.toLocaleString()}
-                                    </div>
-                                </div>
-                                <div className={s.statItem}>
-                                    <div className={s.statLabel}>전체</div>
-                                    <div className={s.statValue}>
-                                        {blogProfile.totalVisitors.toLocaleString()}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </aside>
@@ -173,10 +147,7 @@ export default async function BlogPostPage({
                         <span className={s.articleCat}>{post.category}</span>
                         <h1 className={s.articleTitle}>{post.title}</h1>
                         <div className={s.articleMeta}>
-                            <span className={s.articleAuthor}>
-                                <span className={s.authorAvatar}>{blogProfile.emoji}</span>
-                                {blogProfile.nickname}
-                            </span>
+                            <span className={s.articleAuthor}>{blogProfile.nickname}</span>
                             <span className={s.dot} />
                             <span>{post.date}</span>
                             <span className={s.dot} />
@@ -195,24 +166,11 @@ export default async function BlogPostPage({
                             ))}
                         </div>
 
-                        <div className={s.reactRow}>
-                            <button type="button" className={`${s.reactBtn} ${s.liked}`}>
-                                ❤️ 공감 {post.likes}
-                            </button>
-                            <button type="button" className={s.reactBtn}>
-                                💬 댓글 {post.comments}
-                            </button>
-                        </div>
-
                         <div className={s.authorCard}>
-                            <div className={s.authorCardAvatar}>{blogProfile.emoji}</div>
                             <div>
                                 <div className={s.authorCardName}>{blogProfile.nickname}</div>
                                 <p className={s.authorCardIntro}>{blogProfile.intro}</p>
                             </div>
-                            <button type="button" className={s.authorCardBtn}>
-                                + 이웃추가
-                            </button>
                         </div>
                     </article>
 

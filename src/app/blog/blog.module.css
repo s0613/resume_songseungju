@@ -31,7 +31,7 @@
 }
 
 .topbarInner {
-    max-width: 980px;
+    max-width: 1240px;
     margin: 0 auto;
     height: 56px;
     padding: 0 20px;
@@ -49,19 +49,6 @@
     font-size: 17px;
     color: var(--ink);
     text-decoration: none;
-}
-
-.brandLogo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 8px;
-    background: var(--naver-green);
-    color: #fff;
-    font-size: 15px;
-    font-weight: 900;
 }
 
 .brandSub {
@@ -88,24 +75,14 @@
     color: var(--ink);
 }
 
-.topNavCta {
-    background: var(--naver-green) !important;
-    color: #fff !important;
-    font-weight: 700;
-}
-
-.topNavCta:hover {
-    background: var(--naver-green-dark) !important;
-}
-
 /* ===== 레이아웃 ===== */
 .layout {
-    max-width: 980px;
+    max-width: 1240px;
     margin: 0 auto;
     padding: 24px 20px 80px;
     display: grid;
     grid-template-columns: 240px 1fr;
-    gap: 24px;
+    gap: 28px;
     align-items: start;
 }
 
@@ -131,23 +108,8 @@
 }
 
 .profileBody {
-    padding: 0 18px 18px;
-    margin-top: -34px;
+    padding: 16px 18px 18px;
     text-align: center;
-}
-
-.profileAvatar {
-    width: 68px;
-    height: 68px;
-    margin: 0 auto 10px;
-    border-radius: 50%;
-    background: #fff;
-    border: 3px solid #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 34px;
 }
 
 .profileNick {
@@ -167,57 +129,6 @@
     line-height: 1.6;
     color: var(--ink-soft);
     margin: 12px 2px 0;
-}
-
-.neighborBtn {
-    display: block;
-    width: 100%;
-    margin-top: 14px;
-    padding: 9px 0;
-    border-radius: 10px;
-    background: var(--naver-green);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    transition: background 0.18s;
-}
-
-.neighborBtn:hover {
-    background: var(--naver-green-dark);
-}
-
-.profileStats {
-    display: flex;
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
-}
-
-.statItem {
-    flex: 1;
-    text-align: center;
-}
-
-.statItem + .statItem {
-    border-left: 1px solid var(--line);
-}
-
-.statLabel {
-    font-size: 11px;
-    color: var(--ink-faint);
-}
-
-.statValue {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--ink);
-    margin-top: 3px;
-}
-
-.statValue.green {
-    color: var(--naver-green);
 }
 
 /* ===== 사이드바: 카테고리 ===== */
@@ -329,13 +240,11 @@
 }
 
 .postCard {
-    display: grid;
-    grid-template-columns: 96px 1fr;
-    gap: 18px;
+    display: block;
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 16px;
-    padding: 18px;
+    padding: 20px 22px;
     text-decoration: none;
     color: inherit;
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s;
@@ -345,17 +254,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(3, 199, 90, 0.1);
     border-color: #cdeedd;
-}
-
-.postThumb {
-    width: 96px;
-    height: 96px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--naver-green-soft), #f3fbf6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 42px;
 }
 
 .postMain {
@@ -418,10 +316,28 @@
     background: var(--ink-faint);
 }
 
-.metaCount {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+/* ===== 빈 상태 ===== */
+.empty {
+    background: var(--surface);
+    border: 1px dashed #d7dbe0;
+    border-radius: 16px;
+    padding: 56px 24px;
+    text-align: center;
+}
+
+.emptyTitle {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ink);
+}
+
+.emptyDesc {
+    margin: 8px auto 0;
+    max-width: 360px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    word-break: keep-all;
 }
 
 /* ===== 글 상세 ===== */
@@ -482,17 +398,6 @@
     gap: 7px;
     font-weight: 700;
     color: var(--ink-soft);
-}
-
-.authorAvatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--naver-green-soft);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
 }
 
 /* ===== 글 본문 ===== */
@@ -644,63 +549,15 @@
     border-radius: 999px;
 }
 
-.reactRow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 26px;
-}
-
-.reactBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 11px 20px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: var(--surface);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink-soft);
-    cursor: pointer;
-    transition: all 0.18s;
-}
-
-.reactBtn:hover {
-    border-color: var(--naver-green);
-    color: var(--naver-green-dark);
-    background: var(--naver-green-soft);
-}
-
-.reactBtn.liked {
-    border-color: #ffd1d6;
-    color: #e0395a;
-    background: #fff0f2;
-}
-
 /* ===== 작성자 카드 (글 하단) ===== */
 .authorCard {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-top: 22px;
+    margin-top: 28px;
     padding: 20px 22px;
     background: var(--bg);
     border-radius: 16px;
-}
-
-.authorCardAvatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid var(--naver-green-soft);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    flex-shrink: 0;
 }
 
 .authorCardName {
@@ -714,24 +571,6 @@
     line-height: 1.6;
     color: var(--ink-soft);
     margin-top: 4px;
-}
-
-.authorCardBtn {
-    margin-left: auto;
-    flex-shrink: 0;
-    padding: 9px 16px;
-    border-radius: 10px;
-    background: var(--naver-green);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    transition: background 0.18s;
-}
-
-.authorCardBtn:hover {
-    background: var(--naver-green-dark);
 }
 
 /* ===== 이전/다음 글 ===== */
@@ -819,20 +658,13 @@
 }
 
 @media (max-width: 560px) {
-    .topNav a:not(.topNavCta) {
-        display: none;
+    .topNav a {
+        padding: 6px 9px;
+        font-size: 13px;
     }
 
     .postCard {
-        grid-template-columns: 64px 1fr;
-        gap: 14px;
-        padding: 14px;
-    }
-
-    .postThumb {
-        width: 64px;
-        height: 64px;
-        font-size: 30px;
+        padding: 16px 18px;
     }
 
     .postTitle {
@@ -857,9 +689,5 @@
 
     .authorCard {
         flex-wrap: wrap;
-    }
-
-    .authorCardBtn {
-        margin-left: 0;
     }
 }
