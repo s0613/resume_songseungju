@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import type { ReactNode } from "react"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
@@ -34,10 +35,34 @@ export async function generateMetadata({
 }
 
 function renderInline(text: string, keyPrefix: string) {
-    const parts = text.split(/__(.*?)__/)
-    return parts.map((part, j) =>
-        j % 2 === 1 ? <strong key={`${keyPrefix}-${j}`}>{part}</strong> : part
-    )
+    // __굵게__ 와 [텍스트](url) 링크를 함께 처리
+    const nodes: ReactNode[] = []
+    const regex = /\[([^\]]+)\]\(([^)]+)\)|__(.+?)__/g
+    let last = 0
+    let j = 0
+    let m: RegExpExecArray | null
+    while ((m = regex.exec(text)) !== null) {
+        if (m.index > last) nodes.push(text.slice(last, m.index))
+        if (m[1] !== undefined) {
+            nodes.push(
+                <a
+                    key={`${keyPrefix}-${j}`}
+                    href={m[2]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={s.inlineLink}
+                >
+                    {m[1]}
+                </a>
+            )
+        } else {
+            nodes.push(<strong key={`${keyPrefix}-${j}`}>{m[3]}</strong>)
+        }
+        last = m.index + m[0].length
+        j++
+    }
+    if (last < text.length) nodes.push(text.slice(last))
+    return nodes
 }
 
 function renderBlock(block: BlogBlock, i: number) {

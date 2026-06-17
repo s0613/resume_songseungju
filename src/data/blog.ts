@@ -47,14 +47,129 @@ export interface Category {
 
 // 글의 category 값과 매칭됩니다.
 export const categories: Category[] = [
-    { name: "전체보기", slug: "all", count: 2 },
+    { name: "전체보기", slug: "all", count: 3 },
     { name: "소개", slug: "intro", count: 1 },
     { name: "에이전트 경험", slug: "experience", count: 1 },
-    { name: "AI 학습노트", slug: "learning", count: 0 },
+    { name: "AI 학습노트", slug: "learning", count: 1 },
     { name: "인사이트", slug: "insight", count: 0 },
 ]
 
 export const posts: BlogPost[] = [
+    {
+        slug: "reference-data-mapping-state-of-the-art",
+        category: "AI 학습노트",
+        title: "기준용어 매핑, 요즘은 이렇게 합니다 — 엔티티 매칭 정리노트",
+        date: "2026. 6. 18.",
+        readTime: "9분",
+        excerpt:
+            "기준용어(reference data)는 회사마다 방대하고 나라별 수기 입력이 제각각이라 자동 매핑이 어렵습니다. 요즘 업계가 쓰는 파이프라인과 대표 논문·벤치마크를 출처와 함께 정리했습니다.",
+        tags: ["엔티티매칭", "기준데이터", "MDM", "RAG", "정리노트"],
+        blocks: [
+            {
+                type: "paragraph",
+                content:
+                    "현장에서 자주 듣는 이야기가 있습니다. 기준용어(reference data)는 회사마다 방대하고, 실제로는 수기 입력이 많고, 나라마다 표기와 입력 방식이 달라서, 로컬·수기 표현을 표준 용어에 맞추는 자동 매핑이 어렵다는 것입니다. 이 문제를 다루는 학술 명칭이 __entity matching(엔티티 매칭) / record linkage / entity resolution__ 입니다. 요즘 방식과 대표 논문을 출처와 함께 정리했습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "(이 글의 주장은 1차 출처를 직접 확인해 정리했습니다. 일부 세부 수치는 본문에서 한 번 더 확인하시길 권합니다.)",
+            },
+            { type: "heading", content: "요즘 쓰는 파이프라인" },
+            {
+                type: "paragraph",
+                content:
+                    "용어 정규화·매핑은 대체로 아래 단계를 따릅니다. 핵심은 방대한 표준 카탈로그를 한 번에 비교하지 않고, __먼저 후보를 좁힌 뒤 정밀 판정__하는 2단계 구조입니다.",
+            },
+            {
+                type: "list",
+                items: [
+                    "__전처리·정규화__ — 유니코드/음역 통일, 대소문자·단위·약어 정리",
+                    "__블로킹(후보 생성)__ — N×M 비교를 줄임. 요즘은 고전적 blocking key 대신 임베딩 ANN 검색으로 top-k 후보를 뽑음",
+                    "__매칭·재랭킹__ — retrieve-then-rerank: bi-encoder로 검색 → cross-encoder 또는 LLM으로 정밀 판정",
+                    "__결정·골든레코드__ — 임계값 + survivorship(생존 규칙)으로 표준값 확정",
+                    "__휴먼 검증__ — data steward 검토, 신뢰도가 높으면 자동 확정·낮으면 검토 큐로 분기",
+                    "__피드백 루프__ — steward 결정을 학습 예시로 재활용(active learning)",
+                ],
+            },
+            {
+                type: "paragraph",
+                content:
+                    "상용 MDM(master data management)이 이 구조를 그대로 보여줍니다. 예로 Semarchy xDM은 match group 생성 → 골든레코드 병합 → 확정 → survivorship 통합으로 흐르고, 퍼지 매칭과 ID(정확) 매칭을 구분하며, 신뢰도 점수에 따라 자동 병합과 steward 검토로 분기합니다. 출처: [Semarchy xDM matching 문서](https://www.semarchy.com/doc/semarchy-xdm/xdm/5.3/Design/matching/matching.html). 비슷한 상용으로 Informatica·Reltio·SAP MDG·Tamr, 오픈소스로 Magellan(py_entitymatching)·Zingg·dedupe·RecordLinkage가 있습니다.",
+            },
+            { type: "heading", content: "LLM·RAG가 바꾼 것" },
+            {
+                type: "list",
+                items: [
+                    "__retrieve-then-rerank__ — 빠른 임베딩 검색으로 1차 후보, LLM/cross-encoder로 2차 재랭킹. 품질과 비용·지연의 균형점. 출처: [LlamaIndex](https://www.llamaindex.ai/blog/using-llms-for-retrieval-and-reranking-23cf2d3a14b6)",
+                    "__LLM few-shot 매칭__ — 'Microsoft Corporation'과 'MSFT'처럼 표기가 달라도 동일 엔티티임을 의미적으로 인식. 수작업 피처 엔지니어링 의존을 줄임",
+                    "__cross-lingual__ — 다국어 임베딩으로 나라별 언어 차이를 흡수, 글로벌 데이터 통합에 유리",
+                ],
+            },
+            {
+                type: "paragraph",
+                content:
+                    "특히 [Peeters·Steiner·Bizer, \"Entity Matching using LLMs\" (arXiv 2310.11244)](https://arxiv.org/abs/2310.11244)는 __최고 성능 LLM이 학습 예시 없이(또는 소수만으로) 수천 건으로 파인튜닝한 BERT/RoBERTa급 성능__을 내고, 미관측 엔티티에 더 강건하다고 보고합니다. 라벨링 비용이 큰 현장에서 의미 있는 결과입니다.",
+            },
+            { type: "heading", content: "대표 논문·벤치마크" },
+            {
+                type: "list",
+                items: [
+                    "__Ditto__ — 엔티티 매칭을 시퀀스쌍 분류로 보고 PLM을 파인튜닝. 기존 SOTA 대비 최대 +29% F1, 라벨 절반으로 SOTA 도달(도메인 지식 주입·데이터 증강 포함). [arXiv 2004.00584](https://arxiv.org/abs/2004.00584)",
+                    "__Deepmatcher / Magellan__ — clean 구조화 데이터엔 딥러닝이 전통 기법과 동급이지만 훨씬 느리고, __텍스트·dirty 데이터엔 딥러닝이 우위__. 데이터 성격에 따라 선택하라는 교훈. [SIGMOD'18](https://pages.cs.wisc.edu/~anhai/papers1/deepmatcher-sigmod18.pdf)",
+                    "__WDC Products__ — 코너케이스 난이도·미관측 엔티티 비율·학습량을 조절하는 다차원 벤치마크. 모든 기법이 미관측 엔티티에서 성능이 떨어진다는 점을 정량화. [arXiv 2301.09521](https://arxiv.org/abs/2301.09521)",
+                    "__OpenSanctions Pairs__ — 755,540 라벨 쌍·293 소스·31개국의 대규모 다국어/교차문자 벤치마크. GPT-4o 98.95% F1, 로컬 배포형 오픈모델(DeepSeek-R1-Distill-Qwen-14B) 98.23%가 룰기반 91.33%를 상회. [arXiv 2603.11051](https://arxiv.org/abs/2603.11051)",
+                    "__STEPMatch__ — 짧은 다국어 전자세금계산서 품목명을 blocking + 하이브리드(BM25+SBERT, RRF) 검색 + 다국어 cross-encoder 재랭킹으로 매칭. 영어→포르투갈어 cross-lingual 전이가 타깃 단독 학습을 능가(약 98.6 vs 94.3). [SciTePress 2025](https://www.scitepress.org/Papers/2025/132850/132850.pdf)",
+                    "__BERTMap__ — 온톨로지/용어 정렬을 코퍼스 구성 → BERT 파인튜닝 → 매핑 예측 → 정제의 4단계로. 'after-candidate-classify-then-refine' 구조가 용어 정규화와 똑같음. [AAAI 2022](https://ojs.aaai.org/index.php/AAAI/article/view/20510)",
+                ],
+            },
+            { type: "heading", content: "\"방대함 + 다국어 수기입력\"에 특히 효과적인 것" },
+            {
+                type: "list",
+                items: [
+                    "__retrieve-then-rerank__ — 방대한 카탈로그를 임베딩 검색으로 좁히고 정밀 판정. 규모 확장의 핵심",
+                    "__다국어 임베딩__(LaBSE, multilingual-e5, BGE-M3 등) — 나라별 언어·표기 차이 흡수",
+                    "__dirty·free-text 수기입력엔 LLM/딥러닝__ — Deepmatcher가 보여준 '텍스트·dirty 우위'와 일치",
+                    "__cross-lingual 전이__ — 타깃 언어 라벨이 적을 때 고자원 언어에서 전이(STEPMatch)",
+                    "__휴먼 검증 + active learning__ — 롱테일은 steward가 잡고, 그 결정을 예시로 축적",
+                ],
+            },
+            { type: "heading", content: "한계" },
+            {
+                type: "list",
+                items: [
+                    "__코너케이스__(닮은 비매치 / 안 닮은 매치)에서 모든 기법의 성능이 급락",
+                    "__미관측 엔티티__ 일반화가 약함 — 학습에 없던 새 엔티티에서 정확도 하락",
+                    "__교차문자 음역·식별자 off-by-one__ 은 LLM의 대표적 실패 모드(아랍/키릴/라틴)",
+                    "__LLM 비용·지연·환각__ — 자유 생성 대신 RAG로 후보를 제약해야 안전",
+                    "__clean·ID 보유 데이터__ 엔 LLM/딥러닝이 비용 대비 비효율(전통 매처로 충분)",
+                ],
+            },
+            { type: "heading", content: "실무 권장" },
+            {
+                type: "list",
+                items: [
+                    "표준 기준용어를 __다국어 임베딩 벡터 인덱스__로 구축",
+                    "__top-k 검색 → LLM/cross-encoder 재랭킹 + 신뢰도 점수__",
+                    "__2단계 임계값__: 고신뢰는 자동 확정, 애매한 건 steward 큐",
+                    "__데이터 분기__: dirty·다국어 free-text→LLM, clean·ID 보유→exact/rule (비용 절감)",
+                    "steward 결정으로 __few-shot 예시·active learning__ 축적",
+                    "평가셋에 __코너케이스·미관측 엔티티__ 를 포함해 현실 난이도 반영",
+                ],
+            },
+            {
+                type: "tip",
+                title: "한 줄 요약",
+                content:
+                    "방대한 표준용어는 '임베딩으로 좁히고(retrieve) → LLM/cross-encoder로 정밀 판정(rerank) → 애매하면 사람'. 다국어·수기입력은 다국어 임베딩과 cross-lingual 전이로, 비용은 데이터 성격별 분기로 잡습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "정리하면, 기준용어 매핑은 더 이상 룰·사전 매칭만의 문제가 아니라 검색(retrieval)과 LLM 판정을 결합한 파이프라인 설계 문제에 가깝습니다. 위 논문 링크들이 출발점으로 좋습니다.",
+            },
+        ],
+    },
     {
         slug: "making-my-own-harness",
         category: "에이전트 경험",

@@ -425,6 +425,18 @@
     font-weight: 700;
 }
 
+.inlineLink {
+    color: var(--naver-green-dark);
+    text-decoration: none;
+    border-bottom: 1px solid #b6e3c9;
+    transition: border-color 0.18s, color 0.18s;
+}
+
+.inlineLink:hover {
+    color: #1c5f3a;
+    border-bottom-color: var(--naver-green);
+}
+
 .heading {
     font-size: 19px;
     font-weight: 800;
