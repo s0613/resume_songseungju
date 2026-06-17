@@ -531,6 +531,14 @@
     font-size: 64px;
 }
 
+.figureImg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+}
+
 .figureCaption {
     margin-top: 10px;
     font-size: 13px;

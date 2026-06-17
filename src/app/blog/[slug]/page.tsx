@@ -86,6 +86,22 @@ function renderBlock(block: BlogBlock, i: number) {
                     )}
                 </figure>
             )
+        case "image":
+            return (
+                <figure key={i} className={s.figure}>
+                    <Image
+                        src={block.src}
+                        alt={block.alt}
+                        width={block.width}
+                        height={block.height}
+                        className={s.figureImg}
+                        sizes="(max-width: 820px) 90vw, 720px"
+                    />
+                    {block.caption && (
+                        <figcaption className={s.figureCaption}>{block.caption}</figcaption>
+                    )}
+                </figure>
+            )
         default:
             return null
     }
