@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { posts, getPost, blogProfile, type BlogBlock } from "@/data/blog"
 import s from "../blog.module.css"
 
@@ -129,7 +130,15 @@ export default async function BlogPostPage({
             <div className={s.layout}>
                 <aside className={s.sidebar}>
                     <div className={s.profileCard}>
-                        <div className={s.profileCover} />
+                        <div className={s.profilePhoto}>
+                            <Image
+                                src="/kkachi-horangi.webp"
+                                alt="까치호랑이 민화"
+                                width={760}
+                                height={915}
+                                className={s.profilePhotoImg}
+                            />
+                        </div>
                         <div className={s.profileBody}>
                             <div className={s.profileNick}>{blogProfile.nickname}</div>
                             <div className={s.profileHandle}>@{blogProfile.handle}</div>

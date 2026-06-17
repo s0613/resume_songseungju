@@ -102,9 +102,16 @@
     overflow: hidden;
 }
 
-.profileCover {
-    height: 64px;
-    background: linear-gradient(120deg, var(--naver-green), #25d07a 70%, #5ad99a);
+.profilePhoto {
+    width: 100%;
+    background: #efe9dc;
+    border-bottom: 1px solid var(--line);
+}
+
+.profilePhotoImg {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .profileBody {
