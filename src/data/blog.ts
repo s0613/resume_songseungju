@@ -97,8 +97,8 @@ export const posts: BlogPost[] = [
                 type: "image",
                 src: "/mapping-pipeline.webp",
                 alt: "기준용어 매핑 파이프라인 다이어그램 — 입력·전처리 → 검색(BM25+벡터→RRF→top-k) → 재랭킹(cross-encoder/LLM) → 신뢰도 임계값 → 자동 확정 또는 steward 검토, 그리고 피드백 루프",
-                width: 2240,
-                height: 1520,
+                width: 1680,
+                height: 1815,
                 caption:
                     "전체 흐름을 그림으로: 후보를 넓게 검색해 좁히고(retrieve), 정밀하게 재정렬한 뒤(rerank), 신뢰도로 자동 확정과 사람 검토를 나눕니다. 검토 결과는 다시 학습에 환류됩니다.",
             },
