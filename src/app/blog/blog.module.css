@@ -410,18 +410,27 @@
 /* ===== 글 본문 ===== */
 .body {
     padding-top: 26px;
-    font-size: 15.5px;
-    line-height: 1.85;
-    color: #2a2d33;
+    font-size: 16px;
+    line-height: 1.9;
+    color: #2b2f36;
+}
+
+/* 읽기 편한 줄 길이로 텍스트 블록 폭 제한 (이미지·코드는 넓게 그대로) */
+.body .para,
+.body .heading,
+.body .list,
+.body .quote,
+.body .tipBox {
+    max-width: 720px;
 }
 
 .para {
-    margin: 0 0 20px;
+    margin: 0 0 24px;
     word-break: keep-all;
 }
 
 .para strong {
-    color: var(--naver-green-dark);
+    color: var(--ink);
     font-weight: 700;
 }
 
@@ -441,10 +450,14 @@
     font-size: 19px;
     font-weight: 800;
     color: var(--ink);
-    margin: 34px 0 14px;
+    margin: 48px 0 16px;
     padding-left: 12px;
     border-left: 4px solid var(--naver-green);
     line-height: 1.4;
+}
+
+.heading:first-child {
+    margin-top: 0;
 }
 
 .quote {
@@ -482,7 +495,7 @@
 }
 
 .list {
-    margin: 4px 0 22px;
+    margin: 8px 0 28px;
     padding: 0;
     list-style: none;
 }
@@ -490,20 +503,25 @@
 .list li {
     position: relative;
     padding-left: 24px;
-    margin-bottom: 11px;
-    line-height: 1.7;
+    margin-bottom: 15px;
+    line-height: 1.8;
     word-break: keep-all;
+}
+
+.list li strong {
+    color: var(--ink);
+    font-weight: 700;
 }
 
 .list li::before {
     content: "";
     position: absolute;
     left: 6px;
-    top: 12px;
-    width: 7px;
-    height: 7px;
+    top: 14px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: var(--naver-green);
+    background: #c4ccd4;
 }
 
 .tipBox {
