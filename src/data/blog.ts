@@ -9,6 +9,7 @@ export type BlogBlock =
     | { type: "tip"; title: string; content: string }
     | { type: "figure"; emoji: string; caption?: string }
     | { type: "image"; src: string; alt: string; width: number; height: number; caption?: string }
+    | { type: "code"; lang?: string; code: string; caption?: string }
 
 export interface BlogPost {
     slug: string
@@ -60,7 +61,7 @@ export const posts: BlogPost[] = [
         category: "AI 학습노트",
         title: "기준용어 매핑, 요즘은 이렇게 합니다 — 엔티티 매칭 정리노트",
         date: "2026. 6. 18.",
-        readTime: "11분",
+        readTime: "13분",
         excerpt:
             "기준용어(reference data)는 회사마다 방대하고 나라별 수기 입력이 제각각이라 자동 매핑이 쉽지 않습니다. 정답이 하나는 아니지만, 요즘 '이렇게들 한다'에 가까운 파이프라인·검색 알고리즘·대표 논문을 출처와 함께 정리했습니다.",
         tags: ["엔티티매칭", "기준데이터", "MDM", "RAG", "정리노트"],
@@ -127,6 +128,72 @@ export const posts: BlogPost[] = [
                 type: "paragraph",
                 content:
                     "실무에서는 __BM25 + 벡터 하이브리드로 후보를 뽑고, cross-encoder/LLM으로 재랭킹__하는 조합을 흔히 봅니다. 다만 하이브리드가 항상 이기는 건 아니어서, 자체 데이터로 BM25 단독·벡터 단독·하이브리드를 비교해 보는 걸 권합니다.",
+            },
+            { type: "heading", content: "코드로 보는 한 번의 매핑" },
+            {
+                type: "paragraph",
+                content:
+                    "말로만 보면 추상적이라, 가짜 예시로 한 사이클을 코드로 따라가 봅니다. 아래 네 토막은 위 다이어그램의 __① 전처리 → ② 검색 → ③ 재랭킹 → ④ 결정__ 에 그대로 대응합니다. (라이브러리·모델명은 예시이니 환경에 맞게 바꾸면 됩니다.)",
+            },
+            {
+                type: "code",
+                lang: "① 전처리·정규화 (Python)",
+                code: `import re
+
+def normalize(s: str) -> str:
+    s = s.lower().strip()
+    s = s.replace("(주)", "").replace("주식회사", "")
+    return re.sub(r"\\s+", " ", s)
+
+normalize("마이크로소프트(주)")   # -> "마이크로소프트"`,
+            },
+            {
+                type: "code",
+                lang: "② 검색: 하이브리드 + RRF (Python)",
+                code: `# 1) 두 검색기로 각각 top-k 후보를 뽑는다
+bm25_ids   = bm25_search(query, k=50)     # 어휘(BM25)
+vector_ids = vector_search(query, k=50)   # 의미(임베딩 ANN)
+
+# 2) RRF로 두 순위를 합친다 (가중치 튜닝 불필요)
+def rrf(rankings, k=60):
+    scores = {}
+    for ranking in rankings:
+        for rank, doc_id in enumerate(ranking):
+            scores[doc_id] = scores.get(doc_id, 0) + 1 / (k + rank)
+    return sorted(scores, key=scores.get, reverse=True)
+
+candidates = rrf([bm25_ids, vector_ids])[:20]`,
+            },
+            {
+                type: "code",
+                lang: "③·④ 재랭킹 + 임계값 분기 (Python)",
+                code: `from sentence_transformers import CrossEncoder
+
+reranker = CrossEncoder("BAAI/bge-reranker-v2-m3")   # 예시 모델
+pairs  = [(query, standard_terms[c]) for c in candidates]
+scores = reranker.predict(pairs)                     # 후보별 신뢰도
+
+best, conf = candidates[scores.argmax()], float(scores.max())
+if conf >= 0.90:
+    confirm(best)                          # 자동 확정 → 골든레코드
+else:
+    send_to_steward(query, candidates[:5]) # 애매하면 사람 검토 큐`,
+            },
+            {
+                type: "paragraph",
+                content:
+                    "임계값으로 거르고도 애매한 후보는, 마지막에 LLM에게 판정을 맡기기도 합니다. 자유 생성 대신 __후보를 제시하고 그 안에서 고르게__ 제약하는 게 안전합니다.",
+            },
+            {
+                type: "code",
+                lang: "애매할 때 LLM 판정 (프롬프트 예시)",
+                code: `[질의] "MSFT"
+[후보]
+  1. Microsoft Corporation
+  2. MicroStrategy Inc.
+  3. Microchip Technology
+[지시] 질의와 같은 회사인 후보 번호와 신뢰도(0~1)를 JSON으로만 답하라.
+[출력] {"match": 1, "confidence": 0.97}`,
             },
             { type: "heading", content: "LLM·RAG가 바꾼 것" },
             {

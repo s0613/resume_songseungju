@@ -127,6 +127,18 @@ function renderBlock(block: BlogBlock, i: number) {
                     )}
                 </figure>
             )
+        case "code":
+            return (
+                <figure key={i} className={s.codeFigure}>
+                    {block.lang && <div className={s.codeLang}>{block.lang}</div>}
+                    <pre className={s.codeBlock}>
+                        <code>{block.code}</code>
+                    </pre>
+                    {block.caption && (
+                        <figcaption className={s.figureCaption}>{block.caption}</figcaption>
+                    )}
+                </figure>
+            )
         default:
             return null
     }
@@ -142,8 +154,9 @@ export default async function BlogPostPage({
     if (!post) notFound()
 
     const idx = posts.findIndex((p) => p.slug === slug)
-    const prev = idx > 0 ? posts[idx - 1] : null
-    const next = idx < posts.length - 1 ? posts[idx + 1] : null
+    // posts는 최신순(0번이 최신). 시간 기준으로 '이전 글'은 더 오래된 글, '다음 글'은 더 최신 글.
+    const olderPost = idx < posts.length - 1 ? posts[idx + 1] : null
+    const newerPost = idx > 0 ? posts[idx - 1] : null
 
     return (
         <div className={s.root}>
@@ -225,21 +238,21 @@ export default async function BlogPostPage({
                     </article>
 
                     <div className={s.adjacent}>
-                        {prev ? (
-                            <Link href={`/blog/${prev.slug}`} className={s.adjItem}>
+                        {olderPost ? (
+                            <Link href={`/blog/${olderPost.slug}`} className={s.adjItem}>
                                 <div className={s.adjLabel}>← 이전 글</div>
-                                <div className={s.adjTitle}>{prev.title}</div>
+                                <div className={s.adjTitle}>{olderPost.title}</div>
                             </Link>
                         ) : (
                             <span />
                         )}
-                        {next ? (
+                        {newerPost ? (
                             <Link
-                                href={`/blog/${next.slug}`}
+                                href={`/blog/${newerPost.slug}`}
                                 className={`${s.adjItem} ${s.adjNext}`}
                             >
                                 <div className={s.adjLabel}>다음 글 →</div>
-                                <div className={s.adjTitle}>{next.title}</div>
+                                <div className={s.adjTitle}>{newerPost.title}</div>
                             </Link>
                         ) : (
                             <span />
