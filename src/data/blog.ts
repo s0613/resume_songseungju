@@ -59,7 +59,7 @@ export const posts: BlogPost[] = [
     {
         slug: "reference-data-mapping-state-of-the-art",
         category: "AI 학습노트",
-        title: "기준용어 매핑, 요즘은 이렇게 합니다 — 엔티티 매칭 정리노트",
+        title: "기준용어 매핑 최신 근황",
         date: "2026. 6. 18.",
         readTime: "13분",
         excerpt:
