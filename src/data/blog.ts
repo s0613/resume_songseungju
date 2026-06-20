@@ -48,14 +48,89 @@ export interface Category {
 
 // 글의 category 값과 매칭됩니다.
 export const categories: Category[] = [
-    { name: "전체보기", slug: "all", count: 3 },
+    { name: "전체보기", slug: "all", count: 4 },
     { name: "소개", slug: "intro", count: 1 },
-    { name: "에이전트 경험", slug: "experience", count: 1 },
+    { name: "에이전트 경험", slug: "experience", count: 2 },
     { name: "AI 학습노트", slug: "learning", count: 1 },
     { name: "인사이트", slug: "insight", count: 0 },
 ]
 
 export const posts: BlogPost[] = [
+    {
+        slug: "starting-london-system-agent",
+        category: "에이전트 경험",
+        title: "새 개인 프로젝트, 런던 시스템을 시작했어요",
+        date: "2026. 6. 20.",
+        readTime: "4분",
+        excerpt:
+            "자연어로 요구사항을 적으면 검증·비용·거버넌스를 갖춘 에이전트 그래프로 컴파일해서 운영까지 잇는 'AI Agent CAD'를 개인 프로젝트로 시작했습니다. 왜 시작했고 지금 어디까지 왔는지 가볍게 적어 둡니다.",
+        tags: ["개인프로젝트", "AI에이전트", "에이전트CAD", "LangGraph", "기록"],
+        blocks: [
+            {
+                type: "paragraph",
+                content:
+                    "요즘 새 개인 프로젝트를 하나 시작했습니다. 이름은 __런던 시스템(London System)__ 이에요. 한 줄로 말하면, 자연어로 적은 요구사항을 __운영 가능한 에이전트 시스템으로 컴파일__해 주는 도구를 만들고 있습니다.",
+            },
+            { type: "heading", content: "뭘 만드나" },
+            {
+                type: "paragraph",
+                content:
+                    "스스로는 __AI Agent CAD__(production-readiness infra)라고 부르고 있어요. 자연어로 \"이런 에이전트가 필요해\"를 적으면, Agent Compiler가 분기·루프·상태를 가진 __에이전트 그래프__로 바꾸고, 그걸 검증·시뮬레이션·자동 eval에 통과시킨 뒤, 운영 가능한 API나 코드로 배포·export하는 흐름입니다.",
+            },
+            {
+                type: "list",
+                items: [
+                    "__자연어 요구사항__ — \"문서를 받아 검증하고 요약해줘\" 같은 한 문단",
+                    "__Agent Compiler__ — 분기·루프·상태 기반 그래프(GraphIR)로 컴파일",
+                    "__검증·시뮬레이션__ — 구조가 맞는지, 실제로 도는지 먼저 확인",
+                    "__자동 eval·회귀 + 런당 비용·예산 캡__ — 품질과 비용을 운영 관점에서 묶음",
+                    "__배포·export__ — 운영 가능한 API/코드로 내보내기",
+                ],
+            },
+            { type: "heading", content: "왜 시작했나" },
+            {
+                type: "paragraph",
+                content:
+                    "회사에서 에이전트를 만들면서 늘 느끼던 게 있어요. __잘 도는 데모와 실제로 운영되는 시스템은 다른 문제__라는 것. 데모는 많은데, 막상 운영에 올리려면 신뢰(정말 맞게 도는가)·비용(런당 얼마인가)·거버넌스(누가 무엇을 했는가)가 빠져 있어서 멈추는 경우가 많더라고요.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "그래서 이 프로젝트의 방향은 __범용 자연어 빌더__가 아니라, 그 세 가지 — __신뢰·비용·거버넌스__ — 에 초점을 맞추기로 했습니다. 처음 지원하는 도메인도 욕심내지 않고 ①문서 처리+검증, ②리서치 조사 에이전트 두 가지로 좁혔어요.",
+            },
+            { type: "heading", content: "지금 어디까지 왔나" },
+            {
+                type: "paragraph",
+                content:
+                    "아직 아주 초기지만, 핵심 가설은 한 번 검증해 봤습니다. 자연어를 그래프로 컴파일하는 파이프라인(NL→IR)을 N=28 테스트에서 __28/28__(Vertex Gemini 2.5 Flash)로 통과시켰고, 프런트도 Next.js 스튜디오 셸 + React Flow 캔버스로 결선해서 __입력 → 컴파일 → 그래프 시각화 → 노드 검사__까지 한 흐름으로 굴러갑니다.",
+            },
+            {
+                type: "list",
+                items: [
+                    "__스택__ — Next.js(웹) + Python/FastAPI(런타임 + provider-neutral Model Gateway)",
+                    "__그래프 엔진__ — LangGraph",
+                    "__모델__ — Vertex AI first, 이후 OpenAI/Anthropic/Bedrock 등으로 확장 가능한 게이트웨이 설계",
+                ],
+            },
+            { type: "figure", emoji: "♟️", caption: "이름은 체스 오프닝 '런던 시스템'에서 가져왔습니다." },
+            {
+                type: "paragraph",
+                content:
+                    "이름은 체스 오프닝 __런던 시스템__ 에서 따왔어요. 화려하게 몰아붙이는 오프닝이 아니라, 견고한 구조를 먼저 세워 두고 그 위에서 안정적으로 운영하는 스타일이거든요. 제가 만들려는 '운영 가능한 에이전트' 쪽 정서와 잘 맞는다고 생각했습니다.",
+            },
+            {
+                type: "tip",
+                title: "한 줄 요약",
+                content:
+                    "자연어 요구사항을 신뢰·비용·거버넌스를 갖춘 에이전트 그래프로 컴파일해 운영까지 잇는 'AI Agent CAD'를 개인 프로젝트로 시작했고, NL→그래프 컴파일과 스튜디오 결선까지 1차 검증을 마쳤습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "이제 막 시작 단계라 막히는 지점도 많을 텐데, 그 과정을 여기에 그때그때 기록해 두려고 합니다. 다음 글에서 더 구체적인 이야기로 찾아올게요.",
+            },
+        ],
+    },
     {
         slug: "reference-data-mapping-state-of-the-art",
         category: "AI 학습노트",
