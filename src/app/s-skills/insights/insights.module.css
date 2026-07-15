@@ -450,6 +450,15 @@
     padding: 2px 6px;
 }
 
+/* DIVIDER */
+.divider {
+    margin: 48px auto;
+    width: 120px;
+    height: 1px;
+    border: none;
+    background: linear-gradient(90deg, transparent, rgba(255,172,2,0.45), transparent);
+}
+
 /* CTA BLOCK */
 .ctaBlock {
     margin-top: 40px;

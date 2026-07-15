@@ -62,6 +62,10 @@ function renderBlock(block: Block, i: number) {
         )
     }
 
+    if (block.type === "divider") {
+        return <hr key={i} className={s.divider} />
+    }
+
     if (block.type === "harnessRefs") {
         return (
             <div key={i} className={s.harnessRefs}>
