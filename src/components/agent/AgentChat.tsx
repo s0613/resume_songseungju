@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
+import InquiryChat from "./InquiryChat"
 import s from "./agent.module.css"
 
 interface ChatMessage {
@@ -13,14 +14,16 @@ interface ChatMessage {
 const GREETING: ChatMessage = {
     role: "assistant",
     content:
-        "안녕하세요, 송승주 에이전트예요. 승주가 어떤 개발자인지, 블로그에 쓴 글들에 대해 궁금한 걸 물어보세요!",
+        "안녕하세요, 송승주 에이전트예요. 승주에 대해 궁금한 걸 물어보세요. 채용·협업·프로젝트 제안은 ‘문의 남기기’에서 내용을 확인한 뒤 전달할 수 있어요.",
 }
+
+const INQUIRY_STARTER = "채용·협업 문의 남기기"
 
 // 빈 상태(첫 질문 전)에 보여줄 추천 질문
 const STARTER_QUESTIONS = [
     "S-Skills가 뭐예요?",
     "승주는 어떤 개발자예요?",
-    "읽어볼 만한 글 추천해줘",
+    INQUIRY_STARTER,
 ]
 
 const ERROR_TEXT =
@@ -36,6 +39,31 @@ const AUTO_SCROLL_THRESHOLD = 80
 
 // 답변 본문과 후속 질문 칩을 나누는 마커 (프롬프트가 이 형식을 강제)
 const FOLLOWUP_MARKER = "###FOLLOWUPS###"
+
+function isInquiryIntent(text: string): boolean {
+    if (/[^\s@]+@[^\s@]+\.[^\s@]+/u.test(text)) return true
+    const inquiryMetaQuestion =
+        /(?:문의|제안).{0,30}(?:이메일|메일|주소|어디|어느|어떻게|기능|수신자|보내면|전달돼)|(?:어디|어느|어떻게).{0,30}(?:문의|제안)/iu
+    const questionExpression =
+        /[?？]|알려|뭐|무엇|어디|어느|어떻게|되나요|돼|까요/iu
+    if (
+        inquiryMetaQuestion.test(text) &&
+        questionExpression.test(text)
+    ) {
+        return false
+    }
+    const directIntent =
+        /(?:문의|제안|의뢰|요청|연락)(?:이|을|를)?\s*(?:있|드리|보내|남기|전달|하려|하고\s*싶|하고자|합니다|드립니다|부탁|할게)/iu
+    const topicIntent =
+        /(?:채용|협업|제휴|프로젝트|개발|외주|자문|상담|미팅).{0,40}(?:하고\s*싶|제안\s*드|의뢰\s*드|요청\s*드|부탁|연락\s*드|진행\s*(?:하고|하려)|가능할까요)/iu
+    const englishIntent =
+        /\b(?:i|we)\b.{0,40}\b(?:want|would like|need|hope|looking)\b.{0,50}\b(?:hire|collaborat|work\s+with|proposal|project|consult|contact)\b/iu
+    return (
+        directIntent.test(text) ||
+        topicIntent.test(text) ||
+        englishIntent.test(text)
+    )
+}
 
 interface AgentChatProps {
     open: boolean
@@ -163,6 +191,8 @@ function renderBody(text: string, keyBase: string): ReactNode[] {
 
 /** 송승주 에이전트 채팅 패널 — /api/agent/chat 텍스트 스트림을 그대로 렌더한다. */
 export default function AgentChat({ open, onClose }: AgentChatProps) {
+    const [mode, setMode] = useState<"question" | "inquiry">("question")
+    const [inquiryPrefill, setInquiryPrefill] = useState("")
     const [messages, setMessages] = useState<ChatMessage[]>([GREETING])
     const [input, setInput] = useState("")
     const [loading, setLoading] = useState(false)
@@ -203,6 +233,18 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
     async function send(question?: string) {
         const text = (question ?? input).trim()
         if (!text || loading) return
+        if (text === INQUIRY_STARTER || text === "문의 남기기") {
+            setInput("")
+            setInquiryPrefill("")
+            setMode("inquiry")
+            return
+        }
+        if (isInquiryIntent(text)) {
+            setInput("")
+            setInquiryPrefill(text)
+            setMode("inquiry")
+            return
+        }
         setInput("")
         setLoading(true)
         nearBottomRef.current = true
@@ -281,6 +323,27 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
             : []
     const showStarters = messages.length === 1 && !loading
 
+    function handleInquiryBack() {
+        setMode("question")
+        window.setTimeout(() => inputRef.current?.focus(), 0)
+    }
+
+    function openBlankInquiry() {
+        setInquiryPrefill("")
+        setMode("inquiry")
+    }
+
+    if (mode === "inquiry") {
+        return (
+            <InquiryChat
+                open={open}
+                initialText={inquiryPrefill}
+                onClose={onClose}
+                onBack={handleInquiryBack}
+            />
+        )
+    }
+
     return (
         <div
             className={s.panel}
@@ -291,17 +354,26 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                 <div>
                     <div className={s.panelTitle}>송승주 에이전트</div>
                     <div className={s.panelSub}>
-                        승주와 블로그 글에 대해 무엇이든 물어보세요
+                        승주와 작업에 대해 묻거나 문의를 남겨보세요
                     </div>
                 </div>
-                <button
-                    type="button"
-                    className={s.panelClose}
-                    onClick={onClose}
-                    aria-label="채팅 닫기"
-                >
-                    ✕
-                </button>
+                <div className={s.panelHeadActions}>
+                    <button
+                        type="button"
+                        className={s.panelMode}
+                        onClick={openBlankInquiry}
+                    >
+                        문의 남기기
+                    </button>
+                    <button
+                        type="button"
+                        className={s.panelClose}
+                        onClick={onClose}
+                        aria-label="채팅 닫기"
+                    >
+                        ✕
+                    </button>
+                </div>
             </div>
 
             <div
@@ -359,7 +431,7 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     maxLength={INPUT_LIMIT}
-                    placeholder="예: S-Skills가 뭐예요?"
+                    placeholder="승주에게 궁금한 점을 물어보세요"
                     aria-label="질문 입력"
                 />
                 <button

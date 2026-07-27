@@ -1,7 +1,7 @@
 # Portfolio Website
 
 개인 포트폴리오 웹사이트 프로젝트입니다.  
-이 프로젝트는 **Next.js (15.x)**, **React**, **TypeScript**, **Tailwind CSS**를 사용하여 제작되었습니다.
+이 프로젝트는 **Next.js (16.x)**, **React**, **TypeScript**, **Tailwind CSS**를 사용하여 제작되었습니다.
 
 ### 빌드 및 배포
 
@@ -24,7 +24,7 @@ yarn start
 
 ## 기술 스택
 
-- [Next.js](https://nextjs.org/) (버전 15.x)
+- [Next.js](https://nextjs.org/) (버전 16.x)
 - [React](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
@@ -33,7 +33,7 @@ yarn start
 
 ### 전제 조건
 
-- Node.js (v14 이상 권장)
+- Node.js 20.9 이상
 - npm 또는 yarn
 
 ### 설치 방법
@@ -44,3 +44,23 @@ yarn start
    git clone https://github.com/yourusername/your-portfolio.git
    cd your-portfolio
    ```
+
+## 에이전트 문의 메일 설정
+
+채팅 패널의 `문의 남기기`는 사용자의 요청을 구조화하고, 사용자가 최종
+내용과 개인정보 전송에 동의한 뒤에만 메일을 보냅니다. 실제 수신자는 서버
+코드에서 `totaro@totaro.co.kr`로 고정되어 있습니다.
+
+로컬에서는 `.env.example`을 참고해 이 프로젝트의 `.env.local`에 아래 서버
+전용 변수를 설정합니다. `totaro_web`에서 쓰는 값과 변수 이름을 그대로
+재사용할 수 있지만, 두 프로젝트의 환경변수는 자동 공유되지 않으므로 이
+프로젝트의 실행·배포 환경에도 별도로 등록해야 합니다.
+
+```dotenv
+GOOGLE_GENERATIVE_AI_API_KEY=...
+SMTP_USER=...
+SMTP_PASS=...
+```
+
+`SMTP_PASS`에는 Gmail 일반 비밀번호가 아니라 앱 비밀번호를 사용합니다.
+세 변수 모두 `NEXT_PUBLIC_` 접두사를 붙이지 않습니다.

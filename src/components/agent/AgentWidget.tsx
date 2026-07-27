@@ -88,7 +88,7 @@ export default function AgentWidget() {
 
     function closePanel() {
         setOpen(false)
-        fabRef.current?.focus()
+        window.setTimeout(() => fabRef.current?.focus(), 0)
     }
 
     function toggle() {
@@ -99,7 +99,7 @@ export default function AgentWidget() {
     const showModel = modelReady && !modelErrored
 
     return (
-        <div className={s.widget}>
+        <div className={`${s.widget} ${open ? s.widgetOpen : ""}`}>
             {everOpened && (
                 <div className={open ? undefined : s.panelHidden}>
                     <AgentChat open={open} onClose={closePanel} />
