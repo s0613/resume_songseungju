@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 const Footer: React.FC = () => {
   const pathname = usePathname();
-  if (pathname === "/s-skills" || pathname === "/" || pathname.startsWith("/open-trader") || pathname.startsWith("/portfolio")) return null;
+  if (pathname === "/s-skills" || pathname === "/" || pathname.startsWith("/open-trader") || pathname.startsWith("/portfolio") || pathname.startsWith("/blog")) return null;
   const socialLinks = [
     {
       name: "GitHub",
@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
           {/* Copyright */}
           <div className="text-center">
             <p className="text-sm text-gray-600">
-              © 2025 송승주의 포트폴리오. All rights reserved.
+              © 2025 송승주 · AI 에이전트 빌더. All rights reserved.
             </p>
             <p className="text-xs text-gray-500 mt-1">
               Built with Next.js, TypeScript, and Tailwind CSS

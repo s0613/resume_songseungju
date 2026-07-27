@@ -18,12 +18,11 @@ const Header: React.FC = () => {
   if (isSSkillsPage || isOpenTraderPage || isBlogPage || isHomePage) return null;
 
   const menuItems = [
-    { name: "SSJ", href: isPortfolioPage ? "/" : "#heroSection" },
-    { name: "Introduce", href: isPortfolioPage ? "/#introduce" : "#introduce" },
-    { name: "Skill", href: isPortfolioPage ? "/#skill" : "#skill" },
-    { name: "Expe&proj", href: isPortfolioPage ? "/#experienceAndProject" : "#experienceAndProject" },
-    { name: "Education", href: isPortfolioPage ? "/#education" : "#education" },
-    { name: "ETC", href: isPortfolioPage ? "/#etc" : "#etc" },
+    { name: "SSJ", href: isPortfolioPage ? "/" : "#builds" },
+    { name: "Builds", href: isPortfolioPage ? "/#builds" : "#builds" },
+    { name: "Writing", href: isPortfolioPage ? "/#writing" : "#writing" },
+    { name: "Archive", href: isPortfolioPage ? "/#archive" : "#archive" },
+    { name: "About", href: isPortfolioPage ? "/#about" : "#about" },
   ];
 
   return (

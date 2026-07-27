@@ -198,6 +198,17 @@
     color: var(--cream);
     margin-bottom: 24px;
 }
+.heroLead {
+    font-family: var(--font);
+    font-size: clamp(20px, 3vw, 34px);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+    max-width: 24ch;
+    word-break: keep-all;
+    margin-bottom: 14px;
+}
 .heroTitle {
     font-family: var(--font);
     font-size: clamp(15px, 2vw, 20px);
@@ -230,13 +241,31 @@
     border-radius: 50%;
     flex-shrink: 0;
 }
-.heroScroll {
-    margin-top: 48px;
+.heroCtaRow {
+    margin-top: 44px;
+}
+
+/* ── CTA (공용) ─────────────────────────────────────── */
+.cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 12px 22px;
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.2em;
+    font-size: 12px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--gold-faint);
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid var(--gold-dim);
+    background: var(--gold-ghost);
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.cta:hover,
+.cta:focus-visible {
+    border-color: var(--gold);
+    color: var(--ink);
+    background: var(--gold);
 }
 
 /* ── SECTION BASE ───────────────────────────────────── */
@@ -377,58 +406,189 @@
 }
 .skillTag:hover { border-color: var(--gold-dim); color: var(--cream); }
 
-/* ── EXPERIENCE ─────────────────────────────────────── */
-.expList { display: flex; flex-direction: column; gap: 0; }
-.expItem {
-    padding: 28px 0 28px 24px;
-    border-bottom: 1px solid var(--gold-faint);
-    border-left: 2px solid var(--gold-faint);
-    text-decoration: none;
-    display: block;
+/* ── FLAGSHIP BUILDS ────────────────────────────────── */
+.buildList { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+.buildCard {
+    min-width: 0;
+    padding: 32px;
+    border: 1px solid var(--gold-faint);
+    border-left: 3px solid var(--gold-dim);
+    background: var(--gold-ghost);
     transition: border-left-color 0.2s;
-    position: relative;
 }
-.expItem::before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 32px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--gold-faint);
-    border: 1px solid var(--gold-dim);
-    transition: background 0.2s;
+.buildCard:hover { border-left-color: var(--gold); }
+.buildHead {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
 }
-.expItem:hover { border-left-color: var(--gold); }
-.expItem:hover::before { background: var(--gold); }
-.expHeader {
+.buildName {
+    font-family: var(--hero-font);
+    font-size: clamp(24px, 3vw, 34px);
+    letter-spacing: 0.01em;
+    color: var(--cream);
+    line-height: 1;
+}
+.buildTagline {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+}
+.buildRows { display: flex; flex-direction: column; gap: 14px; }
+.buildRow {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 18px;
+    align-items: baseline;
+}
+.buildRowLabel {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold-dim);
+}
+.buildRowText {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--cream-dim);
+    max-width: 62ch;
+    word-break: keep-all;
+    margin: 0;
+}
+.buildInstall {
+    display: block;
+    margin-top: 20px;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cream);
+    border: 1px dashed var(--gold-faint);
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.buildLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--gold-faint);
+}
+.buildLink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.buildLink:hover,
+.buildLink:focus-visible { color: var(--gold); }
+
+/* ── WRITING ────────────────────────────────────────── */
+.writeList { display: flex; flex-direction: column; gap: 0; }
+.writeItem {
+    display: block;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--gold-faint);
+    text-decoration: none;
+    transition: padding-left 0.2s;
+}
+.writeItem:hover,
+.writeItem:focus-visible { padding-left: 8px; }
+.writeHead {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 8px;
 }
-.expName {
-    font-family: var(--font);
-    font-size: 18px;
+.writeTitle {
+    font-size: 16px;
     font-weight: 700;
     color: var(--cream);
+    line-height: 1.4;
 }
-.expDate {
+.writeItem:hover .writeTitle { color: var(--gold); }
+.writeDate {
     font-family: var(--mono);
     font-size: 11px;
     color: var(--gold-dim);
     white-space: nowrap;
     letter-spacing: 0.06em;
 }
-.expDesc {
+.writeExcerpt {
     font-size: 13px;
-    color: var(--cream-dim);
-    line-height: 1.6;
-    margin-bottom: 12px;
+    line-height: 1.65;
+    color: var(--cream-faint);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
-.expTags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.sectionMore {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.sectionMore:hover,
+.sectionMore:focus-visible { color: var(--gold); }
+
+/* ── PROJECT ARCHIVE ────────────────────────────────── */
+.archList { display: flex; flex-direction: column; gap: 0; }
+.archItem {
+    display: block;
+    padding: 18px 0 18px 20px;
+    border-bottom: 1px solid var(--gold-faint);
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    transition: border-left-color 0.2s;
+}
+.archItem:hover,
+.archItem:focus-visible { border-left-color: var(--gold); }
+.archHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 4px;
+}
+.archName {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cream);
+}
+.archItem:hover .archName { color: var(--gold); }
+.archDate {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold-dim);
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+}
+.archDesc {
+    font-size: 13px;
+    color: var(--cream-faint);
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+.archTags { display: flex; flex-wrap: wrap; gap: 6px; }
 .expTag {
     font-family: var(--mono);
     font-size: 11px;
@@ -437,112 +597,30 @@
     border: 1px solid var(--gold-faint);
     padding: 2px 8px;
 }
-.expBullets {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-.expBullet {
-    display: flex;
-    gap: 10px;
-    font-size: 13px;
-    color: var(--cream-faint);
-    line-height: 1.5;
-}
-.expBulletArrow {
-    color: var(--gold-dim);
-    flex-shrink: 0;
-    font-size: 11px;
-    margin-top: 2px;
-}
-.expMore {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    color: var(--gold-dim);
+/* ── ABOUT + CONTACT ────────────────────────────────── */
+.blockHeading {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    transition: color 0.15s;
+    color: var(--gold);
+    margin-bottom: 18px;
 }
-.expItem:hover .expMore { color: var(--gold); }
-
-/* ── EDUCATION ──────────────────────────────────────── */
-.eduList { display: flex; flex-direction: column; gap: 0; }
-.eduItem {
-    padding: 24px 0;
-    border-bottom: 1px solid var(--gold-faint);
-}
-.eduItem:last-child { border-bottom: none; }
-.eduHeader {
+.contactBlock {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gold-faint);
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 6px;
+    gap: 24px;
+    flex-wrap: wrap;
 }
-.eduName {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--cream);
+.contactText {
+    font-size: 14px;
+    color: var(--cream-dim);
+    line-height: 1.7;
 }
-.eduDate {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gold-dim);
-    letter-spacing: 0.06em;
-}
-.eduDegree {
-    font-size: 12px;
-    color: var(--gold-dim);
-    margin-bottom: 10px;
-    font-family: var(--mono);
-}
-.eduBullets { display: flex; flex-direction: column; gap: 5px; }
-.eduBullet {
-    font-size: 13px;
-    color: var(--cream-faint);
-    display: flex;
-    gap: 10px;
-}
-.eduTags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.eduTag {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gold-dim);
-    border: 1px solid var(--gold-faint);
-    padding: 2px 8px;
-}
-
-/* ── ETC ────────────────────────────────────────────── */
-.etcBlocks { display: flex; flex-direction: column; gap: 0; }
-.etcBlock {
-    padding: 24px 0;
-    border-bottom: 1px solid var(--gold-faint);
-}
-.etcBlock:last-child { border-bottom: none; }
-.etcHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-}
-.etcTitle {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--cream);
-}
-.etcMeta {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--gold-dim);
-}
-.etcBullets { display: flex; flex-direction: column; gap: 5px; }
-.etcBullet {
-    font-size: 13px;
-    color: var(--cream-faint);
-    display: flex;
-    gap: 10px;
-}
-.etcBulletDot { color: var(--gold-dim); flex-shrink: 0; }
 .awardsHeading {
     font-family: var(--hero-font);
     font-size: 20px;
@@ -618,7 +696,7 @@
     .sectionGrid { grid-template-columns: 1fr; gap: 32px; }
     .sectionLabel { position: static; }
     .hero { padding-bottom: 60px; }
-    .heroName { font-size: clamp(56px, 14vw, 120px); }
+    .heroName { font-size: clamp(52px, 12vw, 120px); }
     .heroContacts { gap: 20px; }
     .skillsGrid { grid-template-columns: 1fr; }
     .skillCat:nth-child(odd) { border-right: none; padding-right: 0; }
@@ -628,10 +706,12 @@
     .navLinks { display: none; }
     .navSSkills { display: none; }
     .introProfile { flex-direction: column; }
-    .expHeader { flex-direction: column; gap: 4px; }
-    .eduHeader { flex-direction: column; gap: 4px; }
-    .etcHeader { flex-direction: column; gap: 4px; }
+    .buildCard { padding: 24px 20px; }
+    .buildRow { grid-template-columns: 1fr; gap: 4px; }
+    .writeHead { flex-direction: column; gap: 4px; }
+    .archHead { flex-direction: column; gap: 4px; }
     .awardItem { flex-direction: column; gap: 4px; }
+    .contactBlock { flex-direction: column; align-items: flex-start; gap: 16px; }
     .awardProject { white-space: normal; }
     .footer { flex-direction: column; gap: 16px; align-items: flex-start; }
     .footerMeta { flex-wrap: wrap; gap: 16px; }

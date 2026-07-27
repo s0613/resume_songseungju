@@ -42,6 +42,9 @@ export default function OpenTraderPage() {
                     <p className={s.heroNote}>
                         비너스가 바다에서 태어나듯 — 진짜 제품은 전략이 아니라 하네스 그 자체입니다.
                     </p>
+                    <p className={s.heroNote}>
+                        본 프로젝트는 페이퍼 트레이딩 전용 오픈소스 하네스이며, 투자 자문이나 수익 보장을 제공하지 않습니다.
+                    </p>
                     <div className={s.installWrap}>
                         <div className={s.installRow}>
                             <input className={s.installInput} defaultValue="/plugin marketplace add Totaro-int/claude-trade-harness" readOnly />

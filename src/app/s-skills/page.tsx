@@ -32,7 +32,7 @@ export default function SSkillsPage() {
             <main className={s.ssMain}>
                 {/* Hero */}
                 <div className={s.hero}>
-                    <h1>SJ COMPANY</h1>
+                    <h1>S-SKILLS</h1>
                     <p className={s.heroSub}>
                         IDE에 묶인 코딩 코파일럿도, 단순 API 래퍼도 아닙니다.
                         기획자, 디자이너, 개발자, QA, 보안 전문가가 Claude Code 안에서 팀처럼 협업합니다.
@@ -43,8 +43,6 @@ export default function SSkillsPage() {
                             <button className={s.installBtn} onClick={copyInstall}>Install</button>
                         </div>
                         <div className={s.installAlts}>
-                            <a href="#">macOS / Linux</a>
-                            <a href="#">Windows</a>
                             <a href="https://github.com/s0613/S-skills">GitHub →</a>
                         </div>
                     </div>
@@ -92,7 +90,6 @@ export default function SSkillsPage() {
                             <div key={i} className={s.featureItem}>
                                 <div className={s.featureTitle}>{f.title}</div>
                                 <div className={s.featureDesc}>{f.desc}</div>
-                                <a href="#" className={s.featureMore}>More Details →</a>
                             </div>
                         ))}
                     </div>

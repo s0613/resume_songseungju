@@ -1,14 +1,9 @@
-import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { posts, categories, blogProfile } from "@/data/blog"
 import s from "./blog.module.css"
 
-export const metadata: Metadata = {
-    title: "승주의 AI 블로그 | 송승주",
-    description:
-        "AI와 AI 에이전트에 대한 인사이트·경험·학습을 친근하게 나누는 블로그입니다.",
-}
+// metadata는 blog/layout.tsx에서 단일 소스로 관리 (title 중복 접미사 방지)
 
 export default function BlogHome() {
     return (
