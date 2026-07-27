@@ -3,6 +3,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { Badge } from "@seed-design/react"
+import { Chip } from "seed-design/ui/chip"
 import {
     posts,
     categories,
@@ -15,6 +17,14 @@ import PostViewCount from "@/components/blog/PostViewCount"
 import s from "@/app/blog/blog.module.css"
 
 export type BlogSort = "views" | "latest"
+
+/** 상단 뉴스 영역에 올릴 최대 글 수. */
+const FEATURED_COUNT = 3
+
+const SORT_TABS: { value: BlogSort; label: string }[] = [
+    { value: "views", label: "인기순" },
+    { value: "latest", label: "최신순" },
+]
 
 interface BlogBodyProps {
     /** 카테고리 slug. "all"이거나 알 수 없는 값이면 전체 글을 보여준다. */
@@ -84,10 +94,15 @@ export default function BlogBody({
             : posts.filter((post) => post.category === active.name)
     const visiblePosts = sortPosts(filtered, activeSort, counts)
 
-    // 전체보기에서만 상단 2~3개를 뉴스형(이미지+제목) 카드로 분리한다.
-    const isNewsLayout = activeCatSlug === "all" && visiblePosts.length > 3
-    const featuredPosts = isNewsLayout ? visiblePosts.slice(0, 3) : []
-    const listPosts = isNewsLayout ? visiblePosts.slice(3) : visiblePosts
+    // 전체보기에서만 상단을 뉴스형(이미지+제목) 카드로 분리한다.
+    // 본문에 이미지가 있는 글만 올린다 — 대체 썸네일은 쓰지 않는다.
+    const withThumb = visiblePosts.filter((post) => getPostThumbnail(post))
+    const featuredPosts =
+        activeCatSlug === "all" && withThumb.length < visiblePosts.length
+            ? withThumb.slice(0, FEATURED_COUNT)
+            : []
+    const featuredSlugs = new Set(featuredPosts.map((post) => post.slug))
+    const listPosts = visiblePosts.filter((post) => !featuredSlugs.has(post.slug))
 
     return (
         <div className={s.layout}>
@@ -152,24 +167,24 @@ export default function BlogBody({
                     </strong>
                     <span>{visiblePosts.length}개의 글</span>
                     <nav className={s.sortTabs} aria-label="글 정렬">
-                        <Link
-                            href={blogHref(activeCatSlug, "views")}
-                            className={`${s.sortTab} ${
-                                activeSort === "views" ? s.sortTabActive : ""
-                            }`}
-                            aria-current={activeSort === "views" ? "true" : undefined}
-                        >
-                            인기순
-                        </Link>
-                        <Link
-                            href={blogHref(activeCatSlug, "latest")}
-                            className={`${s.sortTab} ${
-                                activeSort === "latest" ? s.sortTabActive : ""
-                            }`}
-                            aria-current={activeSort === "latest" ? "true" : undefined}
-                        >
-                            최신순
-                        </Link>
+                        {SORT_TABS.map((tab) => {
+                            const isActive = activeSort === tab.value
+                            return (
+                                <Chip.Button
+                                    key={tab.value}
+                                    asChild
+                                    size="small"
+                                    variant={isActive ? "solid" : "outlineWeak"}
+                                >
+                                    <Link
+                                        href={blogHref(activeCatSlug, tab.value)}
+                                        aria-current={isActive ? "true" : undefined}
+                                    >
+                                        <Chip.Label>{tab.label}</Chip.Label>
+                                    </Link>
+                                </Chip.Button>
+                            )
+                        })}
                     </nav>
                 </div>
 
@@ -177,9 +192,7 @@ export default function BlogBody({
                     <div className={s.featuredGrid}>
                         {featuredPosts.map((post) => {
                             const thumb = getPostThumbnail(post)
-                            const emoji = post.blocks.find(
-                                (block) => block.type === "figure"
-                            )
+                            if (!thumb) return null
                             return (
                                 <Link
                                     key={post.slug}
@@ -187,24 +200,13 @@ export default function BlogBody({
                                     className={s.featuredCard}
                                 >
                                     <div className={s.featuredMedia}>
-                                        {thumb ? (
-                                            <Image
-                                                src={thumb.src}
-                                                alt={thumb.alt}
-                                                width={thumb.width}
-                                                height={thumb.height}
-                                                className={s.featuredImg}
-                                            />
-                                        ) : (
-                                            <div
-                                                className={s.featuredFallback}
-                                                aria-hidden="true"
-                                            >
-                                                {emoji?.type === "figure"
-                                                    ? emoji.emoji
-                                                    : "📝"}
-                                            </div>
-                                        )}
+                                        <Image
+                                            src={thumb.src}
+                                            alt={thumb.alt}
+                                            width={thumb.width}
+                                            height={thumb.height}
+                                            className={s.featuredImg}
+                                        />
                                     </div>
                                     <h2 className={s.featuredTitle}>{post.title}</h2>
                                 </Link>
@@ -230,7 +232,9 @@ export default function BlogBody({
                                 className={s.postCard}
                             >
                                 <div className={s.postMain}>
-                                    <span className={s.postCat}>{post.category}</span>
+                                    <Badge variant="weak" tone="brand">
+                                        {post.category}
+                                    </Badge>
                                     <h2 className={s.postTitle}>{post.title}</h2>
                                     <p className={s.postExcerpt}>{post.excerpt}</p>
                                     <div className={s.postMeta}>

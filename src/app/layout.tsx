@@ -4,6 +4,9 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import PageMain from "@/components/common/PageMain";
 import AgentWidget from "@/components/agent/AgentWidget";
+// SEED 디자인 시스템 토큰·레시피 (블로그가 소비하는 단일 토큰 소스).
+// `.seed-*` 클래스와 `--seed-*` 변수만 정의하므로 기존 페이지 스타일과 충돌하지 않는다.
+import '@seed-design/css/all.css';
 import './styles/globals.css';
 
 const SITE_TITLE = "송승주 — AI 에이전트 빌더 · 풀스택 개발자";
@@ -62,7 +65,8 @@ const websiteJsonLd = {
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="ko">
+    // 사이트 전체가 라이트 고정이므로 SEED도 light-only로 잠근다 (다크 자동 전환 없음).
+    <html lang="ko" data-seed data-seed-color-mode="light-only">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

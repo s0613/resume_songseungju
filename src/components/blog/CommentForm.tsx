@@ -1,6 +1,12 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
+import { ActionButton } from "seed-design/ui/action-button"
+import {
+    TextField,
+    TextFieldInput,
+    TextFieldTextarea,
+} from "seed-design/ui/text-field"
 import s from "@/app/blog/blog.module.css"
 
 interface CommentFormProps {
@@ -36,10 +42,9 @@ export default function CommentForm({ onSubmit, error, submitting }: CommentForm
     return (
         <form className={s.commentForm} onSubmit={handleSubmit}>
             <div className={s.commentFields}>
-                <label className={s.commentField}>
-                    <span className={s.commentLabel}>이름</span>
-                    <input
-                        className={s.commentInput}
+                {/* SEED의 TextField required는 표시용이라, 네이티브 검증을 위해 input에도 직접 건다. */}
+                <TextField className={s.commentField} label="이름" required>
+                    <TextFieldInput
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -48,11 +53,9 @@ export default function CommentForm({ onSubmit, error, submitting }: CommentForm
                         autoComplete="nickname"
                         required
                     />
-                </label>
-                <label className={s.commentField}>
-                    <span className={s.commentLabel}>비밀번호</span>
-                    <input
-                        className={s.commentInput}
+                </TextField>
+                <TextField className={s.commentField} label="비밀번호" required>
+                    <TextFieldInput
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -61,7 +64,7 @@ export default function CommentForm({ onSubmit, error, submitting }: CommentForm
                         autoComplete="new-password"
                         required
                     />
-                </label>
+                </TextField>
             </div>
 
             <label className={s.honeypot} aria-hidden="true">
@@ -76,18 +79,16 @@ export default function CommentForm({ onSubmit, error, submitting }: CommentForm
                 />
             </label>
 
-            <label className={s.commentField}>
-                <span className={s.srOnly}>댓글 내용</span>
-                <textarea
-                    className={s.commentTextarea}
+            <TextField className={s.commentTextareaField} required>
+                <TextFieldTextarea
+                    aria-label="댓글 내용"
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                     placeholder="댓글을 입력해주세요."
                     maxLength={2000}
-                    rows={6}
                     required
                 />
-            </label>
+            </TextField>
 
             {error && (
                 <p className={s.commentError} role="alert">
@@ -96,9 +97,9 @@ export default function CommentForm({ onSubmit, error, submitting }: CommentForm
             )}
 
             <div className={s.commentFormFoot}>
-                <button className={s.commentSubmit} type="submit" disabled={submitting}>
+                <ActionButton type="submit" loading={submitting}>
                     {submitting ? "등록 중…" : "댓글 남기기"}
-                </button>
+                </ActionButton>
             </div>
         </form>
     )

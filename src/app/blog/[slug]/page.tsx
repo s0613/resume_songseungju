@@ -3,6 +3,8 @@ import type { ReactNode } from "react"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { Badge } from "@seed-design/react"
+import { Callout } from "seed-design/ui/callout"
 import { posts, getPost, blogProfile, type BlogBlock } from "@/data/blog"
 import ViewCounter from "@/components/blog/ViewCounter"
 import Comments from "@/components/blog/Comments"
@@ -89,7 +91,6 @@ function renderBlock(block: BlogBlock, i: number) {
         case "quote":
             return (
                 <blockquote key={i} className={s.quote}>
-                    <div className={s.quoteMark}>&ldquo;</div>
                     <p className={s.quoteText}>{block.content}</p>
                     {block.author && <div className={s.quoteAuthor}>{block.author}</div>}
                 </blockquote>
@@ -105,8 +106,11 @@ function renderBlock(block: BlogBlock, i: number) {
         case "tip":
             return (
                 <div key={i} className={s.tipBox}>
-                    <div className={s.tipTitle}>{block.title}</div>
-                    <div className={s.tipText}>{block.content}</div>
+                    <Callout
+                        tone="informative"
+                        title={block.title}
+                        description={block.content}
+                    />
                 </div>
             )
         case "figure":
@@ -213,7 +217,9 @@ export default async function BlogPostPage({
                             ← 목록으로
                         </Link>
 
-                        <span className={s.articleCat}>{post.category}</span>
+                        <Badge variant="weak" tone="brand" size="large">
+                            {post.category}
+                        </Badge>
                         <h1 className={s.articleTitle}>{post.title}</h1>
                         <div className={s.articleMeta}>
                             <span className={s.articleAuthor}>{blogProfile.nickname}</span>
@@ -230,9 +236,9 @@ export default async function BlogPostPage({
 
                         <div className={s.tagRow}>
                             {post.tags.map((tag) => (
-                                <span key={tag} className={s.tag}>
+                                <Badge key={tag} variant="weak" tone="neutral">
                                     #{tag}
-                                </span>
+                                </Badge>
                             ))}
                         </div>
 

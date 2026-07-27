@@ -1,0 +1,6 @@
+{
+  "rsc": true,
+  "tsx": true,
+  "path": "./src/seed-design",
+  "telemetry": false
+}
