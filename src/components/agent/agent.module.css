@@ -83,9 +83,9 @@
     position: fixed;
     right: 20px;
     bottom: 110px;
-    width: 372px;
+    width: 400px;
     max-width: calc(100vw - 32px);
-    height: 540px;
+    height: 660px;
     max-height: calc(100vh - 140px);
     max-height: calc(100dvh - 140px);
     display: flex;
@@ -167,18 +167,76 @@
     border-bottom-right-radius: 4px;
 }
 
-.msgAssistant {
-    align-self: flex-start;
-    background: rgba(240, 230, 204, 0.06);
+/* AI 턴 — 말풍선 없이 본문 조판 (여러 문단·목록이 오므로 폭 제한·배경 없이 읽힌다) */
+.msgBody {
+    width: 100%;
     color: var(--agent-cream);
-    border-bottom-left-radius: 4px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding: 2px 2px 4px;
 }
 
 .typing {
     align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.7em;
     color: var(--agent-cream-dim);
     font-size: 13px;
-    padding: 4px 13px;
+    padding: 4px 2px;
+    animation: agentBreathe 1.6s ease-in-out infinite;
+}
+
+@keyframes agentBreathe {
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .typing {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+/* ===== 추천·후속 질문 칩 ===== */
+.sugRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+    padding-top: 4px;
+}
+
+.sug {
+    border: 1px solid var(--agent-gold-faint);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--agent-cream);
+    font-size: 12.5px;
+    font-family: inherit;
+    padding: 7px 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.16s, background 0.16s, transform 0.16s;
+}
+
+.sug:hover {
+    border-color: var(--agent-gold-dim);
+    background: var(--agent-gold-ghost);
+    transform: translateY(-1px);
+}
+
+.sug:focus-visible {
+    outline: 2px solid var(--agent-gold);
+    outline-offset: 2px;
 }
 
 .msgLink {

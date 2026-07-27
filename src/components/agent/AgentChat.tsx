@@ -16,6 +16,13 @@ const GREETING: ChatMessage = {
         "안녕하세요, 송승주 에이전트예요. 승주가 어떤 개발자인지, 블로그에 쓴 글들에 대해 궁금한 걸 물어보세요!",
 }
 
+// 빈 상태(첫 질문 전)에 보여줄 추천 질문
+const STARTER_QUESTIONS = [
+    "S-Skills가 뭐예요?",
+    "승주는 어떤 개발자예요?",
+    "읽어볼 만한 글 추천해줘",
+]
+
 const ERROR_TEXT =
     "지금은 답변을 가져오지 못했어요. 잠시 후 다시 시도해 주세요."
 const RATE_LIMIT_TEXT =
@@ -26,6 +33,9 @@ const HISTORY_LIMIT = 12
 const INPUT_LIMIT = 1000
 // 자동 스크롤을 유지할 하단 근접 임계값(px)
 const AUTO_SCROLL_THRESHOLD = 80
+
+// 답변 본문과 후속 질문 칩을 나누는 마커 (프롬프트가 이 형식을 강제)
+const FOLLOWUP_MARKER = "###FOLLOWUPS###"
 
 interface AgentChatProps {
     open: boolean
@@ -42,21 +52,54 @@ function isSafeHref(href: string): boolean {
     return isInternalHref(href) || /^https?:\/\//.test(href)
 }
 
+/** 스트리밍 중 답변 끝에 마커 접두사(`###FOL…`)가 걸쳐 있으면 잘라낸다.
+ * 마커는 항상 `###`로 시작하므로 3자 미만 접두사는 보지 않는다 — `#` 1~2개로 끝나는 답변은 안 잘린다. */
+function stripPartialMarker(text: string): string {
+    for (let len = FOLLOWUP_MARKER.length - 1; len >= 3; len--) {
+        if (text.endsWith(FOLLOWUP_MARKER.slice(0, len))) {
+            return text.slice(0, text.length - len)
+        }
+    }
+    return text
+}
+
+/** 답변 원문을 본문과 후속 질문(최대 3개)으로 분리한다. */
+function splitAnswer(content: string): { body: string; followups: string[] } {
+    const idx = content.indexOf(FOLLOWUP_MARKER)
+    if (idx === -1) {
+        return { body: stripPartialMarker(content).trimEnd(), followups: [] }
+    }
+    const body = content.slice(0, idx).trimEnd()
+    const followups = content
+        .slice(idx + FOLLOWUP_MARKER.length)
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .slice(0, 3)
+    return { body, followups }
+}
+
 /**
  * 최소 인라인 마크다운 파서 — `**굵게**`, `[텍스트](url)`만 React 엘리먼트로 렌더한다.
  * dangerouslySetInnerHTML을 쓰지 않고 문자열을 토큰화해 React 노드 배열을 만든다.
  * 스트리밍 중 잘린 토큰(예: `**굵`)은 매칭되지 않아 그대로 플레인 텍스트로 보인다.
  */
 function renderInlineTokens(text: string, keyBase: string): ReactNode[] {
+    // 모델이 내는 `* 불릿`/`- 불릿` 줄머리는 별표 원문 노출 대신 불릿 문자로 바꾼다 (텍스트 치환이라 XSS 무관)
+    const normalized = text
+        .split("\n")
+        .map((line) => line.replace(/^(\s*)[*-]\s+/, "$1• "))
+        .join("\n")
+
     const nodes: ReactNode[] = []
     const tokenRe = /\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)]+)\)/g
     let lastIndex = 0
     let match: RegExpExecArray | null
     let tokenIndex = 0
 
-    while ((match = tokenRe.exec(text)) !== null) {
+    while ((match = tokenRe.exec(normalized)) !== null) {
         if (match.index > lastIndex) {
-            nodes.push(text.slice(lastIndex, match.index))
+            nodes.push(normalized.slice(lastIndex, match.index))
         }
         const key = `${keyBase}-${tokenIndex}`
         if (match[1] !== undefined) {
@@ -90,8 +133,8 @@ function renderInlineTokens(text: string, keyBase: string): ReactNode[] {
         tokenIndex += 1
         lastIndex = tokenRe.lastIndex
     }
-    if (lastIndex < text.length) {
-        nodes.push(text.slice(lastIndex))
+    if (lastIndex < normalized.length) {
+        nodes.push(normalized.slice(lastIndex))
     }
     return nodes
 }
@@ -135,11 +178,12 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
         nearBottomRef.current = distanceFromBottom < AUTO_SCROLL_THRESHOLD
     }
 
-    async function send() {
-        const text = input.trim()
+    async function send(question?: string) {
+        const text = (question ?? input).trim()
         if (!text || loading) return
         setInput("")
         setLoading(true)
+        nearBottomRef.current = true
 
         const nextMessages: ChatMessage[] = [
             ...messages,
@@ -148,12 +192,16 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
         setMessages(nextMessages)
 
         try {
-            // 인사말(로컬 고정 문구)과 에러 안내 메시지는 빼고 최근 대화만 보낸다.
+            // 인사말(로컬 고정 문구)과 에러 안내는 제외하고, 답변은 후속 질문 마커를 뗀 본문만 보낸다.
             const history = nextMessages
                 .filter((m) => !m.isError)
                 .slice(1)
                 .slice(-HISTORY_LIMIT)
-                .map(({ role, content }) => ({ role, content }))
+                .map(({ role, content }) => ({
+                    role,
+                    content:
+                        role === "assistant" ? splitAnswer(content).body : content,
+                }))
             const res = await fetch("/api/agent/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -204,6 +252,13 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
     const showTyping =
         loading && (lastMessage?.role !== "assistant" || lastMessage.content === "")
 
+    // 칩은 마지막 답변 뒤에만 — 지나간 턴의 칩은 남기지 않고, 스트리밍 중엔 숨긴다.
+    const lastFollowups =
+        !loading && lastMessage?.role === "assistant" && !lastMessage.isError
+            ? splitAnswer(lastMessage.content).followups
+            : []
+    const showStarters = messages.length === 1 && !loading
+
     return (
         <div
             className={s.panel}
@@ -234,17 +289,39 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                 aria-live="polite"
                 tabIndex={0}
             >
-                {messages.map((msg, i) => (
-                    <div
-                        key={i}
-                        className={`${s.msg} ${
-                            msg.role === "user" ? s.msgUser : s.msgAssistant
-                        }`}
-                    >
-                        {renderInlineTokens(msg.content, `m${i}`)}
-                    </div>
-                ))}
+                {messages.map((msg, i) => {
+                    if (msg.role === "user") {
+                        return (
+                            <div key={i} className={`${s.msg} ${s.msgUser}`}>
+                                {msg.content}
+                            </div>
+                        )
+                    }
+                    // AI 턴은 말풍선이 아니라 본문 조판 — 답변은 여러 문단·목록이라 말풍선에 넣으면 읽기 어렵다.
+                    const { body } = splitAnswer(msg.content)
+                    return (
+                        <div key={i} className={s.msgBody}>
+                            {renderInlineTokens(body, `msg-${i}`)}
+                        </div>
+                    )
+                })}
                 {showTyping && <div className={s.typing}>답변을 쓰는 중…</div>}
+                {(showStarters || lastFollowups.length > 0) && (
+                    <div className={s.sugRow}>
+                        {(showStarters ? STARTER_QUESTIONS : lastFollowups).map(
+                            (q) => (
+                                <button
+                                    key={q}
+                                    type="button"
+                                    className={s.sug}
+                                    onClick={() => void send(q)}
+                                >
+                                    {q}
+                                </button>
+                            )
+                        )}
+                    </div>
+                )}
             </div>
 
             <form
