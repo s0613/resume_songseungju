@@ -1,1 +1,7 @@
-블로그 실시스템화 — (1) /s-skills 인사이트 제거 후 해당 아티클을 블로그 "S-Skills" 카테고리로 이관, (2) 블로그에 조회수·댓글 시스템 구축 (익명 댓글: 이름+비밀번호+본문, 첨부 이미지 레이아웃), (3) Supabase 신규 프로젝트(Vercel 조직 totalointernational, ap-northeast-2)에 연결.
+[HINT:single=frontend] 송승주 에이전트 챗봇 UI/UX 리뷰(FAIL) 이슈 수정 — docs/sj-company/.state/review-design.md의 HIGH 전건 + 주요 MEDIUM
+
+PM 브리핑:
+- 요구사항: (1) 답변 마크다운 렌더 — **굵게**·[링크](url)·줄바꿈만 지원하는 최소 파서를 직접 구현해 React 요소로 렌더(라이브러리 추가 금지, dangerouslySetInnerHTML 금지). /blog 내부 링크는 같은 탭, 외부 http 링크는 새 탭+noopener. (2) 접근성 — ESC로 패널 닫기, 닫을 때 FAB로 포커스 복귀, 패널이 다시 열릴 때마다 입력창 포커스, 메시지 영역 aria-live="polite" + 키보드 스크롤 가능(tabIndex). (3) 대비 — 기존 팔레트 알파 단계 안에서만 상향: .input 테두리는 gold-faint(0.28) 이상, .panelSub/.typing/placeholder는 cream-dim(0.65) 이상. 새 색상 값 추가 금지. (4) 에러 UX — 429는 "질문이 너무 잦아요…" 전용 문구, 그 외 오류와 구분. 에러 안내 문구는 isError 플래그로 표시해 다음 요청 히스토리에서 제외. 스트리밍 자동 스크롤은 사용자가 하단 근처(80px)에 있을 때만. 전송 직후 즉시 "답변을 쓰는 중…" 표시. (5) 3D 에셋 — public/ai-chat-1c.glb를 gltf-transform CLI로 압축(품질 유지 범위), model-viewer 로드는 requestIdleCallback(폴백 setTimeout 1500ms) 이후, GLB 로드 error 이벤트 시 글리프(✦) 폴백 유지, 로드 완료(load 이벤트) 전까지 글리프를 유지해 깜빡임 제거. (6) 모바일 — 패널 높이 vh를 dvh 기반으로 교체해 가상 키보드에 입력창이 가려지지 않게.
+- 엣지케이스: 스트리밍 중 마크다운 토큰이 프레임 경계에서 잘려 도착(파서는 매 청크 전체 문자열 기준 재파싱로 대응) / 사용자가 위로 스크롤한 채 스트리밍 지속(강탈 금지)
+- 리스크: 마크다운 파싱 XSS — 문자열을 HTML로 넣지 말고 토큰→React 요소로만. 링크 href는 /·http(s)만 허용.
+- 완료 조건: pm-brief.md 참조

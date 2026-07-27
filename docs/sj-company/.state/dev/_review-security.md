@@ -1,129 +1,141 @@
-# Security Review — 블로그 조회수·댓글 시스템
+# Security Review — 챗봇 UX 수정
 > 작성: sj-dev-security · 2026-07-27
-> 모드: review (LENS=security, 적대 리뷰)
-> 대상: `src/lib/supabase-admin.ts`, `src/app/api/**`, `src/components/blog/**`, `supabase/migrations/**`, `next.config.ts`, `package.json` + backend/frontend Result Card
+> 모드: review
+> 대상: `docs/sj-company/.state/dev/frontend.md` (AgentChat.tsx / AgentWidget.tsx / agent.module.css / public/ai-chat-1c.glb)
 
-## 검증 방법 (주장 검증 → 반박 시도)
-정적 리뷰에 더해 다음을 **실증**했다.
+## 요약
 
-| # | 공격 가설 | 실증 방법 | 결과 |
-|---|---|---|---|
-| 1 | service_role 키가 클라이언트 번들에 유출 | `next build` 후 `.env.local`의 실제 값 4개를 `.next/static` + `.next/server/app`(프리렌더 HTML 포함) 전체 바이너리 grep | **유출 0건**. JWT 패턴·`*.supabase.co` 호스트 패턴도 `.next/static`에서 0건 |
-| 2 | `server-only` 가드가 실효성 없음(주석 수준) | 임시 `"use client"` 컴포넌트에서 `getSupabaseAdmin()` import 후 `next build` | **빌드 하드 실패** (`'server-only' cannot be imported from a Client Component module`). 가드 실효 확인. 테스트 파일·수정분은 원복 완료 |
-| 3 | RLS/권한이 실제 DB에 적용 안 됨 → anon 키로 `password_hash` 직접 조회 | `.env.local`의 실 anon 키로 라이브 프로젝트에 read-only 프로브 4건 | 전부 **401 `42501 permission denied`** (`blog_comments` select, `password_hash` select, `blog_views` select, `rpc/increment_blog_view`). 쓰기 없음 |
-| 4 | Content-Type 미검증 → 폼 기반 CSRF | Node `Request.json()`에 `text/plain` 바디 투입 | **파싱됨**(아래 L-1 참조. 다만 ambient 인증이 없어 권한 상승 불가) |
-| 5 | 신규 의존성 자체 취약점 | `npm audit --omit=dev` | `@supabase/supabase-js@2.110.8`, `bcryptjs@3.0.3`, `server-only@0.0.1` **취약점 0건** (기존 transitive 이슈만 존재 → M-4) |
+이번 사이클 핵심 신규 공격면인 `renderInlineTokens` 마크다운 렌더러를 42종 페이로드로 적대적 검증했다.
+**XSS(스크립트 실행) 벡터는 재현되지 않았다.** `dangerouslySetInnerHTML`/`innerHTML`/`eval` 미사용이 확인됐고,
+`javascript:` · `data:` · `vbscript:` · 대소문자·공백·개행·엔티티·퍼센트 인코딩 우회 전부 차단된다.
+다만 "내부 링크" 판정 함수에 **역슬래시·탭·개행을 이용한 오픈 리다이렉트 우회 4종**이 존재한다(MEDIUM).
 
----
+## 검증 방법
+
+`AgentChat.tsx:36-42`의 `isInternalHref`/`isSafeHref`와 `:51`의 토크나이저 정규식을 그대로 이식해
+42종 href 페이로드 + 9종 마크다운 문자열 + WHATWG URL 리졸브 + ReDoS 타이밍을 실행 검증했다.
+
+### 차단 확인된 페이로드 (전부 plaintext로 폴백 — 링크 엘리먼트 미생성)
+
+```
+javascript:alert(1)              JaVaScRiPt:alert(1)          JAVASCRIPT:alert(1)
+ javascript:alert(1) (선행 공백)  \tjavascript:  \njavascript:  U+00A0 javascript:
+java\nscript:alert(1)            java\tscript:alert(1)        &#106;avascript:alert(1)
+&#x6A;avascript:alert(1)         %6Aavascript:alert(1)        vbscript: / VBScript:
+data:text/html,<script>alert(1)</script>                      data:text/html;base64,...
+//evil.com   ///evil.com   \\evil.com   \/evil.com            blob: / filesystem: / file: / about:
+https:javascript:alert(1)        U+202E(RLO) javascript:alert(1)
+```
+
+추가 확인:
+- `[x](javascript:alert(1))` → 캡처 그룹 `([^)]+)`가 첫 `)`에서 끊겨 href가 `javascript:alert(1`이 되고, 그마저도 화이트리스트에서 탈락 → 라벨만 텍스트로 렌더.
+- `**[x](javascript:alert(1))**` → bold 대안이 먼저 매칭되어 내부는 **플레인 텍스트**로 처리(중첩 링크 미생성). 안전.
+- `[<img src=x onerror=alert(1)>](/a)` → 라벨은 React children으로 escape됨. 안전.
+- `^https?:\/\/` 는 `i` 플래그가 없어 `HTTPS://`/`hTtP://`가 링크가 되지 않는다 — 보안상 fail-closed(안전 방향)이나 기능상 외부 링크가 텍스트로 떨어질 수 있음.
+- ReDoS: `**`×32,000 반복에서 0.62ms — 실질 위험 없음.
 
 ## 발견
 
 ### CRITICAL — 머지 차단
-**없음.** 위 #1~#3으로 최대 위험(service_role 유출·DB 직접 노출)은 정적·동적 양쪽에서 반박에 실패했다.
-
----
+없음.
 
 ### HIGH — 머지 전 수정 권장
+없음.
 
-**H-1 [backend/infra] `supabase/.temp/` 가 gitignore 되지 않은 채 워킹트리에 존재 — `git add .` 시 커밋됨**
-- 파일: `supabase/.temp/linked-project.json`, `supabase/.temp/pooler-url`, `supabase/.temp/project-ref` (+6)
-- 재현: `git status` → `?? supabase/` (untracked). `git check-ignore -v supabase/.temp/pooler-url` → **exit 1 = 미차단**. `.gitignore`에는 `.env*`만 있고 `supabase/.temp` 규칙 없음.
-- 내용: 링크된 프로젝트 ref `oxsdlupyhwfhlglkeuop`, Vercel org config id `icfg_uzh2m7eLwdCn6oZucaXeiZ0x`, 풀러 호스트/포트.
-- **완화 요인(중요):** `pooler-url`을 파싱해 확인한 결과 **비밀번호 성분이 없다**(`postgresql://postgres.<ref>@aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres`, 97자, userinfo에 `:pw` 구간 없음). 즉 자격증명 유출은 **아님**. 그래서 CRITICAL이 아니라 HIGH.
-- 영향: 리포지토리에 인프라 식별자·조직 id가 영구 기록되고, CLI 로컬 상태가 커밋 노이즈로 남는다. 이후 CLI 명령/버전에 따라 같은 경로에 자격증명이 쓰이면 그때는 그대로 유출된다.
-- 조치: `supabase/.gitignore`에 `.temp/`(및 `.branches/`) 추가, 또는 루트 `.gitignore`에 `supabase/.temp/`. 커밋 전 `git status`에서 `supabase/.temp` 미노출 확인.
+### MEDIUM — 후속 수정 권장
 
-**H-2 [backend] 인증 없는 상태변경 엔드포인트 3종에 남용 통제가 전무 — bcrypt CPU 소진 + 무제한 쓰기 (PM 수용 리스크, 판정에는 미반영)**
-- 파일: `src/app/api/blog/comments/[slug]/route.ts:77` (`bcrypt.hash`, cost 10), `.../[id]/route.ts:51` (`bcrypt.compare`), `src/app/api/blog/views/[slug]/route.ts:40`
-- 재현: 인증·토큰·CAPTCHA·IP 스로틀이 없으므로 `for i in {1..N}; curl -XPOST .../api/blog/comments/<slug> -d '{"name":"a","password":"1234","body":"x"}'` 로 무제한 행 생성. honeypot은 `website` 키를 **생략만 하면** 우회되므로(route.ts:64) 봇 방어 효과는 사실상 0. `POST /api/blog/views/<slug>`도 호출당 +1 무한.
-- 추가 관점(백엔드 Result Card에 미기재): **bcryptjs는 순수 JS 구현**이라 cost 10 해싱이 Node 이벤트 루프를 ~100ms+ 블로킹한다. 동시 요청 N개 = 함수 인스턴스 전체 정지 + Vercel 실행시간 과금 증폭. DELETE도 동일 비용이라 **온라인 비밀번호 무차별 대입**(최소 4자, 숫자 4자리면 10^4)이 성립하고, 성공 시 임의 댓글 삭제가 가능하다.
-- 판단: PM 브리프의 "rate limit 미구현" 방침을 존중해 **판정에는 반영하지 않는다**. 다만 수용된 것은 "스팸 유입"이었고 **CPU/과금 소진과 삭제 비밀번호 온라인 브루트포스는 별개 리스크**이므로 명시적 수용 기록이 필요하다.
-- 최소 비용 완화 제안(코드 변경 거의 없음): Vercel WAF/Firewall의 경로별 rate limit 규칙(코드 0줄), DELETE 실패 시 지연 추가, 또는 삭제 비밀번호 최소 길이를 4 → 6으로 상향.
+**[frontend] `src/components/agent/AgentChat.tsx:36-38` — `isInternalHref` 우회로 인한 오픈 리다이렉트(크로스 오리진 피싱)**
 
----
+주석은 "`//` 프로토콜 상대 경로는 제외"라고 명시하지만, `//`만 막고 **브라우저 URL 파서가 `//`와 동일하게 취급하는 변형**은 통과한다.
+통과한 href는 `next/link`로 내부 링크처럼 렌더되어, 사용자에게는 사이트 내부 링크로 보이지만 클릭 시 외부 도메인으로 이동한다.
 
-### MEDIUM — 후속 작업
+재현 페이로드 (모두 토크나이저 통과 → `<Link>` 생성 → `https://songseungju.dev` 기준 리졸브 결과):
 
-**M-1 [backend] 요청 바디 크기 제한 없음 → 메모리/파싱 DoS**
-- 파일: `src/app/api/blog/comments/[slug]/route.ts:58`, `.../[id]/route.ts:32`
-- 재현: `await request.json()`이 **길이 검증(line 72~74)보다 먼저** 전체 바디를 버퍼링한다. App Router Route Handler에는 Pages Router의 `bodyParser.sizeLimit`이 적용되지 않는다. 100MB JSON을 POST하면 2000자 제한에 걸리기 전에 메모리를 먹는다.
-- 완화 요인: Vercel Serverless의 플랫폼 요청 바디 상한(≈4.5MB)이 프로덕션에서 방어. 자체 호스팅 시 방어 없음.
-- 조치: `request.headers.get("content-length")`가 임계값(예: 16KB) 초과면 413 즉시 반환.
+| LLM 출력 | `isInternalHref` | 실제 이동 |
+|---|---|---|
+| `[블로그 보기](/\evil.com)` | true | `https://evil.com/` |
+| `[블로그 보기](/\/evil.com)` | true | `https://evil.com/` |
+| `[블로그 보기](/<TAB>/evil.com)` | true | `https://evil.com/` |
+| `[블로그 보기](/<LF>/evil.com)` 및 `<CR>` | true | `https://evil.com/` |
 
-**M-2 [backend] 비밀번호 최대 길이 미검증 → bcrypt 72바이트 무음 절삭**
-- 파일: `src/app/api/blog/comments/[slug]/route.ts:73` (`password.length < 4`만 검사, 상한 없음)
-- 재현: 73바이트 이상 비밀번호로 댓글 등록 후, 앞 72바이트만 같은 **다른** 비밀번호로 DELETE → 성공. bcrypt 규격상 키가 72바이트에서 절삭되기 때문.
-- 조치: `password.length > 72`(또는 128) 시 `invalid_body` 반환.
+원인: WHATWG URL 파싱은 special scheme에서 `\`를 `/`와 동등하게 처리하고, 파싱 전에 ASCII tab/LF/CR을 **전부 제거**한다.
+토크나이저의 `([^)]+)`와 `([^\]]+)`가 탭·개행을 그대로 캡처하므로 세 문자 모두 href에 도달 가능하다.
 
-**M-3 [frontend/infra] 보안 헤더 전무 — CSP / X-Frame-Options / Referrer-Policy / HSTS 미설정**
-- 파일: `next.config.ts` (이번 변경에서 `redirects()`만 추가, `headers()` 없음)
-- 재현: 설정·빌드 산출물 어디에도 헤더 정의 없음. 이 변경으로 사이트가 **사용자 생성 콘텐츠(UGC)를 렌더하는 성격으로 바뀌었는데** 방어 계층이 0이다.
-- 현재 실제 XSS 싱크는 없음(아래 "반박 실패" 표 참조)이나, 향후 댓글에 마크다운·링크 렌더를 붙이는 순간 완충재가 없다. 글로벌 룰(`web/security.md`)이 프로덕션 CSP를 요구.
-- 조치: `next.config.ts`에 `headers()`로 `Content-Security-Policy`(최소 `object-src 'none'; base-uri 'self'; frame-ancestors 'none'`), `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security` 추가.
+영향도가 MEDIUM인 이유: 스크립트 실행은 없고(순수 내비게이션), href를 통제하려면 LLM 출력을 조종해야 하며
+지식 베이스(`src/data/agent-knowledge.ts`)는 사이트 소유자 콘텐츠만 담고 대화는 공유·영속되지 않아
+실질적으로 프롬프트 인젝션을 수행한 본인이 표적이 된다. 다만 검증 함수가 스스로 약속한 불변식이 깨진 상태다.
 
-**M-4 [기존 / 이번 변경 무관] 런타임 의존성 취약점 잔존**
-- `npm audit --omit=dev` → 7건(high 6, moderate 1): `sharp <0.35.0`(libvips CVE-2026-33327/33328/35590/35591), `postcss <=8.5.17`, `picomatch`, `yaml`. 모두 `next` transitive.
-- `sharp`는 `next/image` 최적화·`opengraph-image` 경로에서 **서버 런타임에 사용**되므로 이미지 처리 경로가 노출되면 실질 위험.
-- 이번 태스크가 도입한 것은 아니므로 회귀는 아님. 별도 티켓으로 `npm audit fix` 검토.
+권장 조치 (fail-closed 화이트리스트로 정리):
 
----
+```ts
+function isInternalHref(href: string): boolean {
+    // 브라우저 URL 파서는 탭/개행/CR을 제거하고 '\'를 '/'로 정규화하므로 선정규화 후 검사
+    const normalized = href.replace(/[\t\n\r]/g, "")
+    return /^\/(?![/\\])[^\s\\]*$/.test(normalized)
+}
+```
 
-### LOW
+### LOW — 후속 작업 / 보고만
 
-**L-1 [backend] `request.json()`이 Content-Type을 검증하지 않아 폼 기반 CSRF 자체는 성립 — 다만 영향 없음**
-- 실증: `new Request(..., {headers:{"Content-Type":"text/plain"}, body:'{"name":...}'}).json()` → 정상 파싱됨. 즉 크로스오리진 `<form enctype="text/plain">`으로 POST/DELETE 호출 가능.
-- **결론: 조치 불필요.** 이 API들은 쿠키·세션 등 ambient 인증을 전혀 쓰지 않으므로 CSRF로 얻는 권한이 0이고(공격자가 직접 `fetch`하는 것과 동일), DELETE는 비밀번호를 알아야 한다. **CSRF 토큰 요구는 과설계**로 판단. 기록 목적으로만 남긴다.
+**[frontend] `public/ai-chat-1c.glb` — draco 압축 전환으로 gstatic 외부 디코더 의존 신규 발생 (공급망, 차단 아님)**
 
-**L-2 [backend] 에러 객체 전체를 `console.error`로 남김 → 이론적 `password_hash` 로그 유입**
-- 파일: `src/app/api/_lib/blog-api.ts:34` (`console.error(..., error)` — Supabase `PostgrestError` 원본)
-- 경로: Postgres CHECK 위반 시 `details`에 `Failing row contains (..., $2b$10$..., ...)`가 담긴다 → Vercel 로그에 bcrypt 해시가 기록될 수 있다.
-- 도달성 낮음: 라우트 검증(JS `.length`)이 DB CHECK(`char_length`)보다 항상 같거나 엄격하므로(서로게이트 페어는 JS에서 2, PG에서 1) 정상 경로로는 CHECK 위반을 만들 수 없다. 응답에는 절대 노출되지 않음(`{error:"db_error"}`만).
-- 조치(방어적): `error.code` / `error.message`만 로깅하고 `details`·`hint`는 제외.
+GLB에 `KHR_draco_mesh_compression`이 포함됨을 확인했고(21,800 bytes), `@google/model-viewer@4.3.1` 번들에
+하드코딩된 디코더 경로를 확인했다:
 
-**L-3 [frontend] honeypot 오탐 시 정상 댓글이 "성공"으로 위장되어 조용히 소실**
-- 파일: `CommentForm.tsx:67-77` (`position:absolute; left:-9999px` — DOM에 실재하는 `name="website"` 텍스트 입력), `Comments.tsx:72` (`if (res.status === 204) return true` → 폼 초기화 = 사용자에게 성공으로 보임)
-- 재현: 일부 패스워드 매니저/자동완성이 `website` 필드를 채우면 서버가 204로 폐기하는데 UI는 성공 처리한다. `autoComplete="off"` + `tabIndex={-1}`로 완화되어 확률은 낮음.
-- 조치: 낮은 우선순위. 필요하면 필드명을 자동완성이 인식하지 않는 값(`hp_field`)으로 변경.
+```
+node_modules/@google/model-viewer/dist/model-viewer.min.js
+  https://www.gstatic.com/draco/versioned/decoders/1.5.6/
+  https://www.gstatic.com/basis-universal/versioned/2021-04-15-ba1c3e4/
+```
 
-**L-4 [frontend] 익명 댓글 필드 라벨이 "비밀번호" → 사용자 비밀번호 재사용 유도**
-- 파일: `CommentForm.tsx:53,59` (`비밀번호 (4자 이상)`, `autoComplete="new-password"`)
-- 위험: 이 값은 bcrypt로 저장되지만, 사용자가 상용 계정 비밀번호를 재사용하면 사이트가 **불필요한 타인 자격증명 해시를 보관**하게 된다(PII/책임 확대).
-- 조치: 라벨을 "삭제용 비밀번호" / "삭제 PIN"으로 바꿔 재사용 의도를 차단.
+즉 압축 전(무압축 GLB)에는 발생하지 않던 **런타임 서드파티 WASM 페치가 이번 변경으로 새로 생겼다**.
+평가: 위험 수준 낮음 — 버전 고정 경로이고 Google 소유 도메인이며 SRI 불가한 WASM 페치는 업계 일반 관행이다.
+다만 (a) 향후 CSP 도입 시 `script-src`/`connect-src`에 `https://www.gstatic.com` 허용이 반드시 필요하고,
+(b) 서드파티 도메인 장애 = 3D 아이콘 로드 실패이며, (c) 무결성 검증 수단이 없다.
+완전 자립을 원하면 `ModelViewerElement.dracoDecoderLocation`을 self-host 경로로 지정하는 후속 작업 권장.
+현재는 `AgentWidget.tsx:44-46`에서 import 실패 시 글리프 폴백, `:73-75`에서 `error` 이벤트 시 영구 폴백이 있어
+가용성 회귀는 방어되어 있다.
 
-**L-5 [frontend] 댓글 이름·본문으로 레이아웃 훼손 가능 (보안 영향 없음, 데이스페이싱)**
-- 파일: `src/app/blog/blog.module.css:751` `.commentName`에 `overflow-wrap`/`min-width:0` 없음 → flex 자식으로서 40자 무공백 이름이 모바일에서 가로 오버플로 유발. `:786` `.commentBody`는 `white-space: pre-wrap`이라 개행 2000개 댓글로 세로 늘리기 가능(단 `word-break: break-word`가 있어 가로 오버플로는 없음).
-- 이름에 U+200B(폭 0)·U+202E(RTL override) 삽입 시 빈 이름/역순 표시 가능.
-- 조치: `.commentName { min-width: 0; overflow-wrap: anywhere; }` + 서버에서 이름의 제어·포맷 문자 제거, 연속 개행 축약.
+**[frontend/backend] 사이트 전역 CSP·보안 헤더 부재 (기존 이슈, 이번 사이클과 무관하나 노출면 확대)**
 
----
+`next.config.ts`에 `headers()` 없음, `middleware.ts` 없음, `vercel.json` 없음 — CSP/HSTS/X-Frame-Options/
+X-Content-Type-Options 전부 미설정. 이번에 챗봇 위젯이 `layout.tsx`를 통해 **전 페이지에 전역 마운트**되고
+LLM 출력을 DOM에 렌더하기 시작했으므로, CSP는 렌더러 파싱 버그에 대한 2차 방어선으로서 가치가 이전보다 커졌다.
+별도 태스크 권장.
 
-## 반박에 실패한 항목 (공격 시도 → 방어 확인)
+**[backend] `src/app/api/agent/chat/route.ts` — 이번 사이클 변경 없음 확인, 회귀 없음**
 
-| 공격 | 결과 |
-|---|---|
-| slug로 PostgREST 필터 / 경로 인젝션 | `blog-api.ts:11-13` 형식 정규식 **+ `KNOWN_SLUGS` 화이트리스트 멤버십** 이중 검증. `../`·`*`·`,`·`.` 전부 차단. 임의 slug로 행 생성 불가 |
-| 타 slug 댓글 id로 DELETE (IDOR) | `[id]/route.ts:44-45,59-60` fetch·delete 양쪽 모두 `.eq("slug",slug).eq("id",id)` 교차 검증. uuid 정규식(`isValidUuid`)도 통과해야 함 |
-| `password_hash` 응답 유출 | GET/POST 모두 `select("id, name, body, created_at")` 컬럼 명시(`route.ts:30,82`). DELETE는 내부 select만 하고 미반환. 에러 응답은 전부 상수 코드 |
-| 댓글 본문/이름 XSS | `CommentItem.tsx:40,54`에서 React 텍스트 자식으로 렌더 → 자동 이스케이프. 코드베이스 전체 `dangerouslySetInnerHTML`은 `layout.tsx:74,78` JSON-LD 2건뿐이며 **완전 정적 리터럴**(사용자 입력 미포함) |
-| 토큰/비밀값 클라이언트 저장 | `localStorage`/`sessionStorage` 사용 0건 |
-| `target="_blank"` reverse tabnabbing | 검출된 12건 전부 `rel="noopener noreferrer"` 보유 |
-| `.env.local` 커밋 | `.gitignore`의 `.env*`에 포함, `git ls-files`에 env 파일 0건. 코드 내 `NEXT_PUBLIC_*` 사용 0건(= Supabase 값이 클라이언트로 넘어갈 경로 자체가 없음) |
-| 마이그레이션 권한 설계 | RLS enable + 정책 0개(default deny) + anon/authenticated REVOKE + RPC EXECUTE REVOKE. **라이브 DB에서 anon 키 프로브 4종 전부 401 확인** |
-| 에러 응답의 내부 정보 노출 | 전 경로가 `not_configured`/`invalid_slug`/`invalid_body`/`invalid_id`/`not_found`/`wrong_password`/`db_error` 상수만 반환. Supabase 메시지·스택 미노출 |
-| 삭제 타이밍 공격 | 404(해싱 없음) vs 403(해싱 수행) 시간차는 존재하나, 댓글 id는 GET으로 이미 공개이므로 추가 정보 획득 없음 |
-| `next.config.ts` 리다이렉트 오픈 리다이렉트 | destination이 전부 상대 경로(`/blog/:slug`). 외부 호스트 주입 불가 |
+mtime 13:18(백엔드 사이클) vs 프론트 변경 13:37~13:50 — 변경되지 않았다. 기존 방어 그대로 유효:
+검증(`parseMessages` role/content 타입·공백·길이·개수·마지막 발화 role), 레이트리밋(IP당 60초 10회), 하드코딩 키 0건.
+클라이언트 계약도 일치한다(`HISTORY_LIMIT 12` = `MAX_MESSAGES 12`, `INPUT_LIMIT 1000` = `MAX_CONTENT_LENGTH 1000`).
+신규 `isError` 히스토리 필터링은 서버로 `{role, content}`만 매핑해 보내므로 스키마 회귀 없음.
 
----
+참고(보안 아님, 기존 계약 이슈): 서버 `maxOutputTokens: 800`으로 생성된 assistant 답변이 1000자를 넘으면
+다음 턴에 그 답변이 히스토리로 되돌아가 `MAX_CONTENT_LENGTH` 검증에 걸려 400이 되고, 대화가 그 지점에서 막힌다.
+이번 변경이 만든 문제는 아니나 후속 확인 권장.
+
+**레이트리밋 구조 한계 (기존)**: `hits` Map이 인스턴스 로컬이라 서버리스 다중 인스턴스에서 실효 한도가 인스턴스 수만큼 배증한다.
+LLM 호출 비용 남용 완화가 목적이라면 후속으로 공유 스토어 기반 리밋 검토 권장.
+
+## 키·시크릿 점검
+
+- `src/components/agent/**`, `src/data/agent-knowledge.ts`, `src/app/api/agent/**`, `src/types/**` 전수 스캔 — **하드코딩 시크릿 0건**.
+- 유일한 자격증명 참조는 `process.env.AGENT_MODEL`(모델명, 비밀 아님)이며, Google API 키는 SDK가 환경변수에서 읽어 코드에 노출되지 않는다.
+- `.env*`가 `.gitignore:34`로 제외되어 있고 추적 중인 env 파일 0건. `.env.example` 실값 유출 해당 없음.
+- `agent-knowledge.ts:15`의 이메일은 사이트에 이미 공개된 소유자 본인 연락처 — PII 유출 아님. 제3자 개인정보·시드 실사용자 데이터 없음.
+- 로그: `route.ts:104` `console.error("[agent:chat]", error)` — 서버 사이드 전용이고 응답 본문에는 `{error: "agent_unavailable"}` 상수만 반환. 토큰·비밀번호 노출 없음.
+
+## 프론트엔드 체크
+
+- `AgentChat.tsx:74-83` 외부 링크: `target="_blank"` + `rel="noopener noreferrer"` **정상**. 리포지토리 내 나머지 `_blank` 6곳도 전부 rel 보유 확인.
+- 토큰·비밀값의 `localStorage`/`sessionStorage` 저장 없음. 인증 기능 자체가 없는 공개 엔드포인트.
+- CSRF: 인증·상태변경 없는 stateless 공개 엔드포인트로 CSRF 영향 없음(공격자가 얻을 권한 상승 없음). 남용 방어는 레이트리밋이 담당.
 
 ## 판정: PASS
 
-- CRITICAL 0건. **머지 차단 사유 없음.**
-- H-1(`supabase/.temp` gitignore)은 커밋 전 1줄로 처리 가능하므로 **커밋 직전 필수 조치**로 지정한다. 자격증명이 아닌 식별자 유출이라 차단 판정까지는 가지 않는다.
-- H-2(rate limit 부재)는 PM 브리프의 명시적 방침이므로 **판정에 반영하지 않되**, "CPU/과금 소진 + 삭제 비밀번호 온라인 브루트포스"라는 별개 리스크로 수용 기록을 남길 것.
-- M/L 항목은 후속 티켓.
+CRITICAL 0건, HIGH 0건 — 머지 차단 사유 없음.
+MEDIUM 1건(오픈 리다이렉트 우회)은 짧은 수정으로 해소 가능하므로 이번 사이클 내 또는 즉시 후속 처리 권장.
 
 ## 알려진 제약 / 후속 작업
-- 라이브 DB에 대한 **쓰기** 공격 검증(대량 삽입·바디 크기)은 프로덕션 데이터 오염을 피하려 수행하지 않았다. H-2/M-1은 코드 경로 분석과 플랫폼 상한 근거로 판단했다.
-- 배포 환경(Vercel)의 실제 응답 헤더는 미확인 — M-3은 코드 기준 판정이므로, 플랫폼이 HSTS 등을 이미 부여한다면 범위가 줄어든다. 배포 후 `curl -I` 재확인 권장.
-- ESLint가 리포지토리 사전 오류로 실행 불가(frontend Result Card 기재). 정적 분석 린트 계층은 이번 리뷰에서 활용하지 못했다.
-- 리뷰 중 생성한 임시 검증 파일(`src/components/blog/__sectest.tsx`)과 `Comments.tsx` 임시 수정은 **원복 완료**(`git status`로 확인).
+- MEDIUM 오픈 리다이렉트 수정(`isInternalHref` 제어문자·역슬래시 차단) — 요구사항을 막지는 않으나 우선 처리 권장.
+- CSP/보안 헤더 도입, draco 디코더 self-host, 공유 스토어 레이트리밋 — 각각 별도 태스크.

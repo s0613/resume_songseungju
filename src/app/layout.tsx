@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import PageMain from "@/components/common/PageMain";
+import AgentWidget from "@/components/agent/AgentWidget";
 import './styles/globals.css';
 
 const SITE_TITLE = "송승주 — AI 에이전트 빌더 · 풀스택 개발자";
@@ -82,6 +83,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <Header />
         <PageMain>{children}</PageMain>
         <Footer />
+        <AgentWidget />
       </body>
     </html>
   );

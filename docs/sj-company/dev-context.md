@@ -22,3 +22,5 @@
 - 2026-07-27 [run:20260727-081336-49493]: Next.js metadata는 필드 단위 얕은 병합 — 자식이 openGraph를 정의하면 루트 openGraph(파일 컨벤션 og:image 포함)가 통째로 대체된다. 자식 title/description만 바꿔도 og:title은 루트 값이 상속되므로 상세 페이지는 openGraph를 명시해야 함 (Codex 교차 리뷰로 발견).
 - 2026-07-27 [run:20260727-081336-49493]: 포트폴리오 메타 단일 소스는 src/data/portfolio.ts의 buildPortfolioMetadata(slug) — 메인 Archive·상세 metadata·sitemap이 모두 이 파일 참조. 예외: upflowax는 승인 카피 유지로 title/description 자체 정의.
 - 2026-07-27 [run:20260727-081336-49493]: OG 이미지 라우트(satori)는 CSS 변수를 못 읽어 브랜드 색을 리터럴로 사용 — home.module.css 토큰 값과 수동 동기화 필요.
+- 2026-07-27 [run:20260727-132925-87329]: model-viewer 4.3.1은 EXT_meshopt_compression 디코더를 사전 등록하지 않아 meshopt GLB 로드 실패 — draco 압축 사용(디코더는 gstatic CDN 자동 로드). gltf-transform optimize로 544KB→21.8KB.
+- 2026-07-27 [run:20260727-132925-87329]: LLM 답변 마크다운은 AgentChat renderInlineTokens(토큰→React 요소, href는 내부 / 또는 http만·백슬래시/공백 거부)로만 렌더 — dangerouslySetInnerHTML 금지 계약.
