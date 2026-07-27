@@ -175,7 +175,6 @@ export default async function BlogPostPage({
                         </span>
                     </Link>
                     <nav className={s.topNav}>
-                        <Link href="/">이력서</Link>
                         <Link href="/s-skills">S-Skills</Link>
                         <a
                             href="https://github.com/s0613"

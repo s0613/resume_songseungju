@@ -715,3 +715,13 @@ else:
 export function getPost(slug: string): BlogPost | undefined {
     return posts.find((p) => p.slug === slug)
 }
+
+/** 글 본문의 첫 이미지 블록 — 목록 대표(뉴스형) 카드의 썸네일로 쓴다. 없으면 null. */
+export function getPostThumbnail(
+    post: BlogPost
+): Extract<BlogBlock, { type: "image" }> | null {
+    for (const block of post.blocks) {
+        if (block.type === "image") return block
+    }
+    return null
+}
