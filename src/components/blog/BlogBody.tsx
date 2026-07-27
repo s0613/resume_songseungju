@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { posts, categories, blogProfile } from "@/data/blog"
+import PostViewCount from "@/components/blog/PostViewCount"
 import s from "@/app/blog/blog.module.css"
 
 interface BlogBodyProps {
@@ -111,6 +112,7 @@ export default function BlogBody({ activeCategory }: BlogBodyProps) {
                                         <span>{post.date}</span>
                                         <span className={s.dot} />
                                         <span>{post.readTime} 읽기</span>
+                                        <PostViewCount slug={post.slug} />
                                     </div>
                                 </div>
                             </Link>
