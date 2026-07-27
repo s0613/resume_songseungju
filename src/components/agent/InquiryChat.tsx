@@ -193,20 +193,44 @@ export default function InquiryChat({
         "idle" | "sending" | "sent" | "error"
     >("idle")
     const [sendError, setSendError] = useState("")
+    // 뒤로가기로 작성 내용을 버리기 전 확인. 브라우저 confirm 대신 패널 안에서 처리한다.
+    const [backConfirmOpen, setBackConfirmOpen] = useState(false)
     const requestIdRef = useRef<string | null>(null)
     const scrollRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLTextAreaElement>(null)
     const aiConsentRef = useRef<HTMLInputElement>(null)
     const reviewRef = useRef<HTMLElement>(null)
     const successRef = useRef<HTMLElement>(null)
+    const backConfirmRef = useRef<HTMLButtonElement>(null)
 
     useEffect(() => {
         const element = scrollRef.current
         if (element) element.scrollTop = element.scrollHeight
     }, [messages, collecting, readyForReview, sendState])
 
+    // 확인 창이 열리면 기본 포커스를 "계속 작성"(취소)에 둬 실수로 버리는 일을 막는다.
+    useEffect(() => {
+        if (backConfirmOpen) backConfirmRef.current?.focus()
+    }, [backConfirmOpen])
+
+    // 확인 창이 떠 있는 동안의 Esc는 이 창만 닫는다.
+    // AgentChat이 document에 걸어둔 Esc(위젯 전체 닫기)보다 먼저 잡아야 하므로 캡처 단계에서 가로챈다.
+    useEffect(() => {
+        if (!backConfirmOpen) return
+        function handleEscape(event: KeyboardEvent) {
+            if (event.key !== "Escape") return
+            event.stopImmediatePropagation()
+            event.preventDefault()
+            setBackConfirmOpen(false)
+        }
+        document.addEventListener("keydown", handleEscape, true)
+        return () =>
+            document.removeEventListener("keydown", handleEscape, true)
+    }, [backConfirmOpen])
+
     useEffect(() => {
         if (!open) return
+        if (backConfirmOpen) return
         if (sendState === "sent") {
             successRef.current?.focus()
         } else if (!aiConsent) {
@@ -216,7 +240,7 @@ export default function InquiryChat({
         } else if (!collecting) {
             inputRef.current?.focus()
         }
-    }, [open, sendState, aiConsent, readyForReview, collecting])
+    }, [open, backConfirmOpen, sendState, aiConsent, readyForReview, collecting])
 
     function resetInquiry() {
         setDraft(EMPTY_DRAFT)
@@ -420,10 +444,8 @@ export default function InquiryChat({
             sendState !== "sent" &&
             (input.trim().length > 0 ||
                 messages.some((message) => message.role === "user"))
-        if (
-            hasProgress &&
-            !window.confirm("작성 중인 문의가 사라집니다. 돌아갈까요?")
-        ) {
+        if (hasProgress) {
+            setBackConfirmOpen(true)
             return
         }
         onBack()
@@ -728,6 +750,49 @@ export default function InquiryChat({
                         </button>
                     </div>
                 </form>
+            )}
+
+            {backConfirmOpen && (
+                <div
+                    className={s.confirmScrim}
+                    onClick={() => setBackConfirmOpen(false)}
+                >
+                    <div
+                        className={s.confirmCard}
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-labelledby="inquiry-back-confirm-title"
+                        aria-describedby="inquiry-back-confirm-desc"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <strong id="inquiry-back-confirm-title">
+                            작성 중인 문의를 지울까요?
+                        </strong>
+                        <p id="inquiry-back-confirm-desc">
+                            지금까지 정리한 내용은 저장되지 않고 사라져요.
+                        </p>
+                        <div className={s.confirmActions}>
+                            <button
+                                ref={backConfirmRef}
+                                type="button"
+                                className={s.confirmKeep}
+                                onClick={() => setBackConfirmOpen(false)}
+                            >
+                                계속 작성
+                            </button>
+                            <button
+                                type="button"
+                                className={s.confirmDiscard}
+                                onClick={() => {
+                                    setBackConfirmOpen(false)
+                                    onBack()
+                                }}
+                            >
+                                지우고 나가기
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     )

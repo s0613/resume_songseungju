@@ -302,6 +302,10 @@
         animation: none;
         opacity: 1;
     }
+
+    .confirmScrim {
+        animation: none;
+    }
 }
 
 /* ===== 추천·후속 질문 칩 ===== */
@@ -655,6 +659,91 @@
 .inquirySuccessActions button:hover {
     border-color: var(--agent-gold-dim);
     background: var(--agent-gold-ghost);
+}
+
+/* ===== 패널 내 확인 창 =====
+   브라우저 confirm 대신 쓰는 위젯 자체 확인 UI. .panel 안에만 깔린다. */
+.confirmScrim {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(26, 16, 8, 0.72);
+    backdrop-filter: blur(2px);
+    animation: confirmIn 0.14s ease-out;
+}
+
+.confirmCard {
+    width: 100%;
+    max-width: 300px;
+    padding: 18px 18px 16px;
+    border: 1px solid var(--agent-gold-faint);
+    border-radius: 14px;
+    background: var(--agent-ink);
+    box-shadow: 0 18px 40px rgba(26, 16, 8, 0.5);
+}
+
+.confirmCard strong {
+    display: block;
+    color: var(--agent-cream);
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.confirmCard p {
+    margin: 7px 0 0;
+    color: var(--agent-cream-dim);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.confirmActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.confirmActions button {
+    flex: 1;
+    min-height: 38px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.16s, border-color 0.16s;
+}
+
+.confirmActions button:focus-visible {
+    outline: 2px solid var(--agent-gold);
+    outline-offset: 2px;
+}
+
+.confirmKeep {
+    border: none;
+    background: var(--agent-gold);
+    color: var(--agent-ink);
+}
+
+.confirmDiscard {
+    border: 1px solid var(--agent-gold-faint);
+    background: transparent;
+    color: var(--agent-cream-dim);
+}
+
+.confirmDiscard:hover {
+    border-color: var(--agent-gold-dim);
+    background: var(--agent-gold-ghost);
+    color: var(--agent-cream);
+}
+
+@keyframes confirmIn {
+    from {
+        opacity: 0;
+    }
 }
 
 /* ===== 반응형 ===== */
