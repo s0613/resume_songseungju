@@ -84,13 +84,7 @@ function splitAnswer(content: string): { body: string; followups: string[] } {
  * dangerouslySetInnerHTML을 쓰지 않고 문자열을 토큰화해 React 노드 배열을 만든다.
  * 스트리밍 중 잘린 토큰(예: `**굵`)은 매칭되지 않아 그대로 플레인 텍스트로 보인다.
  */
-function renderInlineTokens(text: string, keyBase: string): ReactNode[] {
-    // 모델이 내는 `* 불릿`/`- 불릿` 줄머리는 별표 원문 노출 대신 불릿 문자로 바꾼다 (텍스트 치환이라 XSS 무관)
-    const normalized = text
-        .split("\n")
-        .map((line) => line.replace(/^(\s*)[*-]\s+/, "$1• "))
-        .join("\n")
-
+function renderInlineTokens(normalized: string, keyBase: string): ReactNode[] {
     const nodes: ReactNode[] = []
     const tokenRe = /\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)]+)\)/g
     let lastIndex = 0
@@ -137,6 +131,34 @@ function renderInlineTokens(text: string, keyBase: string): ReactNode[] {
         nodes.push(normalized.slice(lastIndex))
     }
     return nodes
+}
+
+/**
+ * 답변 본문을 줄 단위로 렌더한다. 목록 줄(`1.`·`•`)은 마커/내용을 분리해
+ * 줄바꿈 시 이어지는 줄이 내용 시작 위치에 정렬되게 한다(행잉 인덴트).
+ * 원문의 번호를 그대로 쓴다 — CSS 카운터를 신뢰하지 않는다.
+ */
+function renderBody(text: string, keyBase: string): ReactNode[] {
+    return text.split("\n").map((rawLine, li) => {
+        // `* 불릿`/`- 불릿` 줄머리는 별표 원문 노출 대신 불릿 문자로 (텍스트 치환이라 XSS 무관)
+        const line = rawLine.replace(/^(\s*)[*-]\s+/, "$1• ")
+        const key = `${keyBase}-l${li}`
+        if (line.trim().length === 0) {
+            return <div key={key} className={s.msgGap} />
+        }
+        const list = line.match(/^\s*(\d{1,3}\.|•)\s+(.*)$/)
+        if (list) {
+            return (
+                <div key={key} className={s.msgListLine}>
+                    <span className={s.msgListMarker}>{list[1]}</span>
+                    <span className={s.msgListText}>
+                        {renderInlineTokens(list[2], key)}
+                    </span>
+                </div>
+            )
+        }
+        return <div key={key}>{renderInlineTokens(line, key)}</div>
+    })
 }
 
 /** 송승주 에이전트 채팅 패널 — /api/agent/chat 텍스트 스트림을 그대로 렌더한다. */
@@ -301,7 +323,7 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                     const { body } = splitAnswer(msg.content)
                     return (
                         <div key={i} className={s.msgBody}>
-                            {renderInlineTokens(body, `msg-${i}`)}
+                            {renderBody(body, `msg-${i}`)}
                         </div>
                     )
                 })}

@@ -173,9 +173,32 @@
     color: var(--agent-cream);
     font-size: 13.5px;
     line-height: 1.7;
-    white-space: pre-wrap;
     word-break: break-word;
     padding: 2px 2px 4px;
+}
+
+/* 문단 사이 빈 줄 */
+.msgGap {
+    height: 0.55em;
+}
+
+/* 목록 줄 — 마커/내용 분리로 줄바꿈 시 내용 시작 위치에 정렬(행잉 인덴트) */
+.msgListLine {
+    display: flex;
+    gap: 7px;
+}
+
+.msgListMarker {
+    flex: none;
+    min-width: 1.5em;
+    text-align: right;
+    color: var(--agent-gold-dim);
+    font-weight: 700;
+}
+
+.msgListText {
+    flex: 1;
+    min-width: 0;
 }
 
 .typing {
