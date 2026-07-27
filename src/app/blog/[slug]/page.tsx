@@ -25,7 +25,7 @@ export async function generateMetadata({
 
     const url = `/blog/${slug}`
     return {
-        title: `${post.title} | 승주의 AI 블로그`,
+        title: { absolute: `${post.title} | 승주의 AI 블로그` },
         description: post.excerpt,
         keywords: post.tags,
         alternates: { canonical: url },
@@ -131,7 +131,7 @@ function renderBlock(block: BlogBlock, i: number) {
                         width={block.width}
                         height={block.height}
                         className={s.figureImg}
-                        sizes="(max-width: 820px) 90vw, 720px"
+                        sizes="(max-width: 820px) 90vw, 780px"
                     />
                     {block.caption && (
                         <figcaption className={s.figureCaption}>{block.caption}</figcaption>
@@ -205,7 +205,7 @@ export default async function BlogPostPage({
                         </div>
                         <div className={s.profileBody}>
                             <div className={s.profileNick}>{blogProfile.nickname}</div>
-                            <div className={s.profileHandle}>@{blogProfile.handle}</div>
+                            <div className={s.profileHandle}>{blogProfile.contact}</div>
                             <p className={s.profileIntro}>{blogProfile.intro}</p>
                         </div>
                     </div>
@@ -225,8 +225,6 @@ export default async function BlogPostPage({
                             <span className={s.articleAuthor}>{blogProfile.nickname}</span>
                             <span className={s.dot} />
                             <span>{post.date}</span>
-                            <span className={s.dot} />
-                            <span>{post.readTime} 읽기</span>
                             <ViewCounter slug={post.slug} />
                         </div>
 

@@ -16,7 +16,6 @@ export interface BlogPost {
     category: string
     title: string
     date: string // "2026. 6. 17."
-    readTime: string // "5분"
     excerpt: string
     tags: string[]
     blocks: BlogBlock[]
@@ -24,15 +23,16 @@ export interface BlogPost {
 
 export interface BlogProfile {
     nickname: string
-    handle: string
+    /** 프로필 카드에 그대로 노출되는 연락처. */
+    contact: string
     intro: string
     links: { label: string; href: string }[]
 }
 
 export const blogProfile: BlogProfile = {
     nickname: "승주",
-    handle: "songseungju",
-    intro: "AI 에이전트 개발 일기",
+    contact: "farchicken00@naver.com",
+    intro: "AI와 작업 일기",
     links: [
         { label: "이력서", href: "/" },
         { label: "GitHub", href: "https://github.com/s0613" },
@@ -44,25 +44,33 @@ export interface Category {
     name: string
     slug: string
     count: number
+    /** 대분류 slug. 값이 있으면 그 대분류의 하위 분류다. */
+    parent?: string
 }
 
-// 글의 category 값과 매칭됩니다.
-export const categories: Category[] = [
-    { name: "전체보기", slug: "all", count: 8 },
-    { name: "소개", slug: "intro", count: 1 },
-    { name: "에이전트 경험", slug: "experience", count: 2 },
-    { name: "AI 학습노트", slug: "learning", count: 1 },
-    { name: "인사이트", slug: "insight", count: 3 },
-    { name: "S-Skills", slug: "s-skills", count: 1 },
+/**
+ * 카테고리 트리. `name`이 글의 `category` 값과 매칭된다.
+ * 대분류에도 글을 직접 달 수 있고(예: category "개발"),
+ * 대분류를 고르면 하위 분류의 글까지 함께 보인다.
+ */
+const CATEGORY_TREE: Omit<Category, "count">[] = [
+    { name: "전체보기", slug: "all" },
+    { name: "개발", slug: "dev" },
+    { name: "프론트", slug: "frontend", parent: "dev" },
+    { name: "백엔드", slug: "backend", parent: "dev" },
+    { name: "인프라", slug: "infra", parent: "dev" },
+    { name: "QA", slug: "qa", parent: "dev" },
+    { name: "보안", slug: "security", parent: "dev" },
+    { name: "마케팅", slug: "marketing" },
+    { name: "지식 공유", slug: "knowledge" },
 ]
 
 export const posts: BlogPost[] = [
     {
         slug: "vibe-coding-with-warp-obsidian-claude-codex",
-        category: "인사이트",
+        category: "지식 공유",
         title: "Warp + Obsidian + Claude + Codex로 개발하는 방법",
         date: "2026. 7. 27.",
-        readTime: "10분",
         excerpt:
             "바이브코딩은 못 믿겠다는 현업 분들께 드리는 철저한 경험담. Warp가 지켜보고, Claude가 만들고, Codex가 겐세이 넣고, Obsidian이 기억합니다. 코드를 안 보는 대신 무엇을 보는지까지 정리했습니다.",
         tags: ["바이브코딩", "Warp", "ClaudeCode", "Codex", "옵시디언", "AI적사고"],
@@ -118,8 +126,8 @@ export const posts: BlogPost[] = [
                 type: "image",
                 src: "/vibe-toolset.webp",
                 alt: "바이브 코딩 4종 세트 장표 — Warp(관제탑), Claude Code(실행자), ChatGPT·Codex(겐세이), Obsidian(기억) 카드 4장",
-                width: 2000,
-                height: 1050,
+                width: 1560,
+                height: 819,
                 caption:
                     "발표에서 쓴 장표. 코드를 보지 않고 일하려면, 대신 봐 주는 도구들이 필요합니다.",
             },
@@ -138,8 +146,8 @@ export const posts: BlogPost[] = [
                 type: "image",
                 src: "/vibe-warp-live.webp",
                 alt: "Warp 터미널의 실제 작업 화면 — 왼쪽 세션에서는 Claude Code가 블로그 글을 커밋하고, 오른쪽 세션에서는 다른 에이전트가 옵시디언 지식 폴더를 리뷰하며, 사이드바에는 Codex 세션들이 대기 중",
-                width: 2400,
-                height: 1502,
+                width: 1560,
+                height: 977,
                 caption:
                     "실제 개발하는 모습입니다. 왼쪽 세션은 Claude Code가 지금 이 글을 쓰는 중이고, 오른쪽 세션은 다른 에이전트가 옵시디언 볼트를 정리하는 중입니다. 저는 이 창을 흘끔거리기만 합니다.",
             },
@@ -175,8 +183,8 @@ export const posts: BlogPost[] = [
                 type: "image",
                 src: "/vibe-obsidian-vault.webp",
                 alt: "옵시디언 볼트 화면 — 지식 폴더 아래 AI에이전트·기획·설계·디자인·프론트엔드·백엔드 등 도메인별 폴더가 정리되어 있고, 지식 폴더에만 1,453개 파일이 쌓여 있으며, 발표 자료 노트가 열려 있는 모습",
-                width: 2376,
-                height: 1600,
+                width: 1560,
+                height: 1051,
                 caption:
                     "제 옵시디언 볼트입니다. 지식 폴더에만 파일 1,453개 — 에이전트가 읽고 쓰는 지식이 이렇게 쌓입니다. 발표 자료도 여기서 만들어졌습니다.",
             },
@@ -185,8 +193,8 @@ export const posts: BlogPost[] = [
                 type: "image",
                 src: "/vibe-pm-loop.webp",
                 alt: "PM 마인드 루프 장표 — 나(PM)의 지시 → Claude Code 구현 → Codex 교차 리뷰 → Warp에서 결과 확인 → Obsidian 기록, 그리고 기록이 다음 지시로 이어지는 루프",
-                width: 2000,
-                height: 1025,
+                width: 1560,
+                height: 800,
                 caption:
                     "사람은 방향과 판정만 합니다. 구현·지적·기록은 각자 잘하는 도구의 몫입니다.",
             },
@@ -209,8 +217,8 @@ export const posts: BlogPost[] = [
                 type: "image",
                 src: "/vibe-claude-3d.webp",
                 alt: "claude.ai Design에서 챗봇 플로팅 버튼용 3D 말풍선과 스파클 모델을 만드는 화면 — 왼쪽은 '채팅과 어울리는 3D 모델링으로 다시 만들어줘'라는 대화, 오른쪽은 3D 뷰어와 GLB 다운로드 버튼",
-                width: 2400,
-                height: 1503,
+                width: 1560,
+                height: 977,
                 caption:
                     "심지어 그 챗봇 버튼에 들어간 3D 모델도 클로드로 만들었습니다. \"채팅과 어울리는 3D 모델링으로 다시 만들어줘, 추상적인 거 말고\"라고 말하면 말풍선이 나옵니다. 모델링 툴은 열지도 않았어요.",
             },
@@ -240,10 +248,9 @@ export const posts: BlogPost[] = [
     },
     {
         slug: "s-skills-in-one",
-        category: "S-Skills",
+        category: "QA",
         title: "혼자 만드는 AI 팀은 어떻게 기억하고 검증하는가",
         date: "2026. 7. 15.",
-        readTime: "9분",
         excerpt:
             "S-Skills는 Claude Code에 역할 몇 개를 덧붙인 프롬프트 모음이 아닙니다. 혼자 개발할 때 사라지기 쉬운 맥락을 남기고, 구현과 검증을 분리하며, 반복 작업을 끝까지 닫는 역할 기반 하네스입니다.",
         tags: ["S-Skills", "하네스", "AI에이전트", "루프엔지니어링", "옵시디언"],
@@ -336,10 +343,9 @@ export const posts: BlogPost[] = [
     },
     {
         slug: "harness-obsidian-long-term-memory",
-        category: "인사이트",
+        category: "지식 공유",
         title: "하네스가 실행하고, 옵시디언이 기억합니다",
         date: "2026. 7. 15.",
-        readTime: "6분",
         excerpt:
             "직접 만들던 하네스 S-skills를 크게 개편했습니다. 세션이 끝나면 사라지던 컨텍스트를 옵시디언 볼트에 남기고, 다음 작업은 그 위에서 시작합니다. 하네스는 실행을, 옵시디언은 장기 기억을 맡는 구조예요.",
         tags: ["하네스", "옵시디언", "장기기억", "AI에이전트", "S-skills"],
@@ -409,10 +415,9 @@ export const posts: BlogPost[] = [
     },
     {
         slug: "london-system-agent-coming-soon",
-        category: "인사이트",
+        category: "마케팅",
         title: "곧, londonsystemagent.com 에서 에이전트가 나옵니다",
         date: "2026. 6. 24.",
-        readTime: "4분",
         excerpt:
             "개인 프로젝트로 만들던 런던 시스템이, 이제 직접 써볼 수 있는 형태에 거의 다 왔습니다. 자연어로 요구사항을 적으면 운영 가능한 에이전트로 컴파일해 주는 도구를 londonsystemagent.com 에서 곧 공개합니다.",
         tags: ["런던시스템", "AI에이전트", "에이전트CAD", "출시예고", "기록"],
@@ -466,10 +471,9 @@ export const posts: BlogPost[] = [
     },
     {
         slug: "starting-london-system-agent",
-        category: "에이전트 경험",
+        category: "개발",
         title: "새 개인 프로젝트, 런던 시스템을 시작했어요",
         date: "2026. 6. 20.",
-        readTime: "4분",
         excerpt:
             "자연어로 요구사항을 적으면 검증·비용·거버넌스를 갖춘 에이전트 그래프로 컴파일해서 운영까지 잇는 'AI Agent CAD'를 개인 프로젝트로 시작했습니다. 왜 시작했고 지금 어디까지 왔는지 가볍게 적어 둡니다.",
         tags: ["개인프로젝트", "AI에이전트", "에이전트CAD", "LangGraph", "기록"],
@@ -541,10 +545,9 @@ export const posts: BlogPost[] = [
     },
     {
         slug: "reference-data-mapping-state-of-the-art",
-        category: "AI 학습노트",
+        category: "백엔드",
         title: "기준용어 매핑 최신 근황",
         date: "2026. 6. 18.",
-        readTime: "13분",
         excerpt:
             "기준용어(reference data)는 회사마다 방대하고 나라별 수기 입력이 제각각이라 자동 매핑이 쉽지 않습니다. 정답이 하나는 아니지만, 요즘 '이렇게들 한다'에 가까운 파이프라인·검색 알고리즘·대표 논문을 출처와 함께 정리했습니다.",
         tags: ["엔티티매칭", "기준데이터", "MDM", "RAG", "정리노트"],
@@ -580,8 +583,8 @@ export const posts: BlogPost[] = [
                 type: "image",
                 src: "/mapping-pipeline.webp",
                 alt: "기준용어 매핑 파이프라인 다이어그램 — 입력·전처리 → 검색(BM25+벡터→RRF→top-k) → 재랭킹(cross-encoder/LLM) → 신뢰도 임계값 → 자동 확정 또는 steward 검토, 그리고 피드백 루프",
-                width: 1680,
-                height: 1815,
+                width: 1560,
+                height: 1686,
                 caption:
                     "전체 흐름을 그림으로: 후보를 넓게 검색해 좁히고(retrieve), 정밀하게 재정렬한 뒤(rerank), 신뢰도로 자동 확정과 사람 검토를 나눕니다. 검토 결과는 다시 학습에 환류됩니다.",
             },
@@ -763,10 +766,9 @@ else:
     },
     {
         slug: "making-my-own-harness",
-        category: "에이전트 경험",
+        category: "개발",
         title: "요즘 하네스 만드는 게 재밌더라고요",
         date: "2026. 6. 17.",
-        readTime: "6분",
         excerpt:
             "유명한 하네스들과 좋은 로직을 짬뽕해서, 제 개발 환경과 작업에 맞춘 하네스를 만들고 있습니다. 나만의 자산이 쌓인다는 생각에 요즘 이 작업이 꽤 즐겁습니다.",
         tags: ["하네스", "AI에이전트", "오케스트레이션", "개발환경"],
@@ -791,8 +793,8 @@ else:
                 type: "image",
                 src: "/harness-demo.webp",
                 alt: "sj-company 하네스가 PM, Tech Lead, 병렬 에이전트, QA를 거쳐 작업을 수행하는 터미널 화면",
-                width: 2000,
-                height: 1080,
+                width: 1560,
+                height: 843,
                 caption:
                     "명령 한 줄이면 PM이 복잡도를 판단하고, Tech Lead가 전문 에이전트를 병렬로 디스패치한 뒤, 독립 QA까지 돌아갑니다.",
             },
@@ -839,10 +841,9 @@ else:
     },
     {
         slug: "hello-im-songseungju",
-        category: "소개",
+        category: "마케팅",
         title: "블로그를 시작하며",
         date: "2026. 6. 17.",
-        readTime: "3분",
         excerpt:
             "AI와 AI 에이전트를 만들며 배운 것들을 정리하려고 블로그를 시작합니다. 첫 글에서는 그동안 해온 일과 앞으로 쓸 글에 대해 적어 둡니다.",
         tags: ["소개", "AI에이전트", "개발", "기록"],
@@ -892,6 +893,29 @@ else:
         ],
     },
 ]
+
+/**
+ * 카테고리 slug에 해당하는 글.
+ * 대분류를 고르면 그 대분류에 직접 달린 글 + 하위 분류의 글을 모두 돌려준다.
+ * 모르는 slug는 전체로 취급한다.
+ */
+export function postsInCategory(slug: string): BlogPost[] {
+    const target = CATEGORY_TREE.find((cat) => cat.slug === slug)
+    if (!target || target.slug === "all") return posts
+    const names = new Set([
+        target.name,
+        ...CATEGORY_TREE.filter((cat) => cat.parent === slug).map(
+            (cat) => cat.name
+        ),
+    ])
+    return posts.filter((post) => names.has(post.category))
+}
+
+// 글 수는 손으로 세지 않고 posts에서 뽑는다 — 글을 추가해도 어긋나지 않는다.
+export const categories: Category[] = CATEGORY_TREE.map((cat) => ({
+    ...cat,
+    count: postsInCategory(cat.slug).length,
+}))
 
 export function getPost(slug: string): BlogPost | undefined {
     return posts.find((p) => p.slug === slug)

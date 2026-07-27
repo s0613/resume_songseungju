@@ -168,6 +168,15 @@
     transition: background var(--seed-duration-d3), color var(--seed-duration-d3);
 }
 
+/* 하위 분류 — 한 단 들여쓰고, 항목마다 그은 왼쪽 선이 이어져 묶음 선이 된다. */
+.catChild {
+    margin-left: 12px;
+    padding-left: 14px;
+    border-left: 1px solid var(--seed-color-stroke-neutral-muted);
+    border-radius: 0 var(--seed-radius-r2) var(--seed-radius-r2) 0;
+    font-size: var(--seed-font-size-t2);
+}
+
 .catItem:hover {
     background: var(--seed-color-bg-neutral-weak);
     color: var(--seed-color-fg-neutral);
@@ -434,19 +443,24 @@
 /* ===== 글 본문 =====
    본문 line-height는 SEED의 UI용 값(1.4 내외)보다 길게 잡는다 — 장문 가독성 우선. */
 .body {
+    /* 본문 한 칸의 폭. 텍스트·이미지·코드가 모두 이 값을 공유해 좌우 끝이 맞는다.
+       바꿀 때 [slug]/page.tsx의 <Image sizes>도 같은 값으로 맞춰야 한다. */
+    --measure: 780px;
     padding-top: 26px;
     font-size: var(--seed-font-size-t5);
     line-height: 1.9;
     color: var(--seed-color-fg-neutral);
 }
 
-/* 읽기 편한 줄 길이로 텍스트 블록 폭 제한 (이미지·코드는 넓게 그대로) */
+/* 읽기 편한 줄 길이로 본문 블록 폭 제한 */
 .body .para,
 .body .heading,
 .body .list,
 .body .quote,
-.body .tipBox {
-    max-width: 720px;
+.body .tipBox,
+.body .figure,
+.body .codeFigure {
+    max-width: var(--measure);
 }
 
 .para {

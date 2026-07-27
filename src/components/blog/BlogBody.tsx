@@ -8,6 +8,7 @@ import { Chip } from "seed-design/ui/chip"
 import {
     posts,
     categories,
+    postsInCategory,
     blogProfile,
     getPostThumbnail,
     type BlogPost,
@@ -88,10 +89,7 @@ export default function BlogBody({
         }
     }, [])
 
-    const filtered =
-        !active || active.slug === "all"
-            ? posts
-            : posts.filter((post) => post.category === active.name)
+    const filtered = postsInCategory(activeCatSlug)
     const visiblePosts = sortPosts(filtered, activeSort, counts)
 
     // 전체보기에서만 상단을 뉴스형(이미지+제목) 카드로 분리한다.
@@ -121,7 +119,7 @@ export default function BlogBody({
                     </div>
                     <div className={s.profileBody}>
                         <div className={s.profileNick}>{blogProfile.nickname}</div>
-                        <div className={s.profileHandle}>@{blogProfile.handle}</div>
+                        <div className={s.profileHandle}>{blogProfile.contact}</div>
                         <p className={s.profileIntro}>{blogProfile.intro}</p>
                     </div>
                 </div>
@@ -136,8 +134,8 @@ export default function BlogBody({
                                     <Link
                                         href={blogHref(cat.slug, activeSort)}
                                         className={`${s.catItem} ${
-                                            isActive ? s.catActive : ""
-                                        }`}
+                                            cat.parent ? s.catChild : ""
+                                        } ${isActive ? s.catActive : ""}`}
                                         aria-current={isActive ? "page" : undefined}
                                     >
                                         <span>{cat.name}</span>
@@ -239,8 +237,6 @@ export default function BlogBody({
                                     <p className={s.postExcerpt}>{post.excerpt}</p>
                                     <div className={s.postMeta}>
                                         <span>{post.date}</span>
-                                        <span className={s.dot} />
-                                        <span>{post.readTime} 읽기</span>
                                         <PostViewCount slug={post.slug} />
                                     </div>
                                 </div>

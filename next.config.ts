@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/s-skills/insights",
-        destination: "/blog?category=s-skills",
+        destination: "/blog",
         permanent: true,
       },
       {
