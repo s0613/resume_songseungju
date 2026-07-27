@@ -1,69 +1,47 @@
-[HINT:single=frontend]
-# PM Brief — AI 에이전트 빌더 퍼스널 브랜딩 전 사이트 페이지 정리
-> 생성일: 2026-07-27
-> 참조: [OBSIDIAN: 10_지식/11_마케팅/랜딩 페이지와 전환.md] [OBSIDIAN: 10_지식/04_디자인/00_취향 프로필.md]
-> Codex CLI 세컨드 오피니언 반영 (threadId: 019fa0b8-1027-7201-88b9-32d80fcdddc0)
+[HINT:single=]
+# PM Brief — 블로그 실시스템화 (조회수·댓글·Supabase) + 인사이트 이관
+> 생성일: 2026-07-27 · run:20260727-081336-49493 (2차 사이클)
+> 사용자 확정: Supabase 신규 프로젝트를 Vercel 조직(totalointernational-2935's projects)에 생성
 
 ## 요구사항 분석
+1. **인사이트 → 블로그 이관**: /s-skills/insights의 아티클(s-skills-in-one)을 블로그 "S-Skills" 카테고리 포스트로 변환. /s-skills/insights 라우트 제거, 구 URL은 next.config redirects로 새 블로그 URL에 301. s-skills nav의 "인사이트" 링크는 /blog(S-Skills 카테고리)로 교체.
+2. **조회수**: 글 상세 진입 시 증가, 목록·상세에 표시.
+3. **댓글**: 익명 — 이름 + 비밀번호 + 본문 (첨부 이미지 레이아웃: 이름·비밀번호 2열 입력 위, 큰 textarea "댓글을 입력해주세요." 아래). 비밀번호로 본인 댓글 삭제 가능.
+4. **Supabase**: 신규 프로젝트(리전 ap-northeast-2). 클라이언트에 키 미노출 — 모든 접근은 Next.js Route Handler(서버)에서 service role 키로. RLS는 anon 전면 차단.
 
-사이트를 "잘 만든 이력서"에서 "AI 에이전트 빌더 퍼스널 브랜드"로 전환한다.
-사용자 확정 결정: (a) 이력서성 콘텐츠(고교·군복무 상세)는 메인에서 축소 — 삭제 아님,
-(b) 대표작(S-Skills·open-trader) 강조 + 나머지는 컴팩트 아카이브, (c) 글을 메인에 노출.
-
-Codex 교차 검토 반영 원칙:
-- 포지셔닝은 **핵심 라벨 "AI 에이전트 빌더"만 통일**, 설명 문장은 페이지 맥락별로 변형.
-- 히어로는 한 문장 욕심 대신 2줄 분리:
-  "AI 에이전트가 함께 일하는 시스템을 설계하고 제품으로 출시합니다." + "S-Skills와 open-trader를 만든 풀스택 개발자 송승주입니다."
-- "풀스택 개발자"·Next.js·TypeScript 등 기존 SEO 키워드는 보조 정체성으로 메타·본문에 유지 (검색 유입 손실 방지).
-- Flagship은 2개(S-Skills, open-trader)에 집중. 카드 내용: 해결한 문제 / 직접 설계한 핵심 구조 / 현재 상태 / GitHub·문서 링크.
-- 증거 지표는 검증 가능한 것만 (오픈소스 공개·실운영·설치 방법 등 상태 정보 위주, 부풀리기 금지).
-- 명화 모티프·기존 에디토리얼 디자인(home.module.css)은 preserve 모드 — 새 디자인 시스템 도입 금지, 기존 토큰·스타일 재사용.
+## 아키텍처 결정
+- 테이블: `blog_views(slug text pk, count bigint)` / `blog_comments(id uuid pk, slug text, name text≤40, password_hash text, body text≤2000, created_at timestamptz)`
+- 비밀번호는 bcrypt 해시(bcryptjs) 저장. API 응답에 password_hash 절대 미포함. 삭제는 비밀번호 검증 후.
+- API: `GET|POST /api/blog/views/[slug]`, `GET|POST /api/blog/comments/[slug]`, `DELETE /api/blog/comments/[slug]/[id]` (body에 password)
+- 시크릿: `.env.local`(gitignore)만. 코드 하드코딩 금지. EC2 배포 시 서버 env 설정 필요(배포 노트).
+- Supabase 미설정/장애 시 graceful degrade — 조회수·댓글 영역 숨기거나 안내, 페이지 자체는 정상 렌더.
+- 스팸 최소 방어: 길이 제한 + honeypot 필드 1개 (과설계 금지 — reCAPTCHA 등 도입 안 함).
 
 ## 태스크 목록
-
-### Phase 1 — 메인 페이지 재구성 (src/app/page.tsx + home.module.css)
-- [ ] 히어로 개편: 2줄 포지셔닝 + CTA 1종(대표작 보기 or GitHub) + 기존 씨름도 배경 유지
-- [ ] Flagship Builds 섹션 신설: S-Skills·open-trader 2개 카드 (문제/구조/상태/링크), 히어로 바로 아래
-- [ ] Writing 섹션 신설: src/data/blog.ts에서 선별 글 3개 (제목·발췌·날짜·링크)
-- [ ] Experience → "Project Archive" 컴팩트 목록으로 재편 (12개 유지, 카드 축소, 에이전트 관련 우선 정렬)
-- [ ] Education·ETC 축소: 학력 한 줄(인하대 컴공 졸업), 고교·군복무 상세 제거, About+Contact로 통합
-- [ ] 메인 nav·푸터에 Blog/S-Skills/open-trader 링크 정합성 정리
-
-### Phase 2 — 메타데이터·SEO 인프라
-- [ ] layout.tsx 루트 메타데이터 개편: title "송승주 — AI 에이전트 빌더 · 풀스택 개발자" 패턴, description에 핵심+보조 정체성
-- [ ] JSON-LD: Person(+sameAs: GitHub·LinkedIn) + WebSite 스키마 삽입
-- [ ] OG 이미지: opengraph-image.tsx(ImageResponse)로 루트 1종 + 블로그·포트폴리오 제목 변형. **한글 폰트 로딩 검증 필수**
-- [ ] 포트폴리오 메타 단일 소스화: src/data/portfolio.ts 신설(12개 slug·title·desc) → 9개 페이지 metadata 추가 + sitemap.ts가 같은 소스 사용
-- [ ] sitemap.ts: 블로그 슬러그를 src/data/blog.ts에서 생성 (하드코딩 제거)
-- [ ] 블로그·s-skills 페이지 메타 문구를 브랜딩 라벨과 정합
-
-### Phase 3 — 레거시·정합성 정리
-- [ ] src/main/* 미사용 컴포넌트 6개 삭제 (HeroSection·Introduce·Skill·ExperienceAndProject·Education·Etc)
-- [ ] Header.tsx: 깨진 앵커(/#skill 등) 수정 또는 포트폴리오 상세용 미니 nav로 교체
-- [ ] Footer.tsx 렌더 조건·디자인 정리 (구버전 회색 톤 → 현행 디자인 정합)
-- [ ] /s-skills 데드 링크(href="#" macOS/Windows) 제거
-- [ ] open-trader 페이지에 투자 면책·페이퍼 트레이딩 명시 문구 1줄 추가
+- [ ] Supabase 프로젝트 생성(CLI) + 마이그레이션(테이블·RLS·인덱스) 적용 — supabase/migrations에 SQL 보존
+- [ ] Route Handlers 3종 + Supabase 서버 클라이언트(lib) + bcryptjs 의존성
+- [ ] 블로그 상세: ViewCounter(진입 시 증가+표시) + Comments(목록/작성/삭제, 이미지 레이아웃) 클라이언트 컴포넌트
+- [ ] 블로그 목록: 조회수 표시(가능 범위), "S-Skills" 카테고리 추가
+- [ ] insights 아티클 → blog.ts 포스트 변환(category "S-Skills"), /s-skills/insights 라우트·데이터 제거, redirects 추가, s-skills nav 교체
+- [ ] sitemap·메타 정합 (인사이트 URL 제거는 데이터 기반이라 자동)
 
 ## 리스크
-- 메인 전면 재작성 시 기존 에디토리얼 디자인 훼손 — home.module.css 기존 클래스·토큰 재사용 원칙, 전역 스타일 신설 금지 (취향 프로필 preserve 모드)
-- "AI 에이전트 빌더" 라벨이 유행어로 보일 위험 — 주장 대신 증거(오픈소스 링크·설치 명령·아키텍처 설명)로 뒷받침
-- ImageResponse 한글 폰트 미로딩 시 OG 깨짐 — 폰트 파일 번들 또는 fetch 방식 검증 후 적용
-- 이력서 용도 병행 — 축소하되 정보 자체는 Archive·About에 보존
-- 이메일(farchicken00@naver.com)은 도메인 이메일 전환 권장이나 인프라 작업이라 코드 범위 밖 — 후속 과제로 기록
+- service role 키 노출 시 DB 전체 접근 — 서버 전용 모듈(lib/supabase-admin)에 격리, "use server"/route handler 밖 import 금지
+- EC2에 env 미설정 상태로 배포되면 API 500 — graceful degrade + 배포 노트 필수
+- 정적 프리렌더 페이지에 동적 데이터 혼입 — 조회수·댓글은 클라이언트 fetch로 분리해 기존 SSG 유지
+- 구 인사이트 URL 색인 유실 — 301 redirect로 보전
 
 ## 완료 조건 (기계 검증 가능)
-- `npm run build` 성공 (exit 0)
-- 메인 렌더 HTML에 "AI 에이전트" 포함, "온양고" 미포함 (grep 검증)
-- 메인에 blog 링크 3개(/blog/ 경로) 렌더
-- /portfolio/* 12개 라우트 전부 고유 title 메타 보유 (빌드 산출 확인)
-- opengraph-image 라우트 응답 200 + 이미지 Content-Type
-- sitemap.xml에 src/data/blog.ts의 모든 slug 포함
-- src/main/ 디렉토리 부재 상태로 빌드 통과
-- Header가 렌더되는 페이지에서 존재하지 않는 앵커(#skill, #experienceAndProject) 참조 0건
+- `npm run build` exit 0
+- 빌드 라우트에 /s-skills/insights 부재 + next.config에 redirect 정의 존재
+- blog.ts에 category "S-Skills" 포스트 ≥1, /blog 프리렌더에 해당 카테고리 노출
+- 로컬 dev 서버 + 실제 Supabase 대상 curl 시나리오 통과: 댓글 생성(201)→조회(목록 포함)→잘못된 비밀번호 삭제(401/403)→올바른 비밀번호 삭제(200)
+- 조회수 API 2회 호출 시 count 증가 확인
+- 댓글 GET 응답에 password_hash 문자열 미포함
+- `git grep`으로 코드 내 Supabase 키 하드코딩 0건, .env.local이 gitignore에 포함
+- 삭제된 /s-skills/insights 참조(링크) 소스 내 0건
 
 ## Dev/QA에 전달할 핵심 지침
-- preserve 모드: 기존 home.module.css·명화 모티프·에디토리얼 톤 유지. 새 컬러 토큰 0개 원칙.
-- 콘텐츠 단일 소스: 포트폴리오 메타·sitemap·메인 Archive 목록이 같은 데이터 파일을 읽게 할 것.
-- 히어로·메타데이터·블로그 소개에 "AI 에이전트 빌더" 라벨 통일, 설명 문장은 페이지별 변형 허용.
-- 기존 SEO 키워드(풀스택 개발자, Next.js, TypeScript) 메타에서 제거 금지.
-- 요청 범위 밖 리팩터 금지 (Surgical Changes).
+- 댓글 폼은 첨부 이미지 레이아웃 재현: 상단 이름·비밀번호 2열, 하단 대형 textarea(placeholder "댓글을 입력해주세요."), 블로그 기존 톤(blog.module.css) 준수
+- 모든 DB 접근은 서버 라우트에서만. 클라이언트 번들에 SUPABASE 문자열이 들어가면 실패
+- 기존 블로그 SSG·디자인 보존 (preserve 모드), 요청 밖 리팩터 금지

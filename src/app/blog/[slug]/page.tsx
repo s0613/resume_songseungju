@@ -4,6 +4,8 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { posts, getPost, blogProfile, type BlogBlock } from "@/data/blog"
+import ViewCounter from "@/components/blog/ViewCounter"
+import Comments from "@/components/blog/Comments"
 import s from "../blog.module.css"
 
 export function generateStaticParams() {
@@ -220,6 +222,7 @@ export default async function BlogPostPage({
                             <span>{post.date}</span>
                             <span className={s.dot} />
                             <span>{post.readTime} 읽기</span>
+                            <ViewCounter slug={post.slug} />
                         </div>
 
                         <div className={s.body}>
@@ -241,6 +244,8 @@ export default async function BlogPostPage({
                             </div>
                         </div>
                     </article>
+
+                    <Comments slug={post.slug} />
 
                     <div className={s.adjacent}>
                         {olderPost ? (

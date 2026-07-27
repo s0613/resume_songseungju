@@ -1,46 +1,38 @@
-# Dev Summary — AI 에이전트 빌더 퍼스널 브랜딩 전 사이트 페이지 정리 (Phase 1~3 + Codex 수정)
-> Tech Lead 통합 · 2026-07-27 · run:20260727-081336-49493
+# Dev Summary — 블로그 실시스템화 (조회수·댓글·Supabase) + 인사이트 이관
+> Tech Lead 통합 · 2026-07-27 · run:20260727-081336-49493 (2차 사이클)
 
 ## 참여 역할
-- frontend (Phase 1 메인 재구성 — opus), frontend-phase2 (SEO/메타 인프라), frontend-phase3 (레거시 정리), frontend-fix (Codex 리뷰 수정), security (review-only)
-
-## 모델 사용 내역
-- frontend(Phase 1): opus (브랜딩 핵심 페이지 전면 재구성으로 승격)
-- frontend-phase2/phase3/fix: sonnet (기본값)
-- security 리뷰: opus (기본값)
+- database/provisioning (Tech Lead 직접 — Supabase 프로젝트 생성·마이그레이션), backend (API), frontend (UI+이관 — opus), security (적대 리뷰), Codex GPT (교차 리뷰)
 
 ## 통합 요약
-사이트를 "이력서"에서 "AI 에이전트 빌더 퍼스널 브랜드"로 전환. 메인은 Hero(2줄 포지셔닝+CTA 1종) → Flagship Builds(S-Skills·open-trader) → Writing(블로그 3편) → Project Archive(12개 컴팩트) → About+Contact 구조로 재편(온양고·해병대 상세 제거). SEO 인프라로 루트 메타·Person/WebSite JSON-LD·OG 이미지 2종(한글 폰트)·portfolio.ts 단일 소스·데이터 기반 sitemap 구축. 레거시(src/main 6파일, 깨진 Header 앵커, 데드 링크) 정리. Codex(GPT) 교차 리뷰에서 검증된 메타데이터 상속 결함 10건 추가 수정.
+Supabase 신규 프로젝트 `songseungju-blog`(Vercel 조직, ap-northeast-2)에 blog_views·blog_comments 스키마 + RLS(anon 전면 차단) 적용. 모든 접근은 service_role 키를 쓰는 Next.js Route Handler 3종 경유(키는 .env.local 전용). 블로그 상세에 조회수(진입당 정확히 1회 증가)·익명 댓글(이름+비밀번호 2열, 대형 textarea — 사용자 첨부 이미지 레이아웃, bcrypt 해시, honeypot, 비밀번호 삭제) 추가. s-skills 인사이트 아티클은 블로그 "S-Skills" 카테고리로 이관(원문 보존), /s-skills/insights 삭제 + 308 영구 리다이렉트.
 
 ## 변경 파일 (역할별)
-### Phase 1 (`.state/dev/frontend.md`)
-- `src/app/page.tsx`, `src/app/home.module.css` — 메인 재구성 (preserve 모드, 신규 색 토큰 0)
-### Phase 2 (`.state/dev/frontend-phase2.md`)
-- `src/app/layout.tsx`(메타+JSON-LD), `src/app/opengraph-image.tsx`(신설), `src/app/blog/[slug]/opengraph-image.tsx`(신설), `src/data/portfolio.ts`(신설, 단일 소스), `src/app/sitemap.ts`(데이터 기반), 포트폴리오 래퍼 12개, `src/app/blog/layout.tsx`
-### Phase 3 (`.state/dev/frontend-phase3.md`)
-- `src/main/*` 6파일 삭제, `Header.tsx`(앵커 수정), `Footer.tsx`, `src/app/s-skills/page.tsx`(데드 링크), `src/portfolio/OpenTraderPage.tsx`(면책 문구)
-### Fix (`.state/dev/frontend-fix.md`)
-- 포트폴리오 OG/canonical 12개, s-skills·open-trader 고유 메타, 블로그 title 중복·og:image·twitter 메타, sitemap lastModified 실데이터화, Footer /blog 중복 제거, `PageMain.tsx`(신설 — 중첩 main 해소), s-skills H1 "S-SKILLS", 루트 description 키워드 보강
+- provisioning: supabase/migrations/20260727000001_blog_views_comments.sql, supabase/.gitignore, .env.local(미추적)
+- backend: src/lib/supabase-admin.ts, src/app/api/_lib/blog-api.ts, src/app/api/blog/**(3 라우트), package.json(+@supabase/supabase-js, bcryptjs, server-only)
+- frontend: src/components/blog/{ViewCounter,Comments,CommentForm,CommentItem,types}, src/app/blog/**(상세 통합·카테고리 필터 Suspense), src/data/blog.ts(S-Skills 카테고리+이관 포스트), src/data/insights.ts 삭제, src/app/s-skills/insights/** 삭제, next.config.ts(redirects), sitemap.ts
+- Tech Lead 직접 수정: 비밀번호 72 UTF-8 바이트 상한(생성·삭제), JSON null 바디 400 처리(생성·삭제), supabase/.gitignore
 
 ## API 계약
-없음 (정적 사이트)
+- GET/POST /api/blog/views/[slug] → { count }
+- GET /api/blog/comments/[slug] → { comments:[{id,name,body,created_at}] } (password_hash 미노출)
+- POST 〃 { name, password, body, website? } → 201 { comment } / honeypot 204
+- DELETE /api/blog/comments/[slug]/[id] { password } → 200 / 403 wrong_password / 404
+- 공통: env 미설정 503 not_configured / invalid_slug 400 / invalid_body 400 / db_error 500
 
 ## 배포·운영 영향
-- 마이그레이션·환경 변수: 없음
-- OG 이미지 라우트가 Google Fonts를 fetch — 배포 환경(EC2)에서 외부 fetch 차단 시 영문 폴백 동작. 배포 후 스모크 테스트 권장
-- 롤백: git revert로 충분 (스키마·데이터 변경 없음)
+- **EC2 서버 env 필수**: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY 미설정 시 댓글·조회수 503(페이지는 정상, 섹션 숨김)
+- 마이그레이션: 적용 완료 (supabase db push) / 롤백: 테이블 drop + git revert
+- nginx 경로별 rate limit 권장 (/api/blog/* — bcrypt CPU 소진·브루트포스 완화, 코드 0줄 대안)
 
 ## 리뷰 결과
-- Tech Lead 기술 리뷰: PASS
-- Security cross-review: PASS (CRITICAL/HIGH 0, LOW 2 — 기존 보안 헤더 부재는 별도 인프라 태스크)
-- Design 시각 리뷰: PASS (HIGH 0)
-- 다관점 적대 검증: N/A (CRITICAL 영역 아님) — 대신 사용자 요청으로 **Codex(GPT) 교차 리뷰 수행: FAIL(14건 지적) → 10건 실재 확인·수정, 3건 기각/보류, 재검증 PASS**
-
-## 재디스패치 이력
-- 1회차: Codex 교차 리뷰 지적 10건 수정 (frontend-fix) → 기계 검증 전 항목 통과
+- Security 적대 리뷰: PASS(조건부) — 실증 기반(번들 grep, server-only 빌드 실패 확인, 라이브 RLS 프로브 401). 필수 H-1(supabase/.temp gitignore) 조치 완료
+- Codex GPT 교차 리뷰: FAIL(10건) → 실조치 2건(72바이트 검사, JSON null 400) 반영, 나머지는 기수용 리스크(레이트리밋·조회수 조작·페이지네이션 YAGNI·308 vs 301)로 기각·기록
+- Design 리뷰: PASS — 이미지 레이아웃 재현, 오류 컬러 1건 구조화 예외
+- 수정 후 tsc·build 통과
 
 ## 미해결 / 후속 작업
-- 도메인 이메일(contact@songseungju.dev) 전환 — 인프라 작업, 전환 시 mailto 4곳 일괄 교체
-- CSP/HSTS 등 보안 헤더 부재(기존) — 별도 인프라 태스크, JSON-LD 인라인 script nonce 고려
-- upflowax 메타 카피는 페이지별 변형 유지로 결정 (portfolio.ts 미전환, og/canonical만 자체 추가)
-- OG 폰트 폴백·미존재 slug OG 200 응답 — LOW, 필요 시 후속
+- nginx rate limit (/api/blog/*) — 배포 인프라 태스크
+- CSP 등 보안 헤더 — UGC 도입으로 우선순위 상승 (기존 이슈)
+- 목록 조회수 표시는 미구현 (slug당 N-fetch 과설계 방지 — 배치 API 필요 시 후속)
+- bcryptjs → 네이티브 bcrypt 교체 검토 (이벤트 루프 블로킹 완화)
