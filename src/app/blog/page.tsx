@@ -20,6 +20,7 @@ export default function BlogHome() {
                         </span>
                     </Link>
                     <nav className={s.topNav}>
+                        <Link href="/knowledge">지식 볼트</Link>
                         <Link href="/s-skills">S-Skills</Link>
                         <a
                             href="https://github.com/s0613"

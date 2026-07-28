@@ -459,7 +459,9 @@
 .body .quote,
 .body .tipBox,
 .body .figure,
-.body .codeFigure {
+.body .codeFigure,
+.body .downloadCard,
+.body .downloadList {
     max-width: var(--measure);
 }
 
@@ -584,6 +586,93 @@
     font-size: var(--seed-font-size-t3);
     color: var(--seed-color-fg-neutral-muted);
     word-break: keep-all;
+}
+
+/* ===== 다운로드 카드 ===== */
+.downloadCard {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0;
+    padding: 16px 18px;
+    border: 1px solid var(--seed-color-stroke-brand-weak);
+    border-radius: var(--seed-radius-r4);
+    background: var(--seed-color-bg-brand-weak);
+    text-decoration: none;
+    transition: border-color var(--seed-duration-d3),
+        background var(--seed-duration-d3);
+}
+
+.downloadCard:hover {
+    border-color: var(--seed-color-stroke-brand-solid);
+    background: var(--seed-color-bg-brand-weak-pressed);
+}
+
+.downloadIcon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--seed-radius-full);
+    background: var(--seed-color-bg-brand-solid);
+    color: var(--seed-color-fg-brand-contrast);
+    font-size: var(--seed-font-size-t6);
+    font-weight: var(--seed-font-weight-bold);
+}
+
+.downloadText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.downloadText strong {
+    font-size: var(--seed-font-size-t5);
+    font-weight: var(--seed-font-weight-bold);
+    color: var(--seed-color-fg-brand);
+    line-height: 1.4;
+}
+
+.downloadText small {
+    font-size: var(--seed-font-size-t3);
+    color: var(--seed-color-fg-neutral-subtle);
+}
+
+/* 폴더별 내려받기 — 카드 대신 촘촘한 줄 목록. */
+.downloadList {
+    list-style: none;
+    margin: 22px 0;
+    padding: 0;
+    border-top: 1px solid var(--seed-color-stroke-neutral-muted);
+}
+
+.downloadRow {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 11px 8px;
+    border-bottom: 1px solid var(--seed-color-stroke-neutral-muted);
+    color: var(--seed-color-fg-neutral);
+    text-decoration: none;
+    font-size: var(--seed-font-size-t4);
+    transition: background var(--seed-duration-d3), color var(--seed-duration-d3);
+}
+
+.downloadRow:hover {
+    background: var(--seed-color-bg-brand-weak);
+    color: var(--seed-color-fg-brand);
+}
+
+.downloadRowLabel {
+    font-weight: var(--seed-font-weight-bold);
+}
+
+.downloadRowNote {
+    margin-left: auto;
+    font-size: var(--seed-font-size-t3);
+    color: var(--seed-color-fg-neutral-muted);
 }
 
 /* ===== 코드 블록 =====

@@ -150,6 +150,34 @@ function renderBlock(block: BlogBlock, i: number) {
                     )}
                 </figure>
             )
+        case "download":
+            return (
+                <a key={i} className={s.downloadCard} href={block.href} download>
+                    <span className={s.downloadIcon} aria-hidden="true">
+                        ↓
+                    </span>
+                    <span className={s.downloadText}>
+                        <strong>{block.label}</strong>
+                        {block.note && <small>{block.note}</small>}
+                    </span>
+                </a>
+            )
+        case "downloadList":
+            return (
+                <ul key={i} className={s.downloadList}>
+                    {block.items.map((item) => (
+                        <li key={item.href}>
+                            <a className={s.downloadRow} href={item.href} download>
+                                <span className={s.downloadRowLabel}>{item.label}</span>
+                                {item.note && (
+                                    <span className={s.downloadRowNote}>{item.note}</span>
+                                )}
+                                <span aria-hidden="true">↓</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            )
         default:
             return null
     }
@@ -179,6 +207,7 @@ export default async function BlogPostPage({
                         </span>
                     </Link>
                     <nav className={s.topNav}>
+                        <Link href="/knowledge">지식 볼트</Link>
                         <Link href="/s-skills">S-Skills</Link>
                         <a
                             href="https://github.com/s0613"
