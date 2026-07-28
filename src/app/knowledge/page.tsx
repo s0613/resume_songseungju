@@ -95,6 +95,11 @@ function readSections(): KnowledgeSection[] {
 export default function KnowledgePage() {
     const sections = readSections()
     const total = sections.reduce((sum, section) => sum + section.count, 0)
+    // 용량은 파일에서 읽는다 — 볼트를 갱신할 때마다 손으로 고치지 않도록.
+    const fullZipSize = `${Math.round(
+        fs.statSync(path.join(process.cwd(), "public", "songseungju-knowledge.zip"))
+            .size / 1024
+    )}KB`
 
     return (
         <div className={s.root}>
@@ -130,7 +135,10 @@ export default function KnowledgePage() {
                         </span>
                         <span>
                             <strong>전체 내려받기</strong>
-                            <small>ZIP 883KB · 옵시디언 볼트로 바로 열립니다</small>
+                            <small>
+                                문서 {total}개 · ZIP {fullZipSize} · 옵시디언 볼트로
+                                바로 열립니다
+                            </small>
                         </span>
                     </a>
                     <Link
