@@ -13,7 +13,8 @@ export type BlogBlock =
 
 export interface BlogPost {
     slug: string
-    category: string
+    /** 소분류만 지정할 수 있다 — 대분류("개발")는 컴파일 단계에서 막힌다. */
+    category: PostCategory
     title: string
     date: string // "2026. 6. 17."
     excerpt: string
@@ -46,16 +47,18 @@ export interface Category {
     count: number
     /** 대분류 slug. 값이 있으면 그 대분류의 하위 분류다. */
     parent?: string
+    /** 글을 직접 달 수 없는 묶음용 분류. 하위 분류의 글만 모아 보여준다. */
+    group?: true
 }
 
 /**
  * 카테고리 트리. `name`이 글의 `category` 값과 매칭된다.
- * 대분류에도 글을 직접 달 수 있고(예: category "개발"),
- * 대분류를 고르면 하위 분류의 글까지 함께 보인다.
+ * `group: true`인 대분류에는 글을 직접 달 수 없고(아래 PostCategory가 막는다),
+ * 대분류를 고르면 하위 분류의 글이 모두 보인다.
  */
-const CATEGORY_TREE: Omit<Category, "count">[] = [
+const CATEGORY_TREE = [
     { name: "전체보기", slug: "all" },
-    { name: "개발", slug: "dev" },
+    { name: "개발", slug: "dev", group: true },
     { name: "프론트", slug: "frontend", parent: "dev" },
     { name: "백엔드", slug: "backend", parent: "dev" },
     { name: "인프라", slug: "infra", parent: "dev" },
@@ -63,7 +66,16 @@ const CATEGORY_TREE: Omit<Category, "count">[] = [
     { name: "보안", slug: "security", parent: "dev" },
     { name: "마케팅", slug: "marketing" },
     { name: "지식 공유", slug: "knowledge" },
-]
+] as const satisfies readonly Omit<Category, "count">[]
+
+/**
+ * 글에 붙일 수 있는 분류 이름.
+ * 묶음용 대분류("개발")와 "전체보기"는 제외되므로, 대분류에 글을 달면 타입 에러가 난다.
+ */
+export type PostCategory = Exclude<
+    (typeof CATEGORY_TREE)[number],
+    { group: true } | { slug: "all" }
+>["name"]
 
 export const posts: BlogPost[] = [
     {
@@ -471,7 +483,7 @@ export const posts: BlogPost[] = [
     },
     {
         slug: "starting-london-system-agent",
-        category: "개발",
+        category: "마케팅",
         title: "새 개인 프로젝트, 런던 시스템을 시작했어요",
         date: "2026. 6. 20.",
         excerpt:
@@ -766,7 +778,7 @@ else:
     },
     {
         slug: "making-my-own-harness",
-        category: "개발",
+        category: "인프라",
         title: "요즘 하네스 만드는 게 재밌더라고요",
         date: "2026. 6. 17.",
         excerpt:
@@ -894,17 +906,19 @@ else:
     },
 ]
 
+const CATEGORY_NODES: readonly Omit<Category, "count">[] = CATEGORY_TREE
+
 /**
  * 카테고리 slug에 해당하는 글.
- * 대분류를 고르면 그 대분류에 직접 달린 글 + 하위 분류의 글을 모두 돌려준다.
+ * 대분류를 고르면 하위 분류의 글을 모두 모아서 돌려준다.
  * 모르는 slug는 전체로 취급한다.
  */
 export function postsInCategory(slug: string): BlogPost[] {
-    const target = CATEGORY_TREE.find((cat) => cat.slug === slug)
+    const target = CATEGORY_NODES.find((cat) => cat.slug === slug)
     if (!target || target.slug === "all") return posts
     const names = new Set([
         target.name,
-        ...CATEGORY_TREE.filter((cat) => cat.parent === slug).map(
+        ...CATEGORY_NODES.filter((cat) => cat.parent === slug).map(
             (cat) => cat.name
         ),
     ])
@@ -912,7 +926,7 @@ export function postsInCategory(slug: string): BlogPost[] {
 }
 
 // 글 수는 손으로 세지 않고 posts에서 뽑는다 — 글을 추가해도 어긋나지 않는다.
-export const categories: Category[] = CATEGORY_TREE.map((cat) => ({
+export const categories: Category[] = CATEGORY_NODES.map((cat) => ({
     ...cat,
     count: postsInCategory(cat.slug).length,
 }))
