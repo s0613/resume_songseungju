@@ -43,13 +43,15 @@ function parsePostDate(date: string): number {
     return new Date(y, (m ?? 1) - 1, d ?? 1).getTime()
 }
 
-/** 카테고리·정렬 조합의 목록 URL. 기본값은 쿼리에서 생략한다. */
+/**
+ * 카테고리·정렬 조합의 목록 URL.
+ * category는 "all"이어도 항상 명시한다 — href가 현재 pathname("/blog")과 같아지면
+ * Next의 Link가 쿼리 차이를 무시하고 이동 자체를 건너뛰어, 필터가 안 풀린다.
+ */
 function blogHref(category: string, sort: BlogSort): string {
-    const params = new URLSearchParams()
-    if (category !== "all") params.set("category", category)
+    const params = new URLSearchParams({ category })
     if (sort !== "views") params.set("sort", sort)
-    const qs = params.toString()
-    return qs ? `/blog?${qs}` : "/blog"
+    return `/blog?${params}`
 }
 
 function sortPosts(

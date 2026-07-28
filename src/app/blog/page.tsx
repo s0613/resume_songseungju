@@ -12,7 +12,9 @@ export default function BlogHome() {
             {/* 상단 바 */}
             <header className={s.topbar}>
                 <div className={s.topbarInner}>
-                    <Link href="/blog" className={s.brand}>
+                    {/* 목록 화면에서 눌렀을 때 필터가 풀리도록 category를 명시한다.
+                        href가 현재 pathname과 같으면 Link가 이동을 건너뛴다. */}
+                    <Link href="/blog?category=all" className={s.brand}>
                         <span>
                             승주의 <span className={s.brandSub}>AI</span> 블로그
                         </span>
