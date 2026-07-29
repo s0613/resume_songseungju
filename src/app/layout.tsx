@@ -11,7 +11,7 @@ import './styles/globals.css';
 
 const SITE_TITLE = "송승주 — AI 에이전트 빌더 · 풀스택 개발자";
 const SITE_DESCRIPTION =
-  "AI 에이전트가 함께 일하는 시스템을 설계하는 AI 에이전트 빌더 송승주입니다. Claude Code 멀티 에이전트 하네스 S-Skills와 LLM 트레이딩 하네스 open-trader를 오픈소스로 만들고, Next.js·React·TypeScript·Spring Boot 기반 풀스택 개발로 포트폴리오와 블로그를 포함해 기획부터 배포까지 수행합니다.";
+  "AI 에이전트가 함께 일하는 시스템을 설계하는 AI 에이전트 빌더 송승주입니다. Claude Code 멀티 에이전트 하네스 S-Skills를 오픈소스로 만들고, Next.js·React·TypeScript·Spring Boot 기반 풀스택 개발로 포트폴리오와 블로그를 포함해 기획부터 배포까지 수행합니다.";
 
 export const metadata: Metadata = {
   title: {

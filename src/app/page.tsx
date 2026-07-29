@@ -19,18 +19,6 @@ const BUILDS = [
             { label: "GitHub", href: "https://github.com/s0613/S-skills" },
         ],
     },
-    {
-        name: "open-trader",
-        tagline: "LLM-in-the-loop 트레이딩 하네스",
-        problem: "증권사 OpenAPI는 회사마다 규격이 달라, 연동할 때마다 같은 어댑터 작업을 반복하게 됩니다.",
-        structure: "Claude가 브로커 어댑터 코드를 생성하고, 생성한 코드를 하네스가 다시 검증하는 루프로 연동 과정을 자동화합니다.",
-        status: "오픈소스 · 페이퍼 트레이딩 단계",
-        install: null,
-        links: [
-            { label: "제품 페이지", href: "/open-trader" },
-            { label: "GitHub", href: "https://github.com/Totaro-int/claude-trade-harness" },
-        ],
-    },
 ]
 
 const FEATURED_POST_SLUGS = [
@@ -118,7 +106,7 @@ export default function ResumePage() {
                         AI 에이전트가 함께 일하는 시스템을 설계하고 제품으로 출시합니다.
                     </p>
                     <p className={s.heroTitle}>
-                        S-Skills와 open-trader를 만든 풀스택 개발자 송승주입니다.
+                        S-Skills를 만든 풀스택 개발자 송승주입니다.
                     </p>
                     <div className={s.heroContacts}>
                         <a href="mailto:farchicken00@naver.com" className={s.heroContact}>
@@ -139,12 +127,12 @@ export default function ResumePage() {
                     </div>
                 </section>
 
-                {/* Flagship Builds */}
+                {/* Flagship Build */}
                 <section id="builds" className={s.section} aria-labelledby="builds-heading">
                     <div className={s.sectionGrid}>
                         <div className={s.sectionLabel}>
                             <div className={s.sectionNum}>01</div>
-                            <h2 id="builds-heading" className={s.sectionTitle}>FLAGSHIP<br />BUILDS</h2>
+                            <h2 id="builds-heading" className={s.sectionTitle}>FLAGSHIP<br />BUILD</h2>
                             <div className={s.sectionLine} />
                         </div>
                         <div className={s.buildList}>
@@ -261,8 +249,7 @@ export default function ResumePage() {
                             <div className={s.introDivider} />
                             <p className={s.introPara}>
                                 작업을 사람이 전부 처리하는 대신, 역할을 나눈 AI 에이전트가 이어받아 처리하도록
-                                설계합니다. 그렇게 만든 <span className={s.introStrong}>S-Skills</span>와
-                                <span className={s.introStrong}> open-trader</span>는 둘 다 오픈소스로 공개해
+                                설계합니다. 그렇게 만든 <span className={s.introStrong}>S-Skills</span>를 오픈소스로 공개해
                                 직접 쓰면서 다듬고 있습니다.
                             </p>
                             <p className={s.introPara}>

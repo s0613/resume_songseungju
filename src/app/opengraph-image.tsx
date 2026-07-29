@@ -34,9 +34,9 @@ async function loadGoogleFont(text: string): Promise<ArrayBuffer | null> {
 
 export default async function Image() {
   const titleKo = "송승주 — AI 에이전트 빌더";
-  const subtitleKo = "S-Skills · open-trader · 풀스택 개발자";
+  const subtitleKo = "S-Skills · 풀스택 개발자";
   const titleEn = "SONG SEUNGJU — AI Agent Builder";
-  const subtitleEn = "S-Skills · open-trader · Fullstack Developer";
+  const subtitleEn = "S-Skills · Fullstack Developer";
 
   const fontData = await loadGoogleFont(titleKo + subtitleKo);
   const title = fontData ? titleKo : titleEn;
