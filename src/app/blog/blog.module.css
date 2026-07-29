@@ -168,15 +168,6 @@
     transition: background var(--seed-duration-d3), color var(--seed-duration-d3);
 }
 
-/* 하위 분류 — 한 단 들여쓰고, 항목마다 그은 왼쪽 선이 이어져 묶음 선이 된다. */
-.catChild {
-    margin-left: 12px;
-    padding-left: 14px;
-    border-left: 1px solid var(--seed-color-stroke-neutral-muted);
-    border-radius: 0 var(--seed-radius-r2) var(--seed-radius-r2) 0;
-    font-size: var(--seed-font-size-t2);
-}
-
 .catItem:hover {
     background: var(--seed-color-bg-neutral-weak);
     color: var(--seed-color-fg-neutral);
@@ -869,6 +860,12 @@
 
 .commentDeleteField {
     width: 160px;
+}
+
+.commentLoadMore {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
 }
 
 /* ===== 댓글 작성 폼 ===== */

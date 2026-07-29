@@ -2,11 +2,15 @@
 // 사용법: 서버 실행 후 `npm run agent:check` (기본 http://localhost:3907, BASE_URL로 교체 가능)
 // 케이스 형판 출처: 옵시디언 「CS 상담 에이전트 구축 토대」 §11 (삼청당 실측 역산)
 const BASE = process.env.BASE_URL ?? "http://localhost:3907"
+const ORIGIN = new URL(BASE).origin
 
 async function ask(content) {
     const res = await fetch(`${BASE}/api/agent/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            Origin: ORIGIN,
+        },
         body: JSON.stringify({ messages: [{ role: "user", content }] }),
     })
     if (!res.ok) return { status: res.status, text: "" }

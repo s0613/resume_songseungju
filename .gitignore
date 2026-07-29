@@ -41,3 +41,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .gstack/
+
+# local brainstorming server runtime state
+/.superpowers/**/state/*.log
+/.superpowers/**/state/*.pid

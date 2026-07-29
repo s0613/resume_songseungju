@@ -11,6 +11,11 @@ import type {
     InquiryDraft,
     InquiryMessage,
 } from "@/lib/inquiry/schema"
+import RateLimitNotice from "./RateLimitNotice"
+import {
+    formatRetryAfter,
+    type RetryAfterController,
+} from "./useRetryAfter"
 import s from "./agent.module.css"
 
 interface InquiryChatProps {
@@ -18,10 +23,13 @@ interface InquiryChatProps {
     initialText?: string
     onClose: () => void
     onBack: () => void
+    collectRetry: RetryAfterController
+    sendRetry: RetryAfterController
 }
 
 interface ConversationMessage extends InquiryMessage {
     isError?: boolean
+    excludeFromApi?: boolean
 }
 
 interface CollectResponse {
@@ -35,6 +43,9 @@ interface CollectResponse {
 const RECIPIENT = "totaro@totaro.co.kr"
 const INPUT_LIMIT = 2000
 const MESSAGE_LIMIT = 24
+const DELIVERY_UNCERTAINTY_SECONDS = 24 * 60 * 60
+const UNKNOWN_DELIVERY_TEXT =
+    "전송 결과를 확정하지 못했어요. 중복 발송을 막기 위해 이 문의는 24시간 동안 다시 보내지 않습니다."
 
 const CATEGORY_LABELS: Record<InquiryCategory, string> = {
     project: "프로젝트 의뢰",
@@ -120,9 +131,33 @@ function conversationForApi(
     messages: ConversationMessage[]
 ): InquiryMessage[] {
     return messages
-        .filter((message) => !message.isError)
+        .filter(
+            (message) =>
+                !message.isError && !message.excludeFromApi
+        )
         .slice(-MESSAGE_LIMIT)
         .map(({ role, content }) => ({ role, content }))
+}
+
+/** 실패한 최신 사용자 턴은 transcript에 남기고 Gemini 기록에서만 제외한다. */
+function appendCollectFailure(
+    messages: ConversationMessage[],
+    errorText: string
+): ConversationMessage[] {
+    const next = [...messages]
+    for (let index = next.length - 1; index >= 0; index -= 1) {
+        const message = next[index]
+        if (message.role === "user" && !message.excludeFromApi) {
+            next[index] = { ...message, excludeFromApi: true }
+            break
+        }
+    }
+    const errorMessage: ConversationMessage = {
+        role: "assistant",
+        content: errorText,
+        isError: true,
+    }
+    return [...next, errorMessage].slice(-MESSAGE_LIMIT)
 }
 
 function displayValue(value: string | null): string {
@@ -148,7 +183,7 @@ function createRequestId(): string {
 
 function collectErrorText(status: number): string {
     if (status === 429) {
-        return "문의 정리 요청이 너무 잦아요. 잠시 후 다시 시도해 주세요."
+        return "문의 정리 요청 제한에 도달했어요. 입력 내용은 그대로 두었습니다."
     }
     if (status === 503) {
         return "지금은 문의 내용을 정리하지 못했어요. 입력 내용은 남아 있으니 잠시 후 다시 시도해 주세요."
@@ -158,10 +193,16 @@ function collectErrorText(status: number): string {
 
 function sendErrorText(status: number, code?: string): string {
     if (status === 429) {
-        return "문의 전송 횟수 제한에 도달했어요. 잠시 후 다시 시도해 주세요."
+        return "문의 전송 횟수 제한에 도달했어요. 최종 확인 내용은 그대로 두었습니다."
     }
     if (status === 409 && code === "request_in_progress") {
-        return "같은 문의를 전송하고 있어요. 잠시 후 다시 확인해 주세요."
+        return "같은 문의의 전송 결과를 확인 중이에요. 중복 발송을 막기 위해 다시 보내지 마세요."
+    }
+    if (
+        code === "delivery_state_unknown" ||
+        code === "delivery_state_unavailable"
+    ) {
+        return UNKNOWN_DELIVERY_TEXT
     }
     if (status === 503 || status === 502) {
         return "메일을 보내지 못했어요. 내용은 그대로 보관되어 있으니 잠시 후 다시 시도해 주세요."
@@ -169,11 +210,36 @@ function sendErrorText(status: number, code?: string): string {
     return "메일을 보내지 못했어요. 내용을 확인한 뒤 다시 시도해 주세요."
 }
 
+/** 성공 본문 유실·게이트웨이 오류 등 SMTP 수락 여부가 불명확한 경우 재전송을 잠근다. */
+function isDeliveryOutcomeUncertain(
+    status: number,
+    code: string | undefined,
+    responseOk: boolean
+): boolean {
+    if (responseOk) return true
+    if (
+        code === "delivery_state_unknown" ||
+        code === "delivery_state_unavailable" ||
+        code === "request_in_progress" ||
+        code === "review_token_already_used"
+    ) {
+        return true
+    }
+    if (status < 500) return false
+    return ![
+        "delivery_failed",
+        "delivery_unavailable",
+        "security_service_unavailable",
+    ].includes(code ?? "")
+}
+
 export default function InquiryChat({
     open,
     initialText = "",
     onClose,
     onBack,
+    collectRetry,
+    sendRetry,
 }: InquiryChatProps) {
     const [draft, setDraft] = useState<InquiryDraft>(EMPTY_DRAFT)
     const [messages, setMessages] = useState<ConversationMessage[]>([
@@ -190,9 +256,13 @@ export default function InquiryChat({
     const [consent, setConsent] = useState(false)
     const [website, setWebsite] = useState("")
     const [sendState, setSendState] = useState<
-        "idle" | "sending" | "sent" | "error"
+        "idle" | "sending" | "sent" | "error" | "unknown"
     >("idle")
     const [sendError, setSendError] = useState("")
+    const [sendErrorIsRateLimit, setSendErrorIsRateLimit] =
+        useState(false)
+    const collectInFlightRef = useRef(false)
+    const sendInFlightRef = useRef(false)
     // 뒤로가기로 작성 내용을 버리기 전 확인. 브라우저 confirm 대신 패널 안에서 처리한다.
     const [backConfirmOpen, setBackConfirmOpen] = useState(false)
     const requestIdRef = useRef<string | null>(null)
@@ -256,14 +326,26 @@ export default function InquiryChat({
         setWebsite("")
         setSendState("idle")
         setSendError("")
+        setSendErrorIsRateLimit(false)
         requestIdRef.current = null
     }
 
     async function collect(answer?: string) {
         const text = (answer ?? input).trim()
-        if (!text || !aiConsent || collecting || sendState === "sending") {
+        if (
+            !text ||
+            !aiConsent ||
+            collecting ||
+            collectInFlightRef.current ||
+            collectRetry.isActiveNow() ||
+            sendInFlightRef.current ||
+            sendState === "sending" ||
+            sendState === "sent" ||
+            (sendState === "unknown" && sendRetry.isActiveNow())
+        ) {
             return
         }
+        collectInFlightRef.current = true
 
         const userMessage: ConversationMessage = {
             role: "user",
@@ -281,6 +363,7 @@ export default function InquiryChat({
         setConsent(false)
         setSendState("idle")
         setSendError("")
+        setSendErrorIsRateLimit(false)
         requestIdRef.current = null
 
         try {
@@ -293,6 +376,9 @@ export default function InquiryChat({
             })
             const raw: unknown = await response.json().catch(() => null)
             if (!response.ok) {
+                if (response.status === 429) {
+                    collectRetry.start(response, 10, 10 * 60)
+                }
                 throw Object.assign(new Error("collect_failed"), {
                     status: response.status,
                 })
@@ -327,16 +413,14 @@ export default function InquiryChat({
                 typeof error.status === "number"
                     ? error.status
                     : 0
-            setMessages((current) => [
-                ...current.slice(0, MESSAGE_LIMIT - 1),
-                {
-                    role: "assistant",
-                    content: collectErrorText(status),
-                    isError: true,
-                },
-            ])
-            setInput(text)
+            setMessages((current) =>
+                appendCollectFailure(current, collectErrorText(status))
+            )
+            setInput((current) =>
+                current.trim().length > 0 ? current : text
+            )
         } finally {
+            collectInFlightRef.current = false
             setCollecting(false)
         }
     }
@@ -347,14 +431,20 @@ export default function InquiryChat({
             !reviewToken ||
             reviewMessages.length === 0 ||
             !consent ||
+            collecting ||
+            collectInFlightRef.current ||
             sendState === "sending" ||
-            sendState === "sent"
+            sendInFlightRef.current ||
+            sendState === "sent" ||
+            sendRetry.isActiveNow()
         ) {
             return
         }
 
+        sendInFlightRef.current = true
         setSendState("sending")
         setSendError("")
+        setSendErrorIsRateLimit(false)
 
         try {
             const requestId = requestIdRef.current ?? createRequestId()
@@ -389,6 +479,34 @@ export default function InquiryChat({
                 raw.ok === true
 
             if (!ok) {
+                if (response.status === 429) {
+                    sendRetry.start(response, 10, 60 * 60)
+                    setSendState("error")
+                    setSendError(sendErrorText(response.status, code))
+                    setSendErrorIsRateLimit(true)
+                    return
+                }
+                if (
+                    isDeliveryOutcomeUncertain(
+                        response.status,
+                        code,
+                        response.ok
+                    )
+                ) {
+                    // 서버 idempotency 잠금과 동일한 24시간을 보장한다.
+                    sendRetry.startForSeconds(
+                        DELIVERY_UNCERTAINTY_SECONDS,
+                        DELIVERY_UNCERTAINTY_SECONDS
+                    )
+                    setSendState("unknown")
+                    setSendError(
+                        code === "request_in_progress"
+                            ? sendErrorText(response.status, code)
+                            : UNKNOWN_DELIVERY_TEXT
+                    )
+                    setSendErrorIsRateLimit(false)
+                    return
+                }
                 if (code === "idempotency_conflict") {
                     requestIdRef.current = null
                 }
@@ -398,6 +516,7 @@ export default function InquiryChat({
                     setReadyForReview(false)
                     setConsent(false)
                     setSendState("idle")
+                    setSendErrorIsRateLimit(false)
                     setInput("내용은 그대로예요. 다시 최종 확인해 주세요.")
                     setMessages((current) => [
                         ...current.slice(0, MESSAGE_LIMIT - 1),
@@ -412,11 +531,13 @@ export default function InquiryChat({
                 }
                 setSendState("error")
                 setSendError(sendErrorText(response.status, code))
+                setSendErrorIsRateLimit(false)
                 return
             }
 
             setSendState("sent")
             setSendError("")
+            setSendErrorIsRateLimit(false)
             setMessages((current) => [
                 ...current,
                 {
@@ -426,10 +547,15 @@ export default function InquiryChat({
                 },
             ])
         } catch {
-            setSendState("error")
-            setSendError(
-                "네트워크 문제로 전송 결과를 확인하지 못했어요. 같은 문의가 중복되지 않도록 잠시 후 다시 시도해 주세요."
+            sendRetry.startForSeconds(
+                DELIVERY_UNCERTAINTY_SECONDS,
+                DELIVERY_UNCERTAINTY_SECONDS
             )
+            setSendState("unknown")
+            setSendError(UNKNOWN_DELIVERY_TEXT)
+            setSendErrorIsRateLimit(false)
+        } finally {
+            sendInFlightRef.current = false
         }
     }
 
@@ -439,7 +565,14 @@ export default function InquiryChat({
     }
 
     function handleBack() {
-        if (collecting || sendState === "sending") return
+        if (
+            collecting ||
+            collectInFlightRef.current ||
+            sendState === "sending" ||
+            sendInFlightRef.current
+        ) {
+            return
+        }
         const hasProgress =
             sendState !== "sent" &&
             (input.trim().length > 0 ||
@@ -450,6 +583,15 @@ export default function InquiryChat({
         }
         onBack()
     }
+
+    const deliveryLocked =
+        sendState === "unknown" && sendRetry.active
+    const visibleSendError =
+        sendErrorIsRateLimit && !sendRetry.active
+            ? ""
+            : sendState === "unknown" && !deliveryLocked
+              ? "중복 방지 대기 시간이 끝났어요. 실제 수신 여부를 확인한 뒤 필요하면 다시 보내 주세요."
+              : sendError
 
     return (
         <div
@@ -524,7 +666,11 @@ export default function InquiryChat({
                                     key={reply}
                                     type="button"
                                     className={s.sug}
-                                    disabled={!aiConsent}
+                                    disabled={
+                                        !aiConsent ||
+                                        collectRetry.active ||
+                                        deliveryLocked
+                                    }
                                     onClick={() => void collect(reply)}
                                 >
                                     {reply}
@@ -616,7 +762,10 @@ export default function InquiryChat({
                             <input
                                 type="checkbox"
                                 checked={consent}
-                                disabled={sendState === "sending"}
+                                disabled={
+                                    sendState === "sending" ||
+                                    deliveryLocked
+                                }
                                 onChange={(event) =>
                                     setConsent(event.target.checked)
                                 }
@@ -628,10 +777,19 @@ export default function InquiryChat({
                             </span>
                         </label>
 
-                        {sendError && (
+                        {visibleSendError && (
                             <p className={s.inquirySendError} role="alert">
-                                {sendError}
+                                {visibleSendError}
                             </p>
+                        )}
+                        {sendRetry.active && (
+                            <RateLimitNotice
+                                id="inquiry-send-rate-limit"
+                                remainingSeconds={
+                                    sendRetry.remainingSeconds
+                                }
+                                action="문의 메일을 다시 전송할 수 있어요."
+                            />
                         )}
                         {input.trim().length > 0 && (
                             <p className={s.inquiryReviewHint}>
@@ -645,13 +803,24 @@ export default function InquiryChat({
                             disabled={
                                 !consent ||
                                 input.trim().length > 0 ||
-                                sendState === "sending"
+                                sendState === "sending" ||
+                                deliveryLocked ||
+                                sendRetry.active
+                            }
+                            aria-describedby={
+                                sendRetry.active
+                                    ? "inquiry-send-rate-limit"
+                                    : undefined
                             }
                             onClick={() => void submitInquiry()}
                         >
                             {sendState === "sending"
                                 ? "메일을 보내는 중…"
-                                : "동의하고 메일 보내기"}
+                                : deliveryLocked
+                                  ? "전송 결과 확인 대기"
+                                  : sendRetry.active
+                                    ? "전송 대기 중"
+                                    : "동의하고 메일 보내기"}
                         </button>
                     </section>
                 )}
@@ -681,8 +850,17 @@ export default function InquiryChat({
                 )}
             </div>
 
-            {sendState !== "sent" && (
+            {sendState !== "sent" && !deliveryLocked && (
                 <form className={s.inquiryInputArea} onSubmit={handleSubmit}>
+                    {collectRetry.active && (
+                        <RateLimitNotice
+                            id="inquiry-collect-rate-limit"
+                            remainingSeconds={
+                                collectRetry.remainingSeconds
+                            }
+                            action="문의 내용을 다시 정리할 수 있어요."
+                        />
+                    )}
                     <label className={s.inquiryHoneypot} aria-hidden="true">
                         웹사이트
                         <input
@@ -733,6 +911,11 @@ export default function InquiryChat({
                                 ? "수정할 문의 내용"
                                 : "문의 내용 입력"
                         }
+                        aria-describedby={
+                            collectRetry.active
+                                ? "inquiry-collect-rate-limit"
+                                : undefined
+                        }
                     />
                     <div className={s.inquiryInputMeta}>
                         <span>민감한 개인정보는 적지 마세요</span>
@@ -742,11 +925,18 @@ export default function InquiryChat({
                             disabled={
                                 collecting ||
                                 !aiConsent ||
+                                collectRetry.active ||
                                 sendState === "sending" ||
                                 input.trim().length === 0
                             }
                         >
-                            {readyForReview ? "수정 반영" : "전송"}
+                            {collectRetry.active
+                                ? `${formatRetryAfter(
+                                      collectRetry.remainingSeconds
+                                  )} 후 가능`
+                                : readyForReview
+                                  ? "수정 반영"
+                                  : "전송"}
                         </button>
                     </div>
                 </form>

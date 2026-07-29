@@ -2,10 +2,14 @@ import { google } from "@ai-sdk/google";
 import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 import {
+  consumeRateLimit,
+  RateLimitUnavailableError,
+} from "@/lib/api-rate-limit";
+import { safeErrorMetadata } from "@/lib/api-security";
+import {
   assertConversationLength,
   assertJsonContentType,
   assertTrustedOrigin,
-  getClientIp,
   InquiryHttpError,
   readJsonBody,
 } from "@/lib/inquiry/http";
@@ -36,9 +40,8 @@ export const maxDuration = 30;
 
 const MODEL = process.env.AGENT_MODEL?.trim() || "gemini-3.6-flash";
 const MAX_BODY_BYTES = 48 * 1024;
-const COLLECT_RATE_WINDOW_MS = 10 * 60 * 1_000;
+const COLLECT_RATE_WINDOW_SECONDS = 10 * 60;
 const COLLECT_RATE_LIMIT = 20;
-const collectHits = new Map<string, number[]>();
 
 const CATEGORY_EVIDENCE: Record<InquiryCategory, RegExp> = {
   project: /(프로젝트|개발\s*의뢰|제작|구축|외주|project)/iu,
@@ -85,20 +88,6 @@ const CLEAR_TERMS = [
   "비워",
   "취소",
 ] as const;
-
-function isCollectRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const recent = (collectHits.get(ip) ?? []).filter(
-    (timestamp) => now - timestamp < COLLECT_RATE_WINDOW_MS,
-  );
-  if (recent.length >= COLLECT_RATE_LIMIT) {
-    collectHits.set(ip, recent);
-    return true;
-  }
-  collectHits.set(ip, [...recent, now]);
-  if (collectHits.size > 5_000) collectHits.clear();
-  return false;
-}
 
 function canonicalEvidence(value: string): string {
   return value.normalize("NFKC").replace(/\s+/gu, " ").trim().toLocaleLowerCase();
@@ -279,20 +268,6 @@ export async function POST(request: Request) {
     assertTrustedOrigin(request);
     assertJsonContentType(request);
 
-    const ip = getClientIp(request);
-    if (isCollectRateLimited(ip)) {
-      return NextResponse.json(
-        { error: "rate_limited" },
-        {
-          status: 429,
-          headers: {
-            "Cache-Control": "no-store",
-            "Retry-After": String(COLLECT_RATE_WINDOW_MS / 1_000),
-          },
-        },
-      );
-    }
-
     const payload = await readJsonBody(request, MAX_BODY_BYTES);
     const parsed = collectInquiryRequestSchema.safeParse(payload);
     if (!parsed.success) {
@@ -308,6 +283,25 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "last_message_must_be_user" },
         { status: 400, headers: { "Cache-Control": "no-store" } },
+      );
+    }
+
+    const rate = await consumeRateLimit({
+      request,
+      scope: "inquiry_collect",
+      limit: COLLECT_RATE_LIMIT,
+      windowSeconds: COLLECT_RATE_WINDOW_SECONDS,
+    });
+    if (!rate.allowed) {
+      return NextResponse.json(
+        { error: "rate_limited" },
+        {
+          status: 429,
+          headers: {
+            "Cache-Control": "no-store",
+            "Retry-After": String(rate.retryAfterSeconds),
+          },
+        },
       );
     }
 
@@ -330,9 +324,8 @@ export async function POST(request: Request) {
       extractedDraft = result.output.draft;
       clearedFields = result.output.clearedFields;
     } catch (error) {
-      const errorName = error instanceof Error ? error.name : "UnknownError";
       console.error("[agent:inquiry:collect] extraction failed", {
-        errorName,
+        ...safeErrorMetadata(error),
       });
       return NextResponse.json(
         { error: "agent_unavailable" },
@@ -380,8 +373,14 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     if (error instanceof InquiryHttpError) return httpErrorResponse(error);
+    if (error instanceof RateLimitUnavailableError) {
+      return NextResponse.json(
+        { error: "security_service_unavailable" },
+        { status: 503, headers: { "Cache-Control": "no-store" } },
+      );
+    }
     console.error("[agent:inquiry:collect] unexpected failure", {
-      errorName: error instanceof Error ? error.name : "UnknownError",
+      ...safeErrorMetadata(error),
     });
     return NextResponse.json(
       { error: "internal_error" },

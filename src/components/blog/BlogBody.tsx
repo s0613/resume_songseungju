@@ -6,11 +6,11 @@ import { useEffect, useState } from "react"
 import { Badge } from "@seed-design/react"
 import { Chip } from "seed-design/ui/chip"
 import {
-    posts,
     categories,
     postsInCategory,
     blogProfile,
     getPostThumbnail,
+    normalizeCategorySlug,
     type BlogPost,
 } from "@/data/blog"
 import { getViewCounts } from "@/components/blog/postCounts"
@@ -77,7 +77,8 @@ export default function BlogBody({
     activeCategory,
     activeSort = "views",
 }: BlogBodyProps) {
-    const active = categories.find((cat) => cat.slug === activeCategory)
+    const normalizedCategory = normalizeCategorySlug(activeCategory)
+    const active = categories.find((cat) => cat.slug === normalizedCategory)
     const activeCatSlug = active?.slug ?? "all"
 
     const [counts, setCounts] = useState<Record<string, number> | null>(null)
@@ -136,8 +137,8 @@ export default function BlogBody({
                                     <Link
                                         href={blogHref(cat.slug, activeSort)}
                                         className={`${s.catItem} ${
-                                            cat.parent ? s.catChild : ""
-                                        } ${isActive ? s.catActive : ""}`}
+                                            isActive ? s.catActive : ""
+                                        }`}
                                         aria-current={isActive ? "page" : undefined}
                                     >
                                         <span>{cat.name}</span>

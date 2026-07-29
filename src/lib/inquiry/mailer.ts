@@ -17,11 +17,46 @@ export class InquirySmtpConfigurationError extends Error {
   }
 }
 
-class InquiryRecipientRejectedError extends Error {
+export class InquiryRecipientRejectedError extends Error {
   constructor() {
     super("smtp_recipient_rejected");
     this.name = "InquiryRecipientRejectedError";
   }
+}
+
+/**
+ * 서버가 메일을 수락하지 않았음이 확정된 오류만 true다. 연결 종료·timeout
+ * 오류는 DATA 수락 뒤 최종 응답이 유실된 경우와 구분할 수 없으므로 false다.
+ */
+export function isDefinitiveInquiryDeliveryFailure(
+  error: unknown,
+): boolean {
+  if (
+    error instanceof InquirySmtpConfigurationError ||
+    error instanceof InquiryRecipientRejectedError
+  ) {
+    return true;
+  }
+  if (!error || typeof error !== "object") return false;
+
+  const smtpError = error as {
+    code?: unknown;
+    responseCode?: unknown;
+  };
+  if (
+    typeof smtpError.responseCode === "number" &&
+    Number.isInteger(smtpError.responseCode) &&
+    smtpError.responseCode >= 400 &&
+    smtpError.responseCode <= 599
+  ) {
+    return true;
+  }
+  return (
+    typeof smtpError.code === "string" &&
+    new Set(["EAUTH", "EDNS", "ETLS", "EENVELOPE", "EMESSAGE"]).has(
+      smtpError.code,
+    )
+  );
 }
 
 function singleLine(value: string, max: number): string {

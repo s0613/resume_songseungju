@@ -59,8 +59,8 @@ export default function CommentForm({ onSubmit, error, submitting }: CommentForm
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="비밀번호 (4자 이상)"
-                        minLength={4}
+                        placeholder="비밀번호 (8자 이상)"
+                        minLength={8}
                         autoComplete="new-password"
                         required
                     />

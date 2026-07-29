@@ -1,5 +1,5 @@
 # Team Channel — 챗봇 UI/UX 리뷰 이슈 수정 (마크다운·접근성·대비·에셋)
-> 프로젝트: resume_songseungju  |  경로: /Users/songseungju/me/resume_songseungju
+> 프로젝트: resume_songseungju  |  경로: <REPO_ROOT>
 > 시작: 2026-07-27
 
 ---

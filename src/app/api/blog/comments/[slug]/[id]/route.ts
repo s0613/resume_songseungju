@@ -1,13 +1,24 @@
-import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import {
+  consumeRateLimit,
+  RateLimitUnavailableError,
+} from "@/lib/api-rate-limit";
+import {
+  ApiHttpError,
+  noStoreJson,
+  readTrustedJsonBody,
+} from "@/lib/api-security";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 import {
   dbErrorResponse,
+  httpErrorResponse,
   invalidBodyResponse,
   invalidSlugResponse,
   isValidSlug,
   isValidUuid,
   notConfiguredResponse,
+  rateLimitedResponse,
+  securityUnavailableResponse,
 } from "@/app/api/_lib/blog-api";
 
 export const runtime = "nodejs";
@@ -19,29 +30,44 @@ interface DeleteCommentBody {
   password?: unknown;
 }
 
+const MAX_BODY_BYTES = 2 * 1024;
+const DELETE_RATE_LIMIT = 10;
+const DELETE_RATE_WINDOW_SECONDS = 15 * 60;
+
 export async function DELETE(request: Request, { params }: RouteContext) {
-  const { slug, id } = await params;
-  if (!isValidSlug(slug)) return invalidSlugResponse();
-  if (!isValidUuid(id)) return NextResponse.json({ error: "invalid_id" }, { status: 400 });
-
-  const supabase = getSupabaseAdmin();
-  if (!supabase) return notConfiguredResponse();
-
-  let payload: DeleteCommentBody;
   try {
-    payload = await request.json();
-  } catch {
-    return invalidBodyResponse("invalid_json");
-  }
-  if (payload === null || typeof payload !== "object") {
-    return invalidBodyResponse("invalid_json");
-  }
+    const payload = await readTrustedJsonBody(request, MAX_BODY_BYTES);
+    const { slug, id } = await params;
+    if (!isValidSlug(slug)) return invalidSlugResponse();
+    if (!isValidUuid(id)) {
+      return noStoreJson({ error: "invalid_id" }, { status: 400 });
+    }
+    if (payload === null || typeof payload !== "object") {
+      return invalidBodyResponse("invalid_json");
+    }
 
-  const password = typeof payload.password === "string" ? payload.password : "";
-  // 상한 72바이트(UTF-8): 생성 시와 동일 — bcrypt 72바이트 절삭으로 인한 우회 방지.
-  if (password.length < 1 || Buffer.byteLength(password, "utf8") > 72) return invalidBodyResponse("password");
+    const password =
+      typeof (payload as DeleteCommentBody).password === "string"
+        ? (payload as { password: string }).password
+        : "";
+    // 기존 4자리 댓글도 삭제할 수 있게 최소 길이는 유지하되 72-byte 절삭은 막는다.
+    if (
+      password.length < 1 ||
+      Buffer.byteLength(password, "utf8") > 72
+    ) {
+      return invalidBodyResponse("password");
+    }
 
-  try {
+    const rate = await consumeRateLimit({
+      request,
+      scope: "blog_comment_delete",
+      limit: DELETE_RATE_LIMIT,
+      windowSeconds: DELETE_RATE_WINDOW_SECONDS,
+    });
+    if (!rate.allowed) return rateLimitedResponse(rate);
+
+    const supabase = getSupabaseAdmin();
+    if (!supabase) return notConfiguredResponse();
     const { data: existing, error: fetchError } = await supabase
       .from("blog_comments")
       .select("id, password_hash")
@@ -50,11 +76,16 @@ export async function DELETE(request: Request, { params }: RouteContext) {
       .maybeSingle();
 
     if (fetchError) return dbErrorResponse("comments DELETE fetch", fetchError);
-    if (!existing) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    if (!existing) {
+      return noStoreJson({ error: "not_found" }, { status: 404 });
+    }
 
-    const passwordMatches = await bcrypt.compare(password, existing.password_hash);
+    const passwordMatches = await bcrypt.compare(
+      password,
+      existing.password_hash,
+    );
     if (!passwordMatches) {
-      return NextResponse.json({ error: "wrong_password" }, { status: 403 });
+      return noStoreJson({ error: "wrong_password" }, { status: 403 });
     }
 
     const { error: deleteError } = await supabase
@@ -65,8 +96,12 @@ export async function DELETE(request: Request, { params }: RouteContext) {
 
     if (deleteError) return dbErrorResponse("comments DELETE delete", deleteError);
 
-    return NextResponse.json({ ok: true }, { status: 200 });
+    return noStoreJson({ ok: true }, { status: 200 });
   } catch (error) {
+    if (error instanceof ApiHttpError) return httpErrorResponse(error);
+    if (error instanceof RateLimitUnavailableError) {
+      return securityUnavailableResponse();
+    }
     return dbErrorResponse("comments DELETE", error);
   }
 }

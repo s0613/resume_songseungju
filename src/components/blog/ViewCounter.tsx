@@ -22,10 +22,20 @@ export default function ViewCounter({ slug }: ViewCounterProps) {
 
         // 요청을 abort하지 않는다 — StrictMode의 즉시 언마운트로 증가 요청이 취소되면
         // 조회수가 누락되기 때문. 완료 후의 setState는 React 19에서 안전하다.
-        fetch(`/api/blog/views/${slug}`, { method: "POST" })
+        fetch(`/api/blog/views/${slug}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: "{}",
+        })
             .then(async (res) => {
-                if (!res.ok) return
-                const data: unknown = await res.json()
+                // 같은 NAT의 다른 방문자나 재방문은 증가 제한(429)에 걸릴 수 있다.
+                // 그 경우에도 현재 조회수는 별도 GET으로 표시한다.
+                const countResponse =
+                    res.status === 429
+                        ? await fetch(`/api/blog/views/${slug}`)
+                        : res
+                if (!countResponse.ok) return
+                const data: unknown = await countResponse.json()
                 if (
                     typeof data === "object" &&
                     data !== null &&

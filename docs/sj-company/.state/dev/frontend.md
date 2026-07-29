@@ -16,7 +16,7 @@
 ## 검증 결과
 - `npx tsc --noEmit`: pass (에러 0)
 - `npm run build`: pass (exit 0, 전 라우트 정상 생성)
-- Playwright(로컬 프로덕션 서버, PORT=3907, `/Users/songseungju/toss-autotrader`에서 실행 후 스크립트 삭제·서버 종료 완료) — 9건 전부 pass:
+- Playwright(로컬 프로덕션 서버, PORT=3907, `<LOCAL_PROJECT>`에서 실행 후 스크립트 삭제·서버 종료 완료) — 9건 전부 pass:
   - 패널 열림 / 메시지 컨테이너 `aria-live="polite"` 존재 / 최초 오픈 시 입력창 포커스
   - FAB `model-viewer` 렌더(opacity 1, 커스텀 엘리먼트 정상 로드, console 에러 0)
   - "추천 글 하나 링크와 함께 알려줘" 질문 → 답변에 `**`/`](` 원문 미노출, `a[href^="/blog/"]` 3~4개 존재

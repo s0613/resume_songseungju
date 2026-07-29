@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
+import { ActionButton } from "seed-design/ui/action-button"
 import s from "@/app/blog/blog.module.css"
 import CommentForm from "./CommentForm"
 import CommentItem from "./CommentItem"
@@ -14,7 +15,7 @@ type Status = "loading" | "ready" | "hidden"
 
 const FIELD_MESSAGES: Record<string, string> = {
     name: "이름은 1~40자로 입력해주세요.",
-    password: "비밀번호는 4자 이상 입력해주세요.",
+    password: "비밀번호는 8자 이상 입력해주세요.",
     body: "댓글은 1~2000자로 입력해주세요.",
 }
 
@@ -32,11 +33,18 @@ async function readError(res: Response): Promise<{ error?: string; reason?: stri
 export default function Comments({ slug }: CommentsProps) {
     const [status, setStatus] = useState<Status>("loading")
     const [comments, setComments] = useState<BlogComment[]>([])
+    const [nextCursor, setNextCursor] = useState<string | null>(null)
+    const [loadingMore, setLoadingMore] = useState(false)
+    const [loadError, setLoadError] = useState<string | null>(null)
     const [submitError, setSubmitError] = useState<string | null>(null)
     const [submitting, setSubmitting] = useState(false)
 
     useEffect(() => {
         let alive = true
+        setStatus("loading")
+        setComments([])
+        setNextCursor(null)
+        setLoadError(null)
         fetch(`/api/blog/comments/${slug}`)
             .then(async (res) => {
                 if (!alive) return
@@ -44,9 +52,15 @@ export default function Comments({ slug }: CommentsProps) {
                     setStatus("hidden")
                     return
                 }
-                const data = (await res.json()) as { comments?: BlogComment[] }
+                const data = (await res.json()) as {
+                    comments?: BlogComment[]
+                    nextCursor?: unknown
+                }
                 if (!alive) return
                 setComments(data.comments ?? [])
+                setNextCursor(
+                    typeof data.nextCursor === "string" ? data.nextCursor : null
+                )
                 setStatus("ready")
             })
             .catch(() => {
@@ -56,6 +70,41 @@ export default function Comments({ slug }: CommentsProps) {
             alive = false
         }
     }, [slug])
+
+    const loadOlderComments = useCallback(async () => {
+        if (!nextCursor || loadingMore) return
+
+        setLoadingMore(true)
+        setLoadError(null)
+        try {
+            const params = new URLSearchParams({
+                limit: "100",
+                cursor: nextCursor,
+            })
+            const res = await fetch(`/api/blog/comments/${slug}?${params}`)
+            if (!res.ok) throw new Error("comment_page_unavailable")
+
+            const data = (await res.json()) as {
+                comments?: BlogComment[]
+                nextCursor?: unknown
+            }
+            const olderComments = Array.isArray(data.comments) ? data.comments : []
+            setComments((current) => {
+                const currentIds = new Set(current.map((comment) => comment.id))
+                return [
+                    ...olderComments.filter((comment) => !currentIds.has(comment.id)),
+                    ...current,
+                ]
+            })
+            setNextCursor(
+                typeof data.nextCursor === "string" ? data.nextCursor : null
+            )
+        } catch {
+            setLoadError("이전 댓글을 불러오지 못했어요. 잠시 후 다시 시도해주세요.")
+        } finally {
+            setLoadingMore(false)
+        }
+    }, [loadingMore, nextCursor, slug])
 
     const handleSubmit = useCallback(
         async (input: { name: string; password: string; body: string; website: string }) => {
@@ -126,7 +175,11 @@ export default function Comments({ slug }: CommentsProps) {
     return (
         <section className={s.commentSection} aria-labelledby="comments-heading">
             <h2 className={s.commentTitle} id="comments-heading">
-                댓글 <span className={s.commentCount}>{comments.length}</span>
+                댓글{" "}
+                <span className={s.commentCount}>
+                    {comments.length}
+                    {nextCursor ? "+" : ""}
+                </span>
             </h2>
 
             {comments.length > 0 && (
@@ -139,6 +192,23 @@ export default function Comments({ slug }: CommentsProps) {
                         />
                     ))}
                 </ul>
+            )}
+
+            {nextCursor && (
+                <div className={s.commentLoadMore}>
+                    <ActionButton
+                        type="button"
+                        loading={loadingMore}
+                        onClick={loadOlderComments}
+                    >
+                        {loadingMore ? "불러오는 중…" : "이전 댓글 더 보기"}
+                    </ActionButton>
+                </div>
+            )}
+            {loadError && (
+                <p className={s.commentError} role="alert">
+                    {loadError}
+                </p>
             )}
 
             <CommentForm

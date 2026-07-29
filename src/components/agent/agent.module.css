@@ -252,6 +252,10 @@
     padding: 2px 2px 4px;
 }
 
+.messageError {
+    color: var(--agent-gold);
+}
+
 /* 문단 사이 빈 줄 */
 .msgGap {
     height: 0.55em;
@@ -409,6 +413,30 @@
     cursor: default;
 }
 
+.rateLimitNotice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin: 0 12px 10px;
+    padding: 9px 11px;
+    border: 1px solid var(--agent-gold-faint);
+    border-radius: 10px;
+    background: var(--agent-gold-ghost);
+    color: var(--agent-cream);
+    font-size: 11.5px;
+    line-height: 1.45;
+}
+
+.rateLimitNotice strong {
+    color: var(--agent-gold);
+    font-variant-numeric: tabular-nums;
+}
+
+.rateLimitIcon {
+    flex: none;
+}
+
 /* ===== 문의 수집·최종 확인 ===== */
 .inquiryMessages {
     gap: 12px;
@@ -541,6 +569,11 @@
     flex-shrink: 0;
     padding: 10px 12px 12px;
     border-top: 1px solid var(--agent-gold-ghost);
+}
+
+.inquiryInputArea .rateLimitNotice,
+.inquiryReview .rateLimitNotice {
+    margin: 0 0 9px;
 }
 
 .inquiryAiConsent {

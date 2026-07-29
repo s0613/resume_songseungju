@@ -3,6 +3,7 @@ import "server-only";
 import {
   createHash,
   createHmac,
+  randomBytes,
   timingSafeEqual,
 } from "node:crypto";
 import {
@@ -16,10 +17,15 @@ const KEY_DERIVATION_DOMAIN =
   "songseungju.dev/inquiry-review-token/key/v1";
 const TOKEN_MAC_DOMAIN =
   "songseungju.dev/inquiry-review-token/mac/v1";
+const REVIEW_FINGERPRINT_DOMAIN =
+  "songseungju.dev/inquiry-review-token/content-fingerprint/v1";
+const DELIVERY_FINGERPRINT_DOMAIN =
+  "songseungju.dev/inquiry-delivery/request-fingerprint/v1";
 const TOKEN_TTL_MS = 30 * 60 * 1_000;
 const MAX_FUTURE_SKEW_MS = 60 * 1_000;
 const HEX_SHA256_PATTERN = /^[a-f0-9]{64}$/u;
 const BASE64URL_SHA256_PATTERN = /^[A-Za-z0-9_-]{43}$/u;
+const developmentReviewSecret = randomBytes(32);
 
 export class InquiryReviewTokenConfigurationError extends Error {
   constructor() {
@@ -29,13 +35,19 @@ export class InquiryReviewTokenConfigurationError extends Error {
 }
 
 function reviewTokenKey(): Buffer {
-  const smtpPass = process.env.SMTP_PASS;
-  if (!smtpPass) throw new InquiryReviewTokenConfigurationError();
+  const configured = process.env.INQUIRY_REVIEW_SECRET?.trim();
+  const secret =
+    configured && Buffer.byteLength(configured, "utf8") >= 32
+      ? configured
+      : process.env.NODE_ENV === "development"
+        ? developmentReviewSecret
+        : null;
+  if (!secret) throw new InquiryReviewTokenConfigurationError();
 
   return createHash("sha256")
     .update(KEY_DERIVATION_DOMAIN, "utf8")
     .update("\0", "utf8")
-    .update(smtpPass, "utf8")
+    .update(secret)
     .digest();
 }
 
@@ -65,8 +77,23 @@ export function inquiryReviewFingerprint(
   draft: InquiryDraft,
   messages: InquiryMessage[],
 ): string {
-  return createHash("sha256")
+  return createHmac("sha256", reviewTokenKey())
+    .update(REVIEW_FINGERPRINT_DOMAIN, "utf8")
+    .update("\0", "utf8")
     .update(canonicalInquiryState(draft, messages), "utf8")
+    .digest("hex");
+}
+
+/** DB에는 문의 원문의 평문 SHA 대신 비밀키 기반 지문만 저장한다. */
+export function inquiryDeliveryRequestFingerprint(payload: unknown): string {
+  const serialized = JSON.stringify(payload);
+  if (serialized === undefined) {
+    throw new TypeError("Inquiry delivery payload is not serializable");
+  }
+  return createHmac("sha256", reviewTokenKey())
+    .update(DELIVERY_FINGERPRINT_DOMAIN, "utf8")
+    .update("\0", "utf8")
+    .update(serialized, "utf8")
     .digest("hex");
 }
 
@@ -129,12 +156,7 @@ export function verifyInquiryReviewToken(
     return false;
   }
 
-  let key: Buffer;
-  try {
-    key = reviewTokenKey();
-  } catch {
-    return false;
-  }
+  const key = reviewTokenKey();
   const payload = tokenPayload(issuedAt, suppliedFingerprint);
   const expectedMac = Buffer.from(tokenMac(payload, key), "base64url");
   const suppliedMacBytes = Buffer.from(suppliedMac, "base64url");

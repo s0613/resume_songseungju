@@ -3,12 +3,15 @@
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import Link from "next/link"
 import InquiryChat from "./InquiryChat"
+import RateLimitNotice from "./RateLimitNotice"
+import { formatRetryAfter, useRetryAfter } from "./useRetryAfter"
 import s from "./agent.module.css"
 
 interface ChatMessage {
     role: "user" | "assistant"
     content: string
     isError?: boolean
+    excludeFromHistory?: boolean
 }
 
 const GREETING: ChatMessage = {
@@ -29,7 +32,7 @@ const STARTER_QUESTIONS = [
 const ERROR_TEXT =
     "지금은 답변을 가져오지 못했어요. 잠시 후 다시 시도해 주세요."
 const RATE_LIMIT_TEXT =
-    "질문이 너무 잦아요. 잠시 후 다시 시도해 주세요."
+    "질문 횟수 제한에 도달했어요. 보낸 질문은 대화에 남아 있고, 입력창에서 수정하거나 다음 질문을 작성할 수 있어요."
 
 // 요청에 실어 보내는 대화 기록 상한 (서버 검증과 동일 계약)
 const HISTORY_LIMIT = 12
@@ -189,6 +192,25 @@ function renderBody(text: string, keyBase: string): ReactNode[] {
     })
 }
 
+/** 서버가 받지 못한 최신 사용자 턴은 화면에 남기되 다음 AI 기록에서는 제외한다. */
+function appendRejectedTurn(
+    messages: ChatMessage[],
+    errorText: string
+): ChatMessage[] {
+    const next = [...messages]
+    for (let index = next.length - 1; index >= 0; index -= 1) {
+        const message = next[index]
+        if (message.role === "user" && !message.excludeFromHistory) {
+            next[index] = { ...message, excludeFromHistory: true }
+            break
+        }
+    }
+    return [
+        ...next,
+        { role: "assistant", content: errorText, isError: true },
+    ]
+}
+
 /** 송승주 에이전트 채팅 패널 — /api/agent/chat 텍스트 스트림을 그대로 렌더한다. */
 export default function AgentChat({ open, onClose }: AgentChatProps) {
     const [mode, setMode] = useState<"question" | "inquiry">("question")
@@ -196,6 +218,10 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([GREETING])
     const [input, setInput] = useState("")
     const [loading, setLoading] = useState(false)
+    const chatRetry = useRetryAfter()
+    const collectRetry = useRetryAfter()
+    const sendRetry = useRetryAfter()
+    const requestInFlightRef = useRef(false)
     const scrollRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     // 사용자가 메시지 목록 하단 근처에 있을 때만 자동 스크롤한다.
@@ -232,7 +258,7 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
 
     async function send(question?: string) {
         const text = (question ?? input).trim()
-        if (!text || loading) return
+        if (!text || loading || requestInFlightRef.current) return
         if (text === INQUIRY_STARTER || text === "문의 남기기") {
             setInput("")
             setInquiryPrefill("")
@@ -245,6 +271,8 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
             setMode("inquiry")
             return
         }
+        if (chatRetry.isActiveNow()) return
+        requestInFlightRef.current = true
         setInput("")
         setLoading(true)
         nearBottomRef.current = true
@@ -255,10 +283,12 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
         ]
         setMessages(nextMessages)
 
+        let responseAccepted = false
+        let received = ""
         try {
             // 인사말(로컬 고정 문구)과 에러 안내는 제외하고, 답변은 후속 질문 마커를 뗀 본문만 보낸다.
             const history = nextMessages
-                .filter((m) => !m.isError)
+                .filter((m) => !m.isError && !m.excludeFromHistory)
                 .slice(1)
                 .slice(-HISTORY_LIMIT)
                 .map(({ role, content }) => ({
@@ -272,18 +302,19 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                 body: JSON.stringify({ messages: history }),
             })
             if (!res.ok || !res.body) {
+                if (res.status === 429) chatRetry.start(res, 10, 60)
                 const errorText = res.status === 429 ? RATE_LIMIT_TEXT : ERROR_TEXT
-                setMessages((prev) => [
-                    ...prev,
-                    { role: "assistant", content: errorText, isError: true },
-                ])
+                setMessages((prev) => appendRejectedTurn(prev, errorText))
+                setInput((current) =>
+                    current.trim().length > 0 ? current : text
+                )
                 return
             }
 
+            responseAccepted = true
             setMessages((prev) => [...prev, { role: "assistant", content: "" }])
             const reader = res.body.getReader()
             const decoder = new TextDecoder()
-            let received = ""
             for (;;) {
                 const { done, value } = await reader.read()
                 if (done) break
@@ -295,17 +326,36 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                 ])
             }
             if (received.trim().length === 0) {
-                setMessages((prev) => [
-                    ...prev.slice(0, -1),
-                    { role: "assistant", content: ERROR_TEXT, isError: true },
-                ])
+                setMessages((prev) =>
+                    appendRejectedTurn(prev.slice(0, -1), ERROR_TEXT)
+                )
+                setInput((current) =>
+                    current.trim().length > 0 ? current : text
+                )
             }
         } catch {
-            setMessages((prev) => [
-                ...prev,
-                { role: "assistant", content: ERROR_TEXT, isError: true },
-            ])
+            setMessages((prev) =>
+                responseAccepted && received.trim().length > 0
+                    ? [
+                          ...prev,
+                          {
+                              role: "assistant",
+                              content: ERROR_TEXT,
+                              isError: true,
+                          },
+                      ]
+                    : appendRejectedTurn(
+                          responseAccepted ? prev.slice(0, -1) : prev,
+                          ERROR_TEXT
+                      )
+            )
+            if (!responseAccepted || received.trim().length === 0) {
+                setInput((current) =>
+                    current.trim().length > 0 ? current : text
+                )
+            }
         } finally {
+            requestInFlightRef.current = false
             setLoading(false)
             inputRef.current?.focus()
         }
@@ -340,6 +390,8 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                 initialText={inquiryPrefill}
                 onClose={onClose}
                 onBack={handleInquiryBack}
+                collectRetry={collectRetry}
+                sendRetry={sendRetry}
             />
         )
     }
@@ -394,7 +446,12 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                     // AI 턴은 말풍선이 아니라 본문 조판 — 답변은 여러 문단·목록이라 말풍선에 넣으면 읽기 어렵다.
                     const { body } = splitAnswer(msg.content)
                     return (
-                        <div key={i} className={s.msgBody}>
+                        <div
+                            key={i}
+                            className={`${s.msgBody} ${
+                                msg.isError ? s.messageError : ""
+                            }`}
+                        >
                             {renderBody(body, `msg-${i}`)}
                         </div>
                     )
@@ -408,6 +465,7 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                                     key={q}
                                     type="button"
                                     className={s.sug}
+                                    disabled={loading || chatRetry.active}
                                     onClick={() => void send(q)}
                                 >
                                     {q}
@@ -417,6 +475,14 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                     </div>
                 )}
             </div>
+
+            {chatRetry.active && (
+                <RateLimitNotice
+                    id="agent-chat-rate-limit"
+                    remainingSeconds={chatRetry.remainingSeconds}
+                    action="다시 질문할 수 있어요."
+                />
+            )}
 
             <form
                 className={s.inputRow}
@@ -433,13 +499,26 @@ export default function AgentChat({ open, onClose }: AgentChatProps) {
                     maxLength={INPUT_LIMIT}
                     placeholder="승주에게 궁금한 점을 물어보세요"
                     aria-label="질문 입력"
+                    aria-describedby={
+                        chatRetry.active
+                            ? "agent-chat-rate-limit"
+                            : undefined
+                    }
                 />
                 <button
                     type="submit"
                     className={s.send}
-                    disabled={loading || input.trim().length === 0}
+                    disabled={
+                        loading ||
+                        chatRetry.active ||
+                        input.trim().length === 0
+                    }
                 >
-                    전송
+                    {chatRetry.active
+                        ? `${formatRetryAfter(
+                              chatRetry.remainingSeconds
+                          )} 후 전송`
+                        : "전송"}
                 </button>
             </form>
         </div>
