@@ -80,6 +80,218 @@ export type PostCategory = Exclude<
 
 export const posts: BlogPost[] = [
     {
+        slug: "redesigning-london-system-with-seed-design",
+        category: "개발",
+        title: "당근이 배포한 디자인 시스템 적용해봤습니다",
+        date: "2026. 8. 3.",
+        excerpt:
+            "디자인 감각 대신 디자인 시스템을 빌렸습니다. 당근의 오픈소스 SEED를 에이전트에게 읽히고, 기존 London System의 디자인 기반을 역할 중심 토큰과 컴포넌트로 바꾼 과정을 기록합니다.",
+        tags: ["SEED디자인", "디자인시스템", "LondonSystem", "바이브코딩", "AI협업"],
+        blocks: [
+            {
+                type: "paragraph",
+                content:
+                    "London System은 이미 할 일은 하고 있었습니다. 자연어로 업무를 적으면 에이전트 그래프를 만들고, 실행 비용과 상태를 보여주고, 시뮬레이션까지 돌았습니다. 그런데 화면을 볼 때마다 한 가지가 걸렸어요. __기능은 있는데 아직 하나의 제품처럼 느껴지지는 않았습니다.__",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "회색 화면 안에 사이드바, 대화, 그래프가 모두 들어 있었지만 어디를 먼저 봐야 하는지 모호했습니다. 버튼과 상태는 각자 다른 목소리로 말했고, 새 기능을 붙일 때마다 색·간격·모서리를 다시 결정해야 했습니다. 저는 디자이너가 아니니 \"예쁘게 해줘\"를 반복하는 대신, __이미 잘 정리된 결정 체계를 빌리기로__ 했습니다.",
+            },
+            {
+                type: "image",
+                src: "/london-seed-cover.webp",
+                alt: "강렬한 주황색 배경 중앙에 SEED 로고가 있고 상단에 Foundations, Components, Patterns, AI & Tools 메뉴가 있는 SEED 공식 문서 첫 화면",
+                width: 3456,
+                height: 1990,
+                caption:
+                    "당근의 SEED. 첫 화면부터 강렬하지만, 제가 빌리고 싶었던 건 이 주황색보다 그 아래 정리된 규칙들이었습니다.",
+            },
+            { type: "heading", content: "SEED는 예쁜 버튼 모음이 아니었습니다" },
+            {
+                type: "paragraph",
+                content:
+                    "[SEED](https://seed-design.io/get-started)는 당근 제품을 위한 통합 디자인 언어입니다. 색·타이포그래피·간격 같은 토큰부터 버튼과 리스트 같은 컴포넌트, 반복되는 화면 패턴과 모션까지 제품에서 계속 생기는 결정을 하나의 체계로 묶습니다. 디자인과 코드가 같은 소스를 보게 해서, 누가 만들어도 비슷한 품질의 경험이 나오게 하는 것이 목표라고 합니다.",
+            },
+            {
+                type: "list",
+                items: [
+                    "__Foundations__ — 역할 기반 색상, 타이포그래피, 간격, 반경, 그림자, 모션, 아이콘과 글쓰기 원칙까지 다룹니다.",
+                    "__Components & Patterns__ — 입력·탐색·피드백·표시 컴포넌트와, 그것들을 조합하는 사용 원칙을 함께 제공합니다.",
+                    "__React + CLI__ — 코어 패키지를 설치하고 필요한 컴포넌트 스니펫을 프로젝트의 seed-design 폴더로 가져와 소스를 직접 소유할 수 있습니다.",
+                    "__AI & Tools__ — [llms.txt](https://seed-design.io/react/llms.txt), [공식 Docs MCP](https://seed-design.io/ai-integration/docs-mcp), [Agent Skill](https://seed-design.io/ai-integration/skill)을 따로 제공합니다. 에이전트가 문서를 추측하지 않고 직접 읽을 수 있습니다.",
+                ],
+            },
+            {
+                type: "paragraph",
+                content:
+                    "React에서 시작하는 방법도 단순합니다. 패키지를 받고 CLI로 설정 파일과 필요한 스니펫을 추가합니다. 완성품을 멀리 있는 패키지 안에 숨겨 두는 방식이 아니라, 복잡한 컴포넌트의 조립 코드를 프로젝트로 가져오는 방식이라 필요한 부분은 직접 고칠 수 있습니다.",
+            },
+            {
+                type: "code",
+                lang: "bash",
+                code: "npm install @seed-design/react @seed-design/css\nnpx @seed-design/cli@latest init\nnpx @seed-design/cli@latest add ui:action-button",
+                caption:
+                    "핵심 명령만 세 줄로 추렸습니다. 실제 셋업에는 base.css, 경로 별칭, 번들러 플러그인과 테마 설정이 더 필요합니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "게다가 [Apache-2.0 라이선스](https://github.com/daangn/seed-design)로 공개돼 상업 목적을 포함해 사용·수정·배포할 수 있습니다. 저작권 고지와 라이선스 사본, 변경 사항 명시 같은 조건은 지켜야 합니다. 당근 로고와 브랜드 자산은 별도 가이드라인 대상이고, 당근을 사칭하는 방식으로는 쓸 수 없습니다. __SEED를 도입하는 것과 당근의 브랜드를 복제하는 것은 다른 일입니다.__",
+            },
+            { type: "heading", content: "먼저, 무엇이 문제였나" },
+            {
+                type: "image",
+                src: "/london-before-seed-sanitized.webp",
+                alt: "SEED 적용 전 London System 화면으로 왼쪽 탐색, 가운데 대화와 입력, 오른쪽 작은 에이전트 그래프가 회색 3열 레이아웃에 배치된 모습",
+                width: 1616,
+                height: 973,
+                caption:
+                    "개선 전 화면. 기능은 한 화면에 다 있었지만, 대화와 그래프가 공간을 나눠 가지며 둘 다 작아졌고 상태와 행동의 우선순위도 흐렸습니다. 공개 전 URL 식별자는 제거했습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "기존 화면의 문제를 \"촌스럽다\" 한마디로 정리하지는 않았습니다. 그렇게 말하면 에이전트도 그냥 그림자와 그라데이션을 더하거든요. 대신 화면에서 반복되는 결정을 찾아냈습니다.",
+            },
+            {
+                type: "list",
+                items: [
+                    "__시선의 시작점__ — 새 에이전트를 만들 때 입력보다 주변 패널이 먼저 눈에 들어왔습니다.",
+                    "__공간의 우선순위__ — 그래프가 핵심 결과물인데도 3분할의 한 칸만 차지해 복잡해질수록 읽기 어려웠습니다.",
+                    "__상태의 언어__ — 생성 중·완료·오류와 실행 가능한 행동이 공통 규칙 없이 흩어져 있었습니다.",
+                    "__결정의 중복__ — 기능을 추가할 때마다 색, 간격, 크기, 아이콘을 다시 골라야 했습니다.",
+                ],
+            },
+            { type: "heading", content: "지난 글의 개발 루프를 그대로 돌렸습니다" },
+            {
+                type: "paragraph",
+                content:
+                    "제가 먼저 쓴 [Warp + Obsidian + Claude + Codex로 개발하는 방법](/blog/vibe-coding-with-warp-obsidian-claude-codex)과 똑같이 했습니다. 옵시디언에 정리해 둔 SEED 문서를 장기 기억으로 건네고, Claude Code가 구현하고, Codex가 다른 관점에서 검토하고, 저는 빌드·테스트 결과와 실제 화면으로 판정했습니다.",
+            },
+            {
+                type: "quote",
+                content: "이걸로 베이스 바꾸고 전체 디자인 다시 해줘.",
+                author: "실제로 처음 건넨 지시",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "물론 한 줄만 던지고 눈을 감은 건 아닙니다. 에이전트는 먼저 옵시디언 문서를 읽고, 공식 React llms.txt와 설치 문서를 다시 확인했습니다. 그리고 바로 코딩하지 않고 반론부터 했어요. London System은 그래프 캔버스와 관리 화면이 많은 데스크톱 업무 도구인데, SEED는 모바일 제품 경험에 강하고 현행 컴포넌트만으로 모든 화면을 덮을 수 없다는 지적이었습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "맞는 말이었습니다. 그래도 저는 전면 교체를 선택했습니다. 모든 것을 SEED 컴포넌트로 억지로 만드는 것이 아니라, __공식 컴포넌트와 토큰을 기본 언어로 삼고 London System 고유의 그래프·데스크톱 패널만 그 언어 안에서 직접 만들자__는 뜻이었습니다.",
+            },
+            {
+                type: "image",
+                src: "/london-seed-agent-workflow-redacted.webp",
+                alt: "터미널에서 AI 코딩 에이전트가 SEED 공식 React llms.txt와 설치 문서를 읽고 London System의 디자인 교체 범위와 작업 목록을 정리하는 화면",
+                width: 1385,
+                height: 1136,
+                caption:
+                    "실제 작업 화면. 에이전트는 SEED가 데스크톱 중심 도구에 완벽히 맞지 않는다고 먼저 반박했고, 교체 범위를 합의한 뒤 컴포넌트·CSS·하드코딩 색상 인벤토리부터 잡았습니다. 공개 전 로컬 경로는 가렸습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "착수 전에 에이전트가 잡은 범위는 기존에 쓰던 Astryx UI 컴포넌트 14종, CSS 모듈 24개, 하드코딩된 색상 124개였습니다. 별도 브랜치를 만든 뒤 버튼 몇 개만 바꾸지 않고 토큰, 컴포넌트, 화면 상태를 함께 옮겼습니다. 이 숫자들은 멋져 보이기 위한 성과가 아니라 __작업 범위를 놓치지 않을 체크리스트__였습니다.",
+            },
+            {
+                type: "heading",
+                content: "입력할 때와 결과를 볼 때, 화면의 주인공을 바꿨습니다",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "새 에이전트 화면에서는 가장 중요한 질문과 입력을 가운데로 모았습니다. 왼쪽 탐색은 남겼지만 대비를 낮추고, 복숭아색은 아무 데나 칠하지 않고 제출처럼 다음 단계로 넘어가는 행동에만 썼습니다. 역할 기반 토큰을 쓰니 배경·본문·보조 문구·테두리가 같은 규칙으로 움직이기 시작했습니다.",
+            },
+            {
+                type: "image",
+                src: "/london-seed-new-agent.webp",
+                alt: "SEED 적용 후 London System의 새 에이전트 화면으로 따뜻한 오프화이트 배경 중앙에 질문, 설명, 큰 입력창과 복숭아색 제출 버튼이 배치된 모습",
+                width: 3424,
+                height: 1960,
+                caption:
+                    "① 입력 — 사용자가 해야 할 일 하나만 가운데 남기고, 보조 정보와 탐색은 한 단계 뒤로 물렸습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "그래프가 만들어지기 시작하면 화면의 주인공도 바뀝니다. 입력은 좁은 작업 패널로 이동하고 그래프가 넓은 캔버스를 차지합니다. 생성 중이라는 문장, 스피너, 비활성화된 실행 버튼이 같은 상태를 말하도록 맞췄습니다. 예전처럼 결과와 입력이 항상 같은 비율로 싸우지 않습니다.",
+            },
+            {
+                type: "image",
+                src: "/london-seed-graph-building.webp",
+                alt: "SEED 적용 후 London System에서 계약서 분석 에이전트 그래프를 생성 중인 화면으로 왼쪽 작업 패널과 넓은 격자 캔버스에 9개 노드가 연결된 모습",
+                width: 3438,
+                height: 1988,
+                caption:
+                    "② 생성 중 — OCR부터 추출·검증·재추출·완료까지 이어지는 9개 노드가 이제 화면의 대부분을 씁니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "완료 뒤에는 결과를 문장만으로 흘려보내지 않고 하나의 피드백 카드로 묶었습니다. 노드 수와 비용, 완료 상태는 빠르게 훑을 수 있고, 그래프를 열어 다음 작업으로 이어질 수 있습니다. SEED의 장점은 특정 버튼의 모양보다 __입력 → 진행 → 완료의 리듬을 한 언어로 맞추는 데__ 있었습니다.",
+            },
+            {
+                type: "image",
+                src: "/london-seed-graph-complete.webp",
+                alt: "SEED 적용 후 London System의 그래프 생성 완료 화면으로 노드 수와 실행 비용, completed 상태, 에이전트 그래프 생성 완료 카드가 보이는 모습",
+                width: 3450,
+                height: 1980,
+                caption:
+                    "③ 완료 — 요청, 컴파일 결과, 다음 행동이 한 흐름으로 읽히도록 정리했습니다.",
+            },
+            { type: "heading", content: "SEED를 썼지만, 당근을 복제하지는 않았습니다" },
+            {
+                type: "paragraph",
+                content:
+                    "SEED에는 당근 제품에 꼭 맞는 컴포넌트도 있고 모바일 화면에서 특히 빛나는 패턴도 많습니다. 하지만 London System에 매너온도나 모바일 내비게이션을 가져올 이유는 없습니다. 공식 컴포넌트와 variant를 출발점으로 삼되, 그래프 노드·캔버스·작업 패널은 SEED에 억지로 끼워 맞추지 않고 London System의 컴포넌트로 남겼습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "이 구분이 중요했습니다. 디자인 시스템을 도입한다는 것은 모든 화면을 같은 컴포넌트로 덮는 일이 아니라, __같은 결정을 두 번 하지 않게 만드는 일__에 가까웠습니다. SEED가 답을 가진 곳에서는 그 답을 쓰고, 없는 곳에서는 색·간격·상태 같은 문법만 빌려 London System의 답을 만들었습니다.",
+            },
+            { type: "heading", content: "AI와 디자인 시스템이 특히 잘 맞는 이유" },
+            {
+                type: "paragraph",
+                content:
+                    "AI에게 \"세련되게\"라고 말하면 매번 다른 세련됨이 나옵니다. 반면 역할 기반 토큰을 쓰고, 공식 variant를 우선하고, 없는 컴포넌트만 직접 만들라고 하면 선택지가 줄어듭니다. 프롬프트가 취향을 설명하는 문장에서 __검증 가능한 제약 조건__으로 바뀝니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "SEED는 이 지점에서 유난히 편했습니다. 사람이 읽는 문서만 있는 게 아니라 llms.txt, Docs MCP, Agent Skill을 공식으로 제공합니다. 이번 작업에서는 로컬 지식 문서를 출발점으로 주고 에이전트가 공식 llms.txt와 설치 문서를 다시 확인하게 했습니다. 오래된 예제를 기억에서 꺼내 쓰게 하지 않고, __정본을 찾아가게 하는 경로__를 준 셈입니다.",
+            },
+            {
+                type: "tip",
+                title: "코드를 보지 않는 대신 이번에도 본 것",
+                content:
+                    "교체할 컴포넌트와 하드코딩 값의 인벤토리, 빌드·테스트 결과, 생성 전·중·완료 화면, 그리고 다른 모델의 교차 리뷰를 봤습니다. 디자인 작업도 완료 조건과 상태별 스크린샷이 있어야 판정할 수 있었습니다.",
+            },
+            { type: "heading", content: "결국 London System다운 선택이었습니다" },
+            {
+                type: "paragraph",
+                content:
+                    "런던 시스템이라는 이름은 체스 오프닝에서 가져왔습니다. 화려한 한 수보다 반복 가능한 구조를 먼저 세워 안정적으로 운영하는 방식이 제가 만들려는 에이전트와 닮았기 때문입니다. 디자인도 같았습니다. 한 화면을 멋지게 꾸미는 대신, 다음 화면에도 반복할 수 있는 구조를 먼저 골랐습니다.",
+            },
+            {
+                type: "paragraph",
+                content:
+                    "[londonsystemagent.com](https://londonsystemagent.com)은 이제 자연어 요구사항을 운영 가능한 에이전트로 컴파일하는 기능뿐 아니라, 그 과정을 한 제품의 언어로 보여주기 시작했습니다. 아직 데스크톱 패널과 복잡한 그래프에서 더 다듬을 부분은 많지만, 적어도 새 기능을 붙일 때마다 디자인을 처음부터 다시 시작하지는 않게 됐습니다.",
+            },
+            {
+                type: "tip",
+                title: "제가 가져간 한 줄",
+                content:
+                    "SEED가 줄여준 것은 CSS의 양보다, 화면을 만들 때 같은 결정을 다시 내리는 횟수였습니다.",
+            },
+        ],
+    },
+    {
         slug: "obsidian-knowledge-vault-download",
         category: "지식 공유",
         title: "제 옵시디언 지식 볼트를 통째로 드립니다",
